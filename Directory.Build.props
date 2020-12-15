@@ -1,0 +1,3 @@
+<Project>
+  <Import Project="..\k84-analyzers\analyzers\analyzers.props" />
+</Project>

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\msbuild-binary-output\output-directory.props" />
+  <Import Project="..\..\vostok.devtools\git-commit-to-assembly-title\Vostok.Tools.GitCommit2AssemblyTitle.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
+    <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
+    <NoWarn>1701;1702;CA1716;S3626;ASA001</NoWarn>
+  </PropertyGroup>
+</Project>

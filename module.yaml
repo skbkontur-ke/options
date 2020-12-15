@@ -1,0 +1,26 @@
+default:
+  build:
+    target: Kontur.Extern.Options.sln
+
+lib *default:
+  deps:
+    - k84-analyzers
+    - msbuild-binary-output
+    - vostok.devtools
+
+  build:
+    configuration: Lib
+
+  install:
+    - bin\Kontur.Extern.Options\netstandard2.0\Kontur.Extern.Options.dll
+
+
+full-build > lib:
+  deps:
+    - force: $CURRENT_BRANCH
+
+  build:
+    configuration: Release
+
+  artifacts:
+    - Kontur.Extern.Tests.Options\bin\Release\netcoreapp3.1\Kontur.Extern.Tests.Options.dll

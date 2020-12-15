@@ -8,7 +8,7 @@ MIT
 Use [cement](https://github.com/skbkontur/cement#get-started) to add reference to Option type.
 
 Execute that command in your cement module:
-`cm ref add k84-options your-csproj.csproj`
+`cm ref add ke-options your-csproj.csproj`
 
 ## Features
 

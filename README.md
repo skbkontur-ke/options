@@ -1,5 +1,43 @@
 # Yet another Option type implementation
 
+##Content
+
+* [License](#license)
+* [Using option type](#using-option-type)
+* [Features](#features)
+    * [Killer-feature: Unrestricted do-notation with `Task<T>` support](#killer-feature-unrestricted-do-notation-with-taskt-support)
+    * [Other features](#other-features)
+    * [Drawbacks](#drawbacks)
+* [Instantiation of Option type](#instantiation-of-option-type)
+* [Safe extraction of data from Option instance](#safe-extraction-of-data-from-option-instance)
+    * [GetOrElse](#getorelse)
+    * [TryGet](#tryget)
+    * [Match](#match)
+    * [Switch](#switch)
+    * [OnSome](#onsome)
+    * [OnNone](#onnone)
+    * [Switch/OnSome/OnNone methods chaining](#switchonsomeonnone-methods-chaining)
+    * [HasSome](#hassome)
+    * [IsNone](#isnone)
+    * [Implicit conversion to bool](#implicit-conversion-to-bool)
+    * [foreach](#foreach)
+    * [Conversion to IEnumerable](#conversion-to-ienumerable)
+    * [LINQ method syntax](#linq-method-syntax)
+    * [LINQ query sytnax](#linq-query-sytnax)
+    * [ToString](#tostring)
+* [Unsafe extraction of data from Option instance](#unsafe-extraction-of-data-from-option-instance)
+    * [GetOrThrow](#getorthrow)
+    * [GetOrDefault](#getordefault)
+    * [EnsureHasValue](#ensurehasvalue)
+* [Conversion of `Option<TValue>` to another Option type](#conversion-of-optiontvalue-to-another-option-type)
+    * [Map](#map)
+    * [Upcast](#upcast)
+    * [Or](#or)
+    * [Do-notation without tasks](#do-notation-without-tasks)
+    * [Do-notation with tasks](#do-notation-with-tasks)
+* [Other](#other)
+* [Contributing](#contributing)
+
 ## License
 MIT
 

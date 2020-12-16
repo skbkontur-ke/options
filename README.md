@@ -74,7 +74,7 @@ Task<Option<ConvertResult>> result =
 
 ```
 Where:
-* `A` should return `Option<T>` or `Task<Option<T>>`.
+* `A` or `B` must return `Option<T>` or `Task<Option<T>>`.
 * `B`, `C`, `D` and `E` may return one of `Option<T>`, `Task<T>` or `Task<Option<T>>`. Expressions may depend on previous expressions (`D` and `E` for example) or may not depend on previous expressions (`B` and `C` for example). Count of B, C, D and E-like statements is efficiently unlimited.
 * `F` should return `TResult` or `Option<TResult>`.
 
@@ -426,7 +426,7 @@ Task<Option<ConvertResult>> result =
 
 ```
 Where:
-* `A` should return `Option<T>` or `Task<Option<T>>`.
+* `A` or `B` must return `Option<T>` or `Task<Option<T>>`.
 * `B`, `C`, `D` and `E` may return one of `Option<T>`, `Task<T>` or `Task<Option<T>>`. Expressions may depend on previous expressions (`D` and `E` for example) or may not depend on previous expressions (`B` and `C` for example). Count of B, C, D and E-like statements is efficiently unlimited.
 * `F` should return `TResult` or `Option<TResult>`.
 

@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Kontur.Extern.Tests.Options.Extraction
 {
     [TestFixture]
-    public class Switch_Method_Should
+    public class Switch_Should
     {
         [Test]
         public void Call_OnSome_If_Some()

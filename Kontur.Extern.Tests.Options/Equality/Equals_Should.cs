@@ -39,9 +39,9 @@ namespace Kontur.Extern.Tests.Options.Equality
                 .Concat(EqualsCases.Select(testCase => testCase.Returns(true)));
 
         [TestCaseSource(nameof(Cases))]
-        public bool Compare(object options1, object options2)
+        public bool Compare(object option1, object option2)
         {
-            return options1.Equals(options2);
+            return option1.Equals(option2);
         }
     }
 }

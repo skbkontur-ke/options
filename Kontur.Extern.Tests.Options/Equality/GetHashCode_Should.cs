@@ -20,10 +20,10 @@ namespace Kontur.Extern.Tests.Options.Equality
         };
 
         [TestCaseSource(nameof(Cases))]
-        public void Calculate(object options1, object options2)
+        public void Calculate(object option1, object option2)
         {
-            var hashCode1 = options1.GetHashCode();
-            var hashCode2 = options2.GetHashCode();
+            var hashCode1 = option1.GetHashCode();
+            var hashCode2 = option2.GetHashCode();
 
             hashCode1.Should().Be(hashCode2);
         }

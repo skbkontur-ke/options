@@ -11,7 +11,7 @@ namespace Kontur.Extern.Options
 
         public static Option<TValue> OnSome<TValue>(this Option<TValue> option, Action action)
         {
-            return option.Switch(_ => action(), () => { });
+            return option.OnSome(_ => action());
         }
 
         public static Option<TValue> OnNone<TValue>(this Option<TValue> option, Action action)

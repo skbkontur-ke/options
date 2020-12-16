@@ -1,6 +1,6 @@
 # Yet another Option type implementation
 
-##Content
+## Content
 
 * [License](#license)
 * [Using option type](#using-option-type)

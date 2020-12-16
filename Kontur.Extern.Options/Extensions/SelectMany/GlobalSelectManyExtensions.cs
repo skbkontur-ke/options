@@ -9,50 +9,6 @@ public static class GlobalSelectManyExtensions
 
 // ReSharper restore CheckNamespace
 {
-    public static Option<TResult> SelectMany<TValue, TOtherValue, TResult>(
-        this Option<TValue> option,
-        Func<TValue, Option<TOtherValue>> optionSelector,
-        Func<TValue, TOtherValue, TResult> resultSelector)
-    {
-        return option.SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
-    }
-
-    public static Option<TResult> SelectMany<TValue, TOtherValue, TResult>(
-        this Option<TValue> option,
-        Func<TValue, Option<TOtherValue>> optionSelector,
-        Func<TValue, TOtherValue, Option<TResult>> resultSelector)
-    {
-        return option.Match(
-            myValue => optionSelector(myValue).Match(
-                otherValue => resultSelector(myValue, otherValue),
-                Option.None<TResult>),
-            Option.None<TResult>);
-    }
-
-    public static Task<Option<TResult>> SelectMany<TValue, TItemValue, TResult>(
-        this Option<TValue> option,
-        Func<TValue, Task<Option<TItemValue>>> optionSelector,
-        Func<TValue, TItemValue, TResult> resultSelector)
-    {
-        return option.SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
-    }
-
-    public static Task<Option<TResult>> SelectMany<TValue, TItemValue, TResult>(
-        this Option<TValue> option,
-        Func<TValue, Task<Option<TItemValue>>> optionSelector,
-        Func<TValue, TItemValue, Option<TResult>> resultSelector)
-    {
-        return option.Match(
-            async value =>
-            {
-                var item = await optionSelector(value).ConfigureAwait(false);
-                return item.Match(
-                    itemValue => resultSelector(value, itemValue),
-                    Option<TResult>.None);
-            },
-            () => Task.FromResult(Option.None<TResult>()));
-    }
-
     public static Task<Option<TResult>> SelectMany<TValue1, TValue2, TResult>(
         this Task<Option<TValue1>> optionTask,
         Func<TValue1, Option<TValue2>> optionSelector,

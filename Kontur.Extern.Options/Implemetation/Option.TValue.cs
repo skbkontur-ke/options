@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.Threading.Tasks;
 
 namespace Kontur.Extern.Options
 {
@@ -79,6 +80,46 @@ namespace Kontur.Extern.Options
         public Option<TResult> Select<TResult>(Func<TValue, TResult> resultSelector)
         {
             return Select(value => Option.Some(resultSelector(value)));
+        }
+
+        public Option<TResult> SelectMany<TOtherValue, TResult>(
+            Func<TValue, Option<TOtherValue>> optionSelector,
+            Func<TValue, TOtherValue, TResult> resultSelector)
+        {
+            return SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
+        }
+
+        public Option<TResult> SelectMany<TOtherValue, TResult>(
+            Func<TValue, Option<TOtherValue>> optionSelector,
+            Func<TValue, TOtherValue, Option<TResult>> resultSelector)
+        {
+            return Match(
+                myValue => optionSelector(myValue).Match(
+                    otherValue => resultSelector(myValue, otherValue),
+                    Option.None<TResult>),
+                Option.None<TResult>);
+        }
+
+        public Task<Option<TResult>> SelectMany<TItemValue, TResult>(
+            Func<TValue, Task<Option<TItemValue>>> optionSelector,
+            Func<TValue, TItemValue, TResult> resultSelector)
+        {
+            return SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
+        }
+
+        public Task<Option<TResult>> SelectMany<TItemValue, TResult>(
+            Func<TValue, Task<Option<TItemValue>>> optionSelector,
+            Func<TValue, TItemValue, Option<TResult>> resultSelector)
+        {
+            return Match(
+                async value =>
+                {
+                    var item = await optionSelector(value).ConfigureAwait(false);
+                    return item.Match(
+                        itemValue => resultSelector(value, itemValue),
+                        Option<TResult>.None);
+                },
+                () => Task.FromResult(Option.None<TResult>()));
         }
 
         public Option<TValue> Switch(Action<TValue> onSome, Action onNone)

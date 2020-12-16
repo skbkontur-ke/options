@@ -439,4 +439,4 @@ Where:
 
 ## Contributing
 
-Add safe methods with only `TResult` generic parameter into `Option.TValue.cs`. Add unsafe methods or methods with other generic parameters as extension methods. That allows simplier upcasts.
+Add safe methods into `Option.TValue.cs` if possible. That allows simplier upcasts.

@@ -7,13 +7,13 @@ namespace Kontur.Options
         [Pure]
         public static Option<TValue> Some<TValue>(TValue value)
         {
-            return new Some<TValue>(value);
+            return Option<TValue>.Some(value);
         }
 
         [Pure]
         public static Option<TValue> None<TValue>()
         {
-            return new None<TValue>();
+            return Option<TValue>.None();
         }
 
         [Pure]

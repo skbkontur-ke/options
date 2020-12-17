@@ -10,13 +10,23 @@ namespace Kontur.Tests.Options.Extraction
     internal class GetOrThrow_Should
     {
         [Test]
-        public void Throw_On_None()
+        public void Throw_InvalidOperationException_On_None()
         {
             var option = Option.None<int>();
 
             Func<int> func = () => option.GetOrThrow();
 
             func.Should().Throw<InvalidOperationException>();
+        }
+
+        [Test]
+        public void Throw_ValueMissingException_On_None()
+        {
+            var option = Option.None<int>();
+
+            Func<int> func = () => option.GetOrThrow();
+
+            func.Should().Throw<ValueMissingException>();
         }
 
         [Test]

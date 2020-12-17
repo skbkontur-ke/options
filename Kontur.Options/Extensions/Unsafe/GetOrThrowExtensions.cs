@@ -19,7 +19,7 @@ namespace Kontur.Options.Unsafe
         [Pure]
         public static TValue GetOrThrow<TValue>(this Option<TValue> option)
         {
-            return option.GetOrThrow(new InvalidOperationException($"Can not get value from {option}"));
+            return option.GetOrThrow(new ValueMissingException($"Can not get value from {option}"));
         }
     }
 }

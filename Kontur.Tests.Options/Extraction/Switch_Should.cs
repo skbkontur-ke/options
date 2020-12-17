@@ -14,7 +14,7 @@ namespace Kontur.Tests.Options.Extraction
             var counter = Substitute.For<ICounter>();
             var option = Option.Some("foo");
 
-            option.Switch(_ => counter.Increment(), () => { });
+            option.Switch(() => { }, _ => counter.Increment());
 
             counter.Received().Increment();
         }
@@ -25,7 +25,7 @@ namespace Kontur.Tests.Options.Extraction
             const string expected = "foo";
             var option = Option.Some(expected);
 
-            option.Switch(value => value.Should().Be(expected), () => { });
+            option.Switch(() => { }, value => value.Should().Be(expected));
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace Kontur.Tests.Options.Extraction
             var counter = Substitute.For<ICounter>();
             var option = Option.None<string>();
 
-            option.Switch(_ => { }, () => counter.Increment());
+            option.Switch(() => counter.Increment(), _ => { });
 
             counter.Received().Increment();
         }
@@ -44,7 +44,7 @@ namespace Kontur.Tests.Options.Extraction
         {
             var option = Option.None<string>();
 
-            option.Switch(_ => Assert.Fail("OnSome called"), () => { });
+            option.Switch(() => { }, _ => Assert.Fail("OnSome called"));
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace Kontur.Tests.Options.Extraction
         {
             var option = Option.Some("foo");
 
-            option.Switch(_ => { }, () => Assert.Fail("OnNone called"));
+            option.Switch(() => Assert.Fail("OnNone called"), _ => { });
         }
 
         private static TestCaseData CreateReturnSelfCase(Option<int> option)
@@ -69,7 +69,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(ReturnSelfCases))]
         public void Return_Self(Option<int> option)
         {
-            var result = option.Switch(_ => { }, () => { });
+            var result = option.Switch(() => { }, _ => { });
 
             result.Should().BeEquivalentTo(option);
         }

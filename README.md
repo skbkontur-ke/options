@@ -146,11 +146,11 @@ if (option.TryGet(out var value))
 ```
 Option<int> option = ...;
 
-string result = option.Match(onSome: str => $"Number {i}", onNone: () => "valueOnNone");
-string result = option.Match(onSome: str => $"Number {i}", onNoneValue: "valueOnNone");
+string result = option.Match(onNone: () => "valueOnNone", onSome: str => $"Number {i}");
+string result = option.Match(onNoneValue: "valueOnNone", onSome: str => $"Number {i}");
 
-object result = option.Match<object>(onSome: str => $"Number {i}", onNone: () => "valueOnNone");
-object result = option.Match<object>(onSome: str => $"Number {i}", onNoneValue: "valueOnNone");
+object result = option.Match<object>(onNone: () => "valueOnNone", onSome: str => $"Number {i}");
+object result = option.Match<object>(onNoneValue: "valueOnNone", onSome: str => $"Number {i}");
 ```
 
 ### Switch
@@ -158,8 +158,8 @@ object result = option.Match<object>(onSome: str => $"Number {i}", onNoneValue: 
 Option<int> option = ...;
 
 option.Switch(
-  onSome: value => Console.WriteLine($"Value is {value}"),
-  onNone: () => Console.WriteLine("There is no value")
+  onNone: () => Console.WriteLine("There is no value"),
+  onSome: value => Console.WriteLine($"Value is {value}")
 );
 ```
 
@@ -184,8 +184,8 @@ Option<int> option = ...;
 
 string result = option
   .Switch(
-    onSome: value => Console.WriteLine($"Value is {value}"),
-    onNone: () => Console.WriteLine("There is no value"))
+    onNone: () => Console.WriteLine("There is no value")),
+    onSome: value => Console.WriteLine($"Value is {value}")
   .OnSome(value => log.Info($"Value is {value}"))
   .OnNone(() => log.Info("There is no value"))
   .Match(onSome: value => value.ToString(), onNoneValue: "valueOnNone");

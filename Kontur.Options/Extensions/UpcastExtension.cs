@@ -7,7 +7,7 @@ namespace Kontur.Options
         [Pure]
         public static Option<TResult> Upcast<TResult>(this IOptionMatch<TResult> option)
         {
-            return option.Match(Option<TResult>.Some, Option<TResult>.None);
+            return option.Match(Option<TResult>.None, Option<TResult>.Some);
         }
     }
 }

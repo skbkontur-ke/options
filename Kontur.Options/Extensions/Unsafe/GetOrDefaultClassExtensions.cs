@@ -9,7 +9,7 @@ namespace Kontur.Options.Unsafe
         public static TValue? GetOrDefault<TValue>(this Option<TValue> option)
             where TValue : class
         {
-            return option.Match(value => value, default(TValue));
+            return option.Match(default(TValue), value => value);
 #else
         [return: System.Diagnostics.CodeAnalysis.MaybeNull]
         public static TValue GetOrDefault<TValue>(this Option<TValue> option)

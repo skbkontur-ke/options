@@ -7,7 +7,7 @@ namespace Kontur.Options
     {
         public static TValue GetOrElse<TValue>(this IOptionMatch<TValue> option, Func<TValue> onNoneValueFactory)
         {
-            return option.Match(value => value, onNoneValueFactory);
+            return option.Match(onNoneValueFactory, value => value);
         }
 
         [Pure]

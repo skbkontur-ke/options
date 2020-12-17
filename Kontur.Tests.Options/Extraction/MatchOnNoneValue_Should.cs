@@ -13,7 +13,7 @@ namespace Kontur.Tests.Options.Extraction
             const string expected = "foo";
             var option = Option.Some(expected);
 
-            var result = option.Match(x => x, "bar");
+            var result = option.Match("bar", x => x);
 
             result.Should().Be(expected);
         }
@@ -24,7 +24,7 @@ namespace Kontur.Tests.Options.Extraction
             var option = Option.None<string>();
             const string expected = "bar";
 
-            var result = option.Match(_ => "foo", expected);
+            var result = option.Match(expected, _ => "foo");
 
             result.Should().Be(expected);
         }
@@ -34,9 +34,7 @@ namespace Kontur.Tests.Options.Extraction
         {
             var option = Option.None<string>();
 
-            option.Match(
-                _ => AssertDoNotCalled(),
-                string.Empty);
+            option.Match(string.Empty, _ => AssertDoNotCalled());
         }
 
         private static string AssertDoNotCalled()

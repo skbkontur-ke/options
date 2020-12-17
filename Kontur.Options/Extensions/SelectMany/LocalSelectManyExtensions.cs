@@ -74,7 +74,7 @@ namespace Kontur.Options
         {
             var value1 = await task.ConfigureAwait(false);
             var option = await optionSelector(value1).ConfigureAwait(false);
-            return option.Match(value2 => resultSelector(value1, value2), Option.None<TResult>);
+            return option.Match(Option.None<TResult>, value2 => resultSelector(value1, value2));
         }
     }
 }

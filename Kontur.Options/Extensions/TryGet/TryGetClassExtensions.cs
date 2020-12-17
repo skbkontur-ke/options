@@ -9,9 +9,7 @@ namespace Kontur.Options
             where TValue : class
         {
             bool result;
-            (value, result) = option.Match(
-                v => (v, true),
-                (default(TValue?), false));
+            (value, result) = option.Match((default(TValue?), false), v => (v, true));
             return result;
         }
     }

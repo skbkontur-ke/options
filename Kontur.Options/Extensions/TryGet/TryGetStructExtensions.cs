@@ -11,7 +11,7 @@ namespace Kontur.Options
             where TValue : struct
         {
             bool result;
-            (value, result) = option.Match(val => (val, true), (default, false));
+            (value, result) = option.Match((default, false), val => (val, true));
             return result;
         }
 
@@ -22,7 +22,7 @@ namespace Kontur.Options
             where TValue : struct
         {
             bool result;
-            (value, result) = option.Match(val => (val, true), (null, false));
+            (value, result) = option.Match((null, false), val => (val, true));
             return result;
         }
     }

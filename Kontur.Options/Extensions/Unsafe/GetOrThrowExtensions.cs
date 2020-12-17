@@ -7,7 +7,7 @@ namespace Kontur.Options.Unsafe
     {
         public static TValue GetOrThrow<TValue>(this Option<TValue> option, Func<Exception> exceptionFactory)
         {
-            return option.Match(value => value, () => throw exceptionFactory());
+            return option.Match(() => throw exceptionFactory(), value => value);
         }
 
         [Pure]

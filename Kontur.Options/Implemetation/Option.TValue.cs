@@ -16,7 +16,7 @@ namespace Kontur.Options
         {
         }
 
-        public bool HasSome => Match(_ => true, false);
+        public bool HasSome => Match(false, _ => true);
 
         public bool IsNone => !HasSome;
 
@@ -52,19 +52,19 @@ namespace Kontur.Options
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumeratorInternal();
 
-        TResult IOptionMatch<TValue>.Match<TResult>(Func<TValue, TResult> onSome, Func<TResult> onNone) =>
-            Match(onSome, onNone);
+        TResult IOptionMatch<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
+            Match(onNone, onSome);
 
 #if !NETSTANDARD2_0
         [Pure]
         public abstract bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value);
 #endif
 
-        public abstract TResult Match<TResult>(Func<TValue, TResult> onSome, Func<TResult> onNone);
+        public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);
 
-        public TResult Match<TResult>(Func<TValue, TResult> onSome, TResult onNoneValue)
+        public TResult Match<TResult>(TResult onNoneValue, Func<TValue, TResult> onSome)
         {
-            return Match(onSome, () => onNoneValue);
+            return Match(() => onNoneValue, onSome);
         }
 
         public Option<TResult> Map<TResult>(Func<TValue, TResult> mapper)
@@ -74,7 +74,7 @@ namespace Kontur.Options
 
         public Option<TResult> Select<TResult>(Func<TValue, Option<TResult>> resultSelector)
         {
-            return Match(resultSelector, Option.None<TResult>);
+            return Match(Option.None<TResult>, resultSelector);
         }
 
         public Option<TResult> Select<TResult>(Func<TValue, TResult> resultSelector)
@@ -94,10 +94,10 @@ namespace Kontur.Options
             Func<TValue, TOtherValue, Option<TResult>> resultSelector)
         {
             return Match(
+                Option.None<TResult>,
                 myValue => optionSelector(myValue).Match(
-                    otherValue => resultSelector(myValue, otherValue),
-                    Option.None<TResult>),
-                Option.None<TResult>);
+                    Option.None<TResult>,
+                    otherValue => resultSelector(myValue, otherValue)));
         }
 
         public Task<Option<TResult>> SelectMany<TItemValue, TResult>(
@@ -112,23 +112,21 @@ namespace Kontur.Options
             Func<TValue, TItemValue, Option<TResult>> resultSelector)
         {
             return Match(
+                () => Task.FromResult(Option.None<TResult>()),
                 async value =>
                 {
                     var item = await optionSelector(value).ConfigureAwait(false);
-                    return item.Match(
-                        itemValue => resultSelector(value, itemValue),
-                        Option<TResult>.None);
-                },
-                () => Task.FromResult(Option.None<TResult>()));
+                    return item.Match(Option<TResult>.None, itemValue => resultSelector(value, itemValue));
+                });
         }
 
-        public Option<TValue> Switch(Action<TValue> onSome, Action onNone)
+        public Option<TValue> Switch(Action onNone, Action<TValue> onSome)
         {
-            SwitchInternal(onSome, onNone);
+            SwitchInternal(onNone, onSome);
             return this;
         }
 
-        private protected abstract void SwitchInternal(Action<TValue> onSome, Action onNone);
+        private protected abstract void SwitchInternal(Action onNone, Action<TValue> onSome);
 
         private protected abstract IEnumerator<TValue> GetEnumeratorInternal();
     }

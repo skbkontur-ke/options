@@ -14,8 +14,6 @@ namespace Kontur.Tests.Options.Conversion.Linq.SelectMany.Options2.Tasks1
 
         internal static readonly IEnumerable<TestCaseData> Cases = Options2Common.Cases
             .Select(testCase => new TestCaseData(testCase.Args)
-                .Returns(testCase.Result.Match(
-                    sum => Option.Some(sum + TaskTerm),
-                    () => Option.None())));
+                .Returns(testCase.Result.Match(() => Option.None(), sum => Option.Some(sum + TaskTerm))));
     }
 }

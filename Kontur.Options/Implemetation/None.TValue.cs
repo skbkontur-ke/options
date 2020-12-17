@@ -20,7 +20,7 @@ namespace Kontur.Options
             return TypeArgument.GetHashCode();
         }
 
-        public override TResult Match<TResult>(Func<TValue, TResult> onSome, Func<TResult> onNone)
+        public override TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome)
         {
             return onNone();
         }
@@ -36,7 +36,7 @@ namespace Kontur.Options
         }
 #endif
 
-        private protected override void SwitchInternal(Action<TValue> onSome, Action onNone)
+        private protected override void SwitchInternal(Action onNone, Action<TValue> onSome)
         {
             onNone();
         }

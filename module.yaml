@@ -1,6 +1,6 @@
 default:
   build:
-    target: Kontur.Extern.Options.sln
+    target: Kontur.Options.sln
 
 lib *default:
   deps:
@@ -12,7 +12,7 @@ lib *default:
     configuration: Lib
 
   install:
-    - bin\Kontur.Extern.Options\netstandard2.1\Kontur.Extern.Options.dll
+    - bin\Kontur.Options\netstandard2.1\Kontur.Options.dll
 
 
 full-build > lib:
@@ -23,5 +23,5 @@ full-build > lib:
     configuration: Release
 
   artifacts:
-    - Kontur.Extern.Tests.Options\bin\Release\net48\Kontur.Extern.Tests.Options.dll
-    - Kontur.Extern.Tests.Options\bin\Release\netcoreapp3.1\Kontur.Extern.Tests.Options.dll
+    - Kontur.Tests.Options\bin\Release\net48\Kontur.Tests.Options.dll
+    - Kontur.Tests.Options\bin\Release\netcoreapp3.1\Kontur.Tests.Options.dll

@@ -48,7 +48,7 @@ Use [cement](https://github.com/skbkontur/cement#get-started) to add reference t
 Execute that command in your cement module:
 `cm ref add ke-options your-csproj.csproj`
 
-If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-options\bin\Kontur.Extern.Options\netstandard2.1\Kontur.Extern.Options.dll` with reference `..\ke-options\bin\Kontur.Extern.Options\netstandard2.0\Kontur.Extern.Options.dll`.
+If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-options\bin\Kontur.Options\netstandard2.1\Kontur.Options.dll` with reference `..\ke-options\bin\Kontur.Options\netstandard2.0\Kontur.Options.dll`.
 
 ## Features
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Kontur.Options
 {
@@ -39,11 +38,6 @@ namespace Kontur.Options
         private protected override void SwitchInternal(Action onNone, Action<TValue> onSome)
         {
             onNone();
-        }
-
-        private protected override IEnumerator<TValue> GetEnumeratorInternal()
-        {
-            yield break;
         }
     }
 }

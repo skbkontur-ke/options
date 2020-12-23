@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Kontur.Options
@@ -48,23 +49,14 @@ namespace Kontur.Options
             return new None<TValue>();
         }
 
-        IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() => GetEnumeratorInternal();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumeratorInternal();
-
         TResult IOptionMatch<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
             Match(onNone, onSome);
 
-#if !NETSTANDARD2_0
-        [Pure]
-        public abstract bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value);
-#endif
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);
-
-        public TResult Match<TResult>(TResult onNoneValue, Func<TValue, TResult> onSome)
+        public IEnumerator<TValue> GetEnumerator()
         {
-            return Match(() => onNoneValue, onSome);
+            return Match(Enumerable.Empty<TValue>, value => new[] { value }).GetEnumerator();
         }
 
         public Option<TResult> Map<TResult>(Func<TValue, TResult> mapper)
@@ -126,8 +118,18 @@ namespace Kontur.Options
             return this;
         }
 
-        private protected abstract void SwitchInternal(Action onNone, Action<TValue> onSome);
+        public TResult Match<TResult>(TResult onNoneValue, Func<TValue, TResult> onSome)
+        {
+            return Match(() => onNoneValue, onSome);
+        }
 
-        private protected abstract IEnumerator<TValue> GetEnumeratorInternal();
+        public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);
+
+#if !NETSTANDARD2_0
+        [Pure]
+        public abstract bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value);
+#endif
+
+        private protected abstract void SwitchInternal(Action onNone, Action<TValue> onSome);
     }
 }

@@ -8,15 +8,15 @@ namespace Kontur.Tests.Options.Instantiation
     [TestFixture]
     internal class Create_Via_Generic_Should
     {
-        private static TestCaseData CreateCreateCase(Option<int> option, bool hasSome)
+        private static TestCaseData CreateCase(Option<int> option, bool hasSome)
         {
             return new TestCaseData(option).Returns(hasSome);
         }
 
         private static readonly TestCaseData[] CreateCases =
         {
-            CreateCreateCase(Option<int>.None(), false),
-            CreateCreateCase(Option<int>.Some(10), true),
+            CreateCase(Option<int>.None(), false),
+            CreateCase(Option<int>.Some(10), true),
         };
 
         [TestCaseSource(nameof(CreateCases))]

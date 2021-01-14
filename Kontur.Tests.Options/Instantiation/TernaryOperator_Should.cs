@@ -8,22 +8,31 @@ namespace Kontur.Tests.Options.Instantiation
     {
         private const int SomeValue = 7;
 
-        private static TestCaseData Create(bool flag, Option<int> result)
+        private static TestCaseData CreateCase(bool flag, Option<int> result)
         {
             return new TestCaseData(flag).Returns(result);
         }
 
         private static readonly TestCaseData[] Cases =
         {
-            Create(true, SomeValue),
-            Create(false, Option.None()),
+            CreateCase(true, SomeValue),
+            CreateCase(false, Option.None()),
         };
 
         [TestCaseSource(nameof(Cases))]
-        public Option<int> Create(bool flag)
+        public Option<int> Create_Via_Other_Argument_Implicit_Conversion(bool flag)
+        {
+            var option = flag
+                ? Option.Some(SomeValue)
+                : Option.None();
+            return option;
+        }
+
+        [TestCaseSource(nameof(Cases))]
+        public Option<int> Create_Via_Target_Type_Inference(bool flag)
         {
             return flag
-                ? Option.Some(SomeValue)
+                ? SomeValue
                 : Option.None();
         }
     }

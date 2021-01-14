@@ -111,6 +111,10 @@ Option<string> option = Option.None();
 var option = flag
   ? Option.Some("Hello")
   : Option.None();
+
+Option<string> option = flag
+  ? "Hello"
+  : Option.None();
 ```
 
 ## Safe extraction of data from Option instance

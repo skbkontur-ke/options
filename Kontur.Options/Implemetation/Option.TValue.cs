@@ -74,6 +74,11 @@ namespace Kontur.Options
             return Select(value => Option.Some(resultSelector(value)));
         }
 
+        public Option<TValue> Where(Func<TValue, bool> predicate)
+        {
+            return Select(value => predicate(value) ? Option.Some(value) : None());
+        }
+
         public Option<TResult> SelectMany<TOtherValue, TResult>(
             Func<TValue, Option<TOtherValue>> optionSelector,
             Func<TValue, TOtherValue, TResult> resultSelector)

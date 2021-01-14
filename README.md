@@ -43,7 +43,7 @@ MIT
 
 ## Using option type
 
-Use [cement](https://github.com/skbkontur/cement#get-started) to add reference to Option type.
+Use [cement](https://github.com/skbkontur/cement#get-started) to add reference to Option type assembly.
 
 Execute that command in your cement module:
 `cm ref add ke-options your-csproj.csproj`
@@ -65,9 +65,11 @@ abstract Option<ConvertResult> Convert(string message, Format format);
 
 Task<Option<ConvertResult>> result =
   from userId  in GetCurrentUserId() // A
+  where userId != Guid.Empty
   from index   in GetCurrentIndex() // B
   from product in GetCurrentProduct() // C
   let nextIndex = index + 1
+  where nextIndex > 0
   from message in GetMessage(userId, nextIndex, product) // D
   from format  in GetFormat(nextIndex, message) // E
   select Convert(message, format); // F
@@ -82,7 +84,7 @@ Where:
 ### Other features
 
 * Assembly contains only Option type implementation. There are no other stuff.
-* Option type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. Also there is no ternary operators.
+* Option type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. So there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag.
 * There is no specific handling of nulls. Use C# 8 nullable reference types to handle nulls.
 
 ### Drawbacks
@@ -396,6 +398,7 @@ abstract Option<ConvertResult> Convert(string message, Product product);
 
 Option<ConvertResult> result =
   from userId  in GetCurrentUserId()
+  where userId != Guid.Empty
   from index   in GetCurrentIndex()
   from product in GetCurrentProduct()
   let nextIndex = index + 1
@@ -417,9 +420,11 @@ abstract Option<ConvertResult> Convert(string message, Format format);
 
 Task<Option<ConvertResult>> result =
   from userId  in GetCurrentUserId() // A
+  where userId != Guid.Empty
   from index   in GetCurrentIndex() // B
   from product in GetCurrentProduct() // C
   let nextIndex = index + 1
+  where nextIndex > 0
   from message in GetMessage(userId, nextIndex, product) // D
   from format  in GetFormat(nextIndex, message) // E
   select Convert(message, format); // F

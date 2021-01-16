@@ -21,6 +21,8 @@ namespace Kontur.Options
 
         public bool IsNone => !HasSome;
 
+        protected static string TypeArgumentString => $"<{TypeArgument.Name}>";
+
         public static implicit operator Option<TValue>(TValue value)
         {
             return new Some<TValue>(value);

@@ -13,7 +13,7 @@ namespace Kontur.Options
 
         public override string ToString()
         {
-            return $"{nameof(Some<TValue>)}<{TypeArgument.Name}> value={value}";
+            return $"{nameof(Some<TValue>)}{TypeArgumentString} value={value}";
         }
 
         public override bool Equals(object obj)

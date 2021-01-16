@@ -6,7 +6,7 @@ namespace Kontur.Options
     {
         public override string ToString()
         {
-            return $"{nameof(None<TValue>)}<{TypeArgument.Name}>";
+            return $"{nameof(None<TValue>)}{TypeArgumentString}";
         }
 
         public override bool Equals(object obj)

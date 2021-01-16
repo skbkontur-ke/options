@@ -59,11 +59,6 @@ namespace Kontur.Options
             return Match(Enumerable.Empty<TValue>, value => new[] { value }).GetEnumerator();
         }
 
-        public Option<TResult> Map<TResult>(Func<TValue, TResult> mapper)
-        {
-            return Select(value => Option<TResult>.Some(mapper(value)));
-        }
-
         public Option<TResult> Select<TResult>(Func<TValue, Option<TResult>> resultSelector)
         {
             return Match(Option.None<TResult>, resultSelector);
@@ -71,7 +66,7 @@ namespace Kontur.Options
 
         public Option<TResult> Select<TResult>(Func<TValue, TResult> resultSelector)
         {
-            return Select(value => Option.Some(resultSelector(value)));
+            return Select(value => Option<TResult>.Some(resultSelector(value)));
         }
 
         public Option<TValue> Where(Func<TValue, bool> predicate)

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Kontur.Tests.Options.Conversion
 {
     [TestFixture]
-    internal class Map_Should
+    internal class Select_Should
     {
         private static TestCaseData Create(Option<int> option, Option<string> result)
         {
@@ -21,7 +21,7 @@ namespace Kontur.Tests.Options.Conversion
         [TestCaseSource(nameof(Cases))]
         public Option<string> Process_Value(Option<int> option)
         {
-            return option.Map(i => i.ToString(CultureInfo.InvariantCulture));
+            return option.Select(i => i.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

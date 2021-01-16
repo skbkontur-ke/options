@@ -60,11 +60,10 @@ namespace Kontur.Tests.Options.Conversion.Linq
                 where nextIndex > 0
                 from message in GetMessage(userId, nextIndex, product)
                 from format in GetFormat(nextIndex, message)
-                select Convert(message, format);
+                from converted in Convert(message, format)
+                select converted.Result;
 
-            var result = await task.ConfigureAwait(false);
-
-            return result.Map(c => c.Result);
+            return await task.ConfigureAwait(false);
         }
 
         private class Product

@@ -30,7 +30,7 @@
     * [GetOrDefault](#getordefault)
     * [EnsureHasValue](#ensurehasvalue)
 * [Conversion of `Option<TValue>` to another Option type](#conversion-of-optiontvalue-to-another-option-type)
-    * [Map](#map)
+    * [Select](#select)
     * [Upcast](#upcast)
     * [Or](#or)
     * [Do-notation without tasks](#do-notation-without-tasks)
@@ -351,12 +351,12 @@ option.EnsureHasValue();
 
 ## Conversion of `Option<TValue>` to another Option type
 
-### Map
+### Select
 ```
 Option<int> option = ...;
 
-Option<string> result = option.Map(i => i.ToString());
-Option<object> result = option.Map<object>(i => i.ToString());
+Option<string> result = option.Select(i => i.ToString());
+Option<object> result = option.Select<object>(i => i.ToString());
 ```
 
 ### Upcast

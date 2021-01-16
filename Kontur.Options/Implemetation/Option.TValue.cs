@@ -17,7 +17,7 @@ namespace Kontur.Options
         {
         }
 
-        public bool HasSome => Match(false, _ => true);
+        public bool HasSome => Match(false, true);
 
         public bool IsNone => !HasSome;
 
@@ -123,9 +123,30 @@ namespace Kontur.Options
             return this;
         }
 
+        [Pure]
+        public TResult Match<TResult>(TResult onNoneValue, TResult onSomeValue)
+        {
+            return Match(() => onNoneValue, onSomeValue);
+        }
+
+        public TResult Match<TResult>(TResult onNoneValue, Func<TResult> onSome)
+        {
+            return Match(() => onNoneValue, onSome);
+        }
+
         public TResult Match<TResult>(TResult onNoneValue, Func<TValue, TResult> onSome)
         {
             return Match(() => onNoneValue, onSome);
+        }
+
+        public TResult Match<TResult>(Func<TResult> onNone, TResult onSomeValue)
+        {
+            return Match(onNone, () => onSomeValue);
+        }
+
+        public TResult Match<TResult>(Func<TResult> onNone, Func<TResult> onSomeValue)
+        {
+            return Match(onNone, _ => onSomeValue());
         }
 
         public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);

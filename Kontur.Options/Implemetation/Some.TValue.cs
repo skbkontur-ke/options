@@ -23,7 +23,7 @@ namespace Kontur.Options
 
         public override int GetHashCode()
         {
-            return (Value: value, TypeArgument).GetHashCode();
+            return (value, TypeArgument).GetHashCode();
         }
 
         public override TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome)

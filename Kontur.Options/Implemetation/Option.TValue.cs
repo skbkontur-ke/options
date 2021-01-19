@@ -17,21 +17,21 @@ namespace Kontur.Options
         {
         }
 
-        public bool HasSome => Match(false, true);
-
         public bool IsNone => !HasSome;
 
-        protected static string TypeArgumentString => $"<{TypeArgument.Name}>";
+        public bool HasSome => Match(false, true);
 
-        public static implicit operator Option<TValue>(TValue value)
-        {
-            return new Some<TValue>(value);
-        }
+        protected static string TypeArgumentString => $"<{TypeArgument.Name}>";
 
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Only type is needed")]
         public static implicit operator Option<TValue>(NoneMarker _)
         {
             return new None<TValue>();
+        }
+
+        public static implicit operator Option<TValue>(TValue value)
+        {
+            return new Some<TValue>(value);
         }
 
         public static implicit operator bool(Option<TValue> option)
@@ -40,15 +40,15 @@ namespace Kontur.Options
         }
 
         [Pure]
-        public static Option<TValue> Some(TValue value)
-        {
-            return new Some<TValue>(value);
-        }
-
-        [Pure]
         public static Option<TValue> None()
         {
             return new None<TValue>();
+        }
+
+        [Pure]
+        public static Option<TValue> Some(TValue value)
+        {
+            return new Some<TValue>(value);
         }
 
         TResult IOptionMatch<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>

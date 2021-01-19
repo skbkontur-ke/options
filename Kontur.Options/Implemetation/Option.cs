@@ -5,9 +5,9 @@ namespace Kontur.Options
     public static class Option
     {
         [Pure]
-        public static Option<TValue> Some<TValue>(TValue value)
+        public static NoneMarker None()
         {
-            return Option<TValue>.Some(value);
+            return default;
         }
 
         [Pure]
@@ -17,9 +17,9 @@ namespace Kontur.Options
         }
 
         [Pure]
-        public static NoneMarker None()
+        public static Option<TValue> Some<TValue>(TValue value)
         {
-            return default;
+            return Option<TValue>.Some(value);
         }
     }
 }

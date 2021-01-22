@@ -9,10 +9,5 @@ namespace Kontur.Tests.Options.Instantiation.Create_Via_Non_Generic
         {
             return new TestCaseData(option).Returns(hasValue);
         }
-
-        internal static TestCaseData CreatePassValueCase<TValue>(TValue value)
-        {
-            return new TestCaseData(Option.Some(value)).Returns(value);
-        }
     }
 }

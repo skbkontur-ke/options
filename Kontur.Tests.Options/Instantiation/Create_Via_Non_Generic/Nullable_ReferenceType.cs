@@ -25,20 +25,12 @@ namespace Kontur.Tests.Options.Instantiation.Create_Via_Non_Generic
             return option.HasSome;
         }
 
-        private static TestCaseData CreateStoreValueCase(string? value)
+        [TestCase(null, ExpectedResult = null)]
+        [TestCase("foo", ExpectedResult = "foo")]
+        public string? Store_Value(string? value)
         {
-            return Common.CreatePassValueCase(value);
-        }
+            var option = Option.Some(value);
 
-        private static readonly TestCaseData[] PassValueNullableReferenceTypeCases =
-        {
-            CreateStoreValueCase(null),
-            CreateStoreValueCase("foo"),
-        };
-
-        [TestCaseSource(nameof(PassValueNullableReferenceTypeCases))]
-        public string? Store_Value(Option<string?> option)
-        {
             return option.GetOrThrow();
         }
     }

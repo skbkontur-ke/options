@@ -7,16 +7,16 @@ namespace Kontur.Tests.Options.Equality
     [TestFixture]
     internal class GetHashCode_Should
     {
-        private static TestCaseData CreateCase<TValue1, TValue2>(Option<TValue1> option1, Option<TValue2> option2)
+        private static TestCaseData Create<TValue1, TValue2>(Option<TValue1> option1, Option<TValue2> option2)
         {
-            return new TestCaseData(option1, option2);
+            return new (option1, option2);
         }
 
         public static readonly TestCaseData[] Cases =
         {
-            CreateCase(Option.None<int>(), Option.None<int>()),
-            CreateCase(Option.None<string>(), Option.None<string>()),
-            CreateCase(Option.Some(500), Option.Some(500)),
+            Create(Option.None<int>(), Option.None<int>()),
+            Create(Option.None<string>(), Option.None<string>()),
+            Create(Option.Some(500), Option.Some(500)),
         };
 
         [TestCaseSource(nameof(Cases))]

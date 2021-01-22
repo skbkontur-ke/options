@@ -1,39 +1,49 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Kontur.Options;
 using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
 namespace Kontur.Tests.Options.Instantiation
 {
-    [TestFixture]
-    internal class Create_Via_Generic_Should
+    [TestFixture(10)]
+    [TestFixture("bar")]
+    internal class Create_Via_Generic_Should<T>
     {
-        private static TestCaseData CreateCase(Option<int> option, bool hasSome)
+        private readonly T value;
+
+        public Create_Via_Generic_Should(T value)
         {
-            return new TestCaseData(option).Returns(hasSome);
+            this.value = value;
+        }
+
+        private static TestCaseData CreateCase(Func<T, Option<T>> optionFactory, bool hasSome)
+        {
+            return new TestCaseData(optionFactory).Returns(hasSome);
         }
 
         private static readonly TestCaseData[] CreateCases =
         {
-            CreateCase(Option<int>.None(), false),
-            CreateCase(Option<int>.Some(10), true),
+            CreateCase(_ => Option<T>.None(), false),
+            CreateCase(Option<T>.Some, true),
         };
 
         [TestCaseSource(nameof(CreateCases))]
-        public bool Pass_HasValue(Option<int> option)
+        public bool Pass_HasValue(Func<T, Option<T>> optionFactory)
         {
+            var option = optionFactory(value);
+
             return option.HasSome;
         }
 
         [Test]
         public void Pass_Value_To_Some()
         {
-            const int expected = 10;
-            var option = Option<int>.Some(expected);
+            var option = Option<T>.Some(value);
 
             var result = option.GetOrThrow();
 
-            result.Should().Be(expected);
+            result.Should().Be(value);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Kontur.Tests.Options.Instantiation.Create_Via_Non_Generic
         };
 
         [TestCaseSource(nameof(HasValueNullableValueTypeCases))]
-        public bool Store_HasValue(Option<int?> option)
+        public bool HasValue(Option<int?> option)
         {
             return option.HasSome;
         }

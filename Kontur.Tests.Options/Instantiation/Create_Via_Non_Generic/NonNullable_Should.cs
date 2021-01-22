@@ -29,7 +29,7 @@ namespace Kontur.Tests.Options.Instantiation.Create_Via_Non_Generic
         };
 
         [TestCaseSource(nameof(Cases))]
-        public bool Store_HasValue(Func<T, Option<T>> optionFactory)
+        public bool HasValue(Func<T, Option<T>> optionFactory)
         {
             var option = optionFactory(value);
 

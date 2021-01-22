@@ -29,7 +29,7 @@ namespace Kontur.Tests.Options.Instantiation
         };
 
         [TestCaseSource(nameof(CreateCases))]
-        public bool Pass_HasValue(Func<T, Option<T>> optionFactory)
+        public bool HasValue(Func<T, Option<T>> optionFactory)
         {
             var option = optionFactory(value);
 
@@ -37,7 +37,7 @@ namespace Kontur.Tests.Options.Instantiation
         }
 
         [Test]
-        public void Pass_Value_To_Some()
+        public void Store_Value()
         {
             var option = Option<T>.Some(value);
 

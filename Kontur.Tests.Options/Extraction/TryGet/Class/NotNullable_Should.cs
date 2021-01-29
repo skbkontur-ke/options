@@ -32,20 +32,20 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Class
 
         public string? Extract_Value(Option<string> option)
         {
-            _ = option.TryGet(out var actual);
+            _ = option.TryGet(out var value);
 
-            return actual;
+            return value;
         }
 
         [TestCaseSource(nameof(GetCases))]
         public string Extract_Value_With_If(Option<string> option)
         {
-            if (option.TryGet(out var result))
+            if (option.TryGet(out var value))
             {
 #if NETFRAMEWORK
 #pragma warning disable 8603
 #endif
-                return result;
+                return value;
 #pragma warning restore 8603
             }
 

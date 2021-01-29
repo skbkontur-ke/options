@@ -31,17 +31,17 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Struct
         [TestCaseSource(nameof(GetCases))]
         public int Extract_Value(Option<int> option)
         {
-            _ = option.TryGet(out var actual);
+            _ = option.TryGet(out var value);
 
-            return actual;
+            return value;
         }
 
         [TestCaseSource(nameof(GetCases))]
         public int Extract_Value_With_If(Option<int> option)
         {
-            if (option.TryGet(out var result))
+            if (option.TryGet(out var value))
             {
-                return result;
+                return value;
             }
 
             throw new UnreachableException();

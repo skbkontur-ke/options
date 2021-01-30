@@ -11,7 +11,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Select
         private static readonly IEnumerable<TestCaseData> Cases = Common.ResultCases;
 
         [TestCaseSource(nameof(Cases))]
-        public Option<int> Option_Some(Option<int> option)
+        public Option<int> OneOption(Option<int> option)
         {
             return
                 from value in option
@@ -19,7 +19,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Select
         }
 
         [TestCaseSource(nameof(Cases))]
-        public Task<Option<int>> TaskOption_Some(Option<int> option)
+        public Task<Option<int>> TaskOption(Option<int> option)
         {
             return
                 from value in Task.FromResult(option)

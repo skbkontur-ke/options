@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Kontur.Options;
 using Kontur.Options.Unsafe;
@@ -14,9 +16,9 @@ namespace Kontur.Tests.Options.Extraction
         {
             var option = Option.None<int>();
 
-            Func<int> func = () => option.GetOrThrow();
+            Func<int> action = () => option.GetOrThrow();
 
-            func.Should().Throw<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Test]
@@ -24,59 +26,44 @@ namespace Kontur.Tests.Options.Extraction
         {
             var option = Option.None<int>();
 
-            Func<int> func = () => option.GetOrThrow();
+            Func<int> action = () => option.GetOrThrow();
 
-            func.Should().Throw<ValueMissingException>();
+            action.Should().Throw<ValueMissingException>();
         }
 
-        [Test]
-        public void Do_No_Throw_On_Some()
+        private static TestCaseData CreateCase(Func<Option<int>, int> extractor)
         {
-            var option = Option.Some(5);
-
-            Func<int> func = () => option.GetOrThrow();
-
-            func.Should().NotThrow();
+            return new(extractor);
         }
 
-        [Test]
-        public void Throw_MyException_On_None()
+        private static readonly TestCaseData[] MyExceptionCases =
         {
-            var option = Option.None<int>();
+            CreateCase(option => option.GetOrThrow(new MyException())),
+            CreateCase(option => option.GetOrThrow(() => new MyException())),
+        };
 
-            Func<int> func = () => option.GetOrThrow(new MyException());
-
-            func.Should().Throw<MyException>();
-        }
-
-        [Test]
-        public void Do_No_Throw_Passed_Exception_On_Some()
-        {
-            var option = Option.Some(5);
-
-            Func<int> func = () => option.GetOrThrow(new MyException());
-
-            func.Should().NotThrow();
-        }
-
-        [Test]
-        public void Throw_MyException_From_Factory_On_None()
+        [TestCaseSource(nameof(MyExceptionCases))]
+        public void Throw_MyException_On_None(Func<Option<int>, int> extractor)
         {
             var option = Option.None<int>();
 
-            Func<int> func = () => option.GetOrThrow(() => new MyException());
+            Func<int> action = () => extractor(option);
 
-            func.Should().Throw<MyException>();
+            action.Should().Throw<MyException>();
         }
 
-        [Test]
-        public void Do_No_Throw_Passed_Exception_From_Factory_On_Some()
+        private static readonly IEnumerable<TestCaseData> SomeCases = MyExceptionCases
+            .Append(CreateCase(option => option.GetOrThrow()));
+
+        [TestCaseSource(nameof(SomeCases))]
+        public void Return_Value_On_Some(Func<Option<int>, int> extractor)
         {
-            var option = Option.Some(5);
+            const int expected = 5;
+            var option = Option.Some(expected);
 
-            Func<int> func = () => option.GetOrThrow(() => new MyException());
+            var result = extractor(option);
 
-            func.Should().NotThrow();
+            result.Should().Be(expected);
         }
 
         [Test]

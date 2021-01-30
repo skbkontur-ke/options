@@ -37,8 +37,8 @@ namespace Kontur.Tests.Options.Conversion
         [Test]
         public void Do_Not_Call_Delegate_On_Success()
         {
-            var options = Option.Some(0);
-            options.Or(ThrowError);
+            var option = Option.Some(0);
+            option.Or(ThrowError);
         }
 
         private static Option<int> ThrowError()
@@ -56,10 +56,10 @@ namespace Kontur.Tests.Options.Conversion
         {
             yield return CreateUpcastCase(Option.None(), Option.None(), Option.None());
 
-            var some = new B();
-            yield return CreateUpcastCase(Option.None(), some, some);
-            yield return CreateUpcastCase(some, Option.None(), some);
-            yield return CreateUpcastCase(some, new B(), some);
+            var example = new B();
+            yield return CreateUpcastCase(Option.None(), example, example);
+            yield return CreateUpcastCase(example, Option.None(), example);
+            yield return CreateUpcastCase(example, new B(), example);
         }
 
         [TestCaseSource(nameof(GetUpcastCases))]

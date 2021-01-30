@@ -10,7 +10,7 @@ namespace Kontur.Tests.Options.Conversion.Linq
     {
         private static TestCaseData Create(int argsCount, params SelectCase[] expectedResult)
         {
-            return new TestCaseData(argsCount, expectedResult);
+            return new(argsCount, expectedResult);
         }
 
         private static readonly TestCaseData[] Cases =

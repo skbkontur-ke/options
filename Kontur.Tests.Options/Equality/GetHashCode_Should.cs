@@ -9,7 +9,7 @@ namespace Kontur.Tests.Options.Equality
     {
         private static TestCaseData Create<TValue1, TValue2>(Option<TValue1> option1, Option<TValue2> option2)
         {
-            return new (option1, option2);
+            return new(option1, option2);
         }
 
         public static readonly TestCaseData[] Cases =

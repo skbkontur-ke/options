@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using FluentAssertions;
 using Kontur.Options;
 using NUnit.Framework;
 
@@ -22,6 +23,22 @@ namespace Kontur.Tests.Options.Conversion
         public Option<string> Process_Value(Option<int> option)
         {
             return option.Select(i => i.ToString(CultureInfo.InvariantCulture));
+        }
+
+        [TestCaseSource(nameof(Cases))]
+        public Option<string> Process_Result(Option<int> option)
+        {
+            return option.Select(i => Option<string>.Some(i.ToString(CultureInfo.InvariantCulture)));
+        }
+
+        [Test]
+        public void Convert_Success_To_Failure()
+        {
+            var option = Option.Some("unused");
+
+            var result = option.Select(_ => Option<string>.None());
+
+            result.Should().BeEquivalentTo(Option<string>.None());
         }
     }
 }

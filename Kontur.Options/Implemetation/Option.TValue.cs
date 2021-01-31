@@ -61,6 +61,21 @@ namespace Kontur.Options
             return Match(Enumerable.Empty<TValue>, value => new[] { value }).GetEnumerator();
         }
 
+        public Option<TResult> Map<TResult>(TResult result)
+        {
+            return Map(() => result);
+        }
+
+        public Option<TResult> Map<TResult>(Func<TResult> resultFactory)
+        {
+            return Map(_ => resultFactory());
+        }
+
+        public Option<TResult> Map<TResult>(Func<TValue, TResult> projection)
+        {
+            return Select(projection);
+        }
+
         public Option<TResult> Select<TResult>(Func<TValue, Option<TResult>> resultSelector)
         {
             return Match(Option.None<TResult>, resultSelector);

@@ -87,7 +87,7 @@ namespace Kontur.Tests.Options.Extraction
         private static string AssertDoNotCalled(string branch)
         {
             Assert.Fail(branch + " called");
-            return string.Empty;
+            throw new UnreachableException();
         }
     }
 }

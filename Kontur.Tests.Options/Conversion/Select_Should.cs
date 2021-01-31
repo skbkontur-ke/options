@@ -32,7 +32,7 @@ namespace Kontur.Tests.Options.Conversion
         }
 
         [Test]
-        public void Convert_Success_To_Failure()
+        public void Convert_Some_To_None()
         {
             var option = Option.Some("unused");
 

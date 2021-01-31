@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction
+namespace Kontur.Tests.Options
 {
     internal class UnreachableException : AssertionException
     {

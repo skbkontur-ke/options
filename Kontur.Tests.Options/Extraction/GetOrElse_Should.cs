@@ -31,16 +31,17 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [Test]
-        public void Do_Not_Call_Delegate_On_Success()
+        public void Do_Not_Call_Delegate_On_Some()
         {
             var options = Option.Some(0);
+
             options.GetOrElse(ThrowError);
         }
 
         private static int ThrowError()
         {
-            Assert.Fail("Backup value should not be called on Some");
-            return 0;
+            Assert.Fail("Backup value factory should not be called on Some");
+            throw new UnreachableException();
         }
 
         private static TestCaseData CreateUpcastCase(Option<B> option, A defaultValue, A result)

@@ -76,9 +76,8 @@ namespace Kontur.Tests.Options.Extraction
 
         private static Exception AssertDoNotCalled()
         {
-            const string message = "Exception should not be created on some";
-            Assert.Fail(message);
-            return new Exception(message);
+            Assert.Fail("Exception should not be created on some");
+            throw new UnreachableException();
         }
 
         private class MyException : Exception

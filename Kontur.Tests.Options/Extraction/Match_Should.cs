@@ -108,10 +108,10 @@ namespace Kontur.Tests.Options.Extraction
 
         private static readonly TestCaseData[] CreateDoNoCallSomeFactoryOnNoneCases =
         {
-            CreateDoNoCallFactoryCase(option => option.Match(() => "unreachable", _ => AssertSomeIsNotCalled())),
-            CreateDoNoCallFactoryCase(option => option.Match(() => "unreachable", AssertSomeIsNotCalled)),
-            CreateDoNoCallFactoryCase(option => option.Match("unreachable", _ => AssertSomeIsNotCalled())),
-            CreateDoNoCallFactoryCase(option => option.Match("unreachable", AssertSomeIsNotCalled)),
+            CreateDoNoCallFactoryCase(option => option.Match(() => "unused", _ => AssertSomeIsNotCalled())),
+            CreateDoNoCallFactoryCase(option => option.Match(() => "unused", AssertSomeIsNotCalled)),
+            CreateDoNoCallFactoryCase(option => option.Match("unused", _ => AssertSomeIsNotCalled())),
+            CreateDoNoCallFactoryCase(option => option.Match("unused", AssertSomeIsNotCalled)),
         };
 
         [TestCaseSource(nameof(CreateDoNoCallSomeFactoryOnNoneCases))]
@@ -129,9 +129,9 @@ namespace Kontur.Tests.Options.Extraction
 
         private static readonly TestCaseData[] CreateDoNoCallNoneFactoryOnSomeCases =
         {
-            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled, _ => "unreachable")),
-            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled,  () => "unreachable")),
-            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled,  "unreachable")),
+            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled, _ => "unused")),
+            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled,  () => "unused")),
+            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled,  "unused")),
         };
 
         [TestCaseSource(nameof(CreateDoNoCallNoneFactoryOnSomeCases))]

@@ -66,18 +66,18 @@ namespace Kontur.Tests.Options.Extraction
             result.Should().Be(expected);
         }
 
+        private static Exception AssertIsNotCalled()
+        {
+            Assert.Fail("Exception should not be created on some");
+            throw new UnreachableException();
+        }
+
         [Test]
         public void Do_No_Create_Exception_On_Some()
         {
             var option = Option.Some(5);
 
-            option.GetOrThrow(AssertDoNotCalled);
-        }
-
-        private static Exception AssertDoNotCalled()
-        {
-            Assert.Fail("Exception should not be created on some");
-            throw new UnreachableException();
+            option.GetOrThrow(AssertIsNotCalled);
         }
 
         private class MyException : Exception

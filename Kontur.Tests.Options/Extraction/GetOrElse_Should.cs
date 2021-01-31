@@ -30,18 +30,18 @@ namespace Kontur.Tests.Options.Extraction
             return option.GetOrElse(() => value);
         }
 
+        private static int AssertIsNotCalled()
+        {
+            Assert.Fail("Backup value factory should not be called on Some");
+            throw new UnreachableException();
+        }
+
         [Test]
         public void Do_Not_Call_Delegate_On_Some()
         {
             var options = Option.Some(0);
 
-            options.GetOrElse(ThrowError);
-        }
-
-        private static int ThrowError()
-        {
-            Assert.Fail("Backup value factory should not be called on Some");
-            throw new UnreachableException();
+            options.GetOrElse(AssertIsNotCalled);
         }
 
         private static TestCaseData CreateUpcastCase(Option<B> option, A defaultValue, A result)

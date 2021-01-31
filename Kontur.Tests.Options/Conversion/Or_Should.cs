@@ -34,18 +34,18 @@ namespace Kontur.Tests.Options.Conversion
             return option1.Or(() => option2);
         }
 
+        private static Option<int> AssertIsNotCalled()
+        {
+            Assert.Fail("Backup value factory should not be called on Some");
+            throw new UnreachableException();
+        }
+
         [Test]
         public void Do_Not_Call_Delegate_On_Some()
         {
             var option = Option.Some(0);
 
-            option.Or(ThrowError);
-        }
-
-        private static Option<int> ThrowError()
-        {
-            Assert.Fail("Backup value factory should not be called on Some");
-            throw new UnreachableException();
+            option.Or(AssertIsNotCalled);
         }
 
         private static TestCaseData CreateUpcastCase(Option<B> option1, Option<A> option2, Option<A> result)

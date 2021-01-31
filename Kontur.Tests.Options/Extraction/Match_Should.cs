@@ -89,14 +89,21 @@ namespace Kontur.Tests.Options.Extraction
             result.Should().Be("777");
         }
 
-        private static TestCaseData CreateDoNoCallFactoryCase(Func<Option<string>, string> assertExtracted)
+        [AssertionMethod]
+        private static string AssertIsNotCalled(string branch)
         {
-            return new(assertExtracted);
+            Assert.Fail(branch + " is called");
+            throw new UnreachableException();
         }
 
         private static string AssertSomeIsNotCalled()
         {
-            return AssertDoNotCalled("OnSome");
+            return AssertIsNotCalled("OnSome");
+        }
+
+        private static TestCaseData CreateDoNoCallFactoryCase(Func<Option<string>, string> assertExtracted)
+        {
+            return new(assertExtracted);
         }
 
         private static readonly TestCaseData[] CreateDoNoCallSomeFactoryOnNoneCases =
@@ -117,7 +124,7 @@ namespace Kontur.Tests.Options.Extraction
 
         private static string AssertNoneIsNotCalled()
         {
-            return AssertDoNotCalled("OnNone");
+            return AssertIsNotCalled("OnNone");
         }
 
         private static readonly TestCaseData[] CreateDoNoCallNoneFactoryOnSomeCases =
@@ -133,13 +140,6 @@ namespace Kontur.Tests.Options.Extraction
             var option = Option.Some("foo");
 
             assertExtracted(option);
-        }
-
-        [AssertionMethod]
-        private static string AssertDoNotCalled(string branch)
-        {
-            Assert.Fail(branch + " is called");
-            throw new UnreachableException();
         }
     }
 }

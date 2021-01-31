@@ -59,6 +59,12 @@ namespace Kontur.Tests.Options.Conversion
             result.Should().BeEquivalentTo(Option.Some("777"));
         }
 
+        private static int AssertIsNotCalled()
+        {
+            Assert.Fail("Value factory should not be called on None");
+            throw new UnreachableException();
+        }
+
         private static TestCaseData CreateDoNoCallFactoryCase(Func<Option<string>, Option<int>> assertMapped)
         {
             return new(assertMapped);
@@ -66,8 +72,8 @@ namespace Kontur.Tests.Options.Conversion
 
         private static readonly TestCaseData[] CreateDoNoCallSomeFactoryOnNoneCases =
         {
-            CreateDoNoCallFactoryCase(option => option.Map(_ => ThrowError())),
-            CreateDoNoCallFactoryCase(option => option.Map(ThrowError)),
+            CreateDoNoCallFactoryCase(option => option.Map(_ => AssertIsNotCalled())),
+            CreateDoNoCallFactoryCase(option => option.Map(AssertIsNotCalled)),
         };
 
         [TestCaseSource(nameof(CreateDoNoCallSomeFactoryOnNoneCases))]
@@ -76,12 +82,6 @@ namespace Kontur.Tests.Options.Conversion
             var option = Option<string>.None();
 
             assertMapped(option);
-        }
-
-        private static int ThrowError()
-        {
-            Assert.Fail("Value factory should not be called on None");
-            throw new UnreachableException();
         }
     }
 }

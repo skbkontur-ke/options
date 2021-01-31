@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
 using Kontur.Options;
 using NUnit.Framework;
 
@@ -7,29 +9,6 @@ namespace Kontur.Tests.Options.Extraction
     [TestFixture]
     internal class GetOrElse_Should
     {
-        private static TestCaseData CreateCase(Option<int> option, int value, int result)
-        {
-            return new TestCaseData(option, value).Returns(result);
-        }
-
-        private static readonly TestCaseData[] Cases =
-        {
-            CreateCase(Option.None(), 2, 2),
-            CreateCase(1, 2, 1),
-        };
-
-        [TestCaseSource(nameof(Cases))]
-        public int Process_Option(Option<int> option, int value)
-        {
-            return option.GetOrElse(value);
-        }
-
-        [TestCaseSource(nameof(Cases))]
-        public int Process_Func(Option<int> option, int value)
-        {
-            return option.GetOrElse(() => value);
-        }
-
         private static int AssertIsNotCalled()
         {
             Assert.Fail("Backup value factory should not be called on Some");
@@ -39,33 +18,70 @@ namespace Kontur.Tests.Options.Extraction
         [Test]
         public void Do_Not_Call_Delegate_On_Some()
         {
-            var options = Option.Some(0);
+            var options = Option<int>.Some(0);
 
             options.GetOrElse(AssertIsNotCalled);
         }
 
-        private static TestCaseData CreateUpcastCase(Option<B> option, A defaultValue, A result)
+        private static TestCaseData Create<TSource, TResult>(Func<Option<TSource>, TResult, TResult> extractor)
+            where TSource : TResult
         {
-            return new TestCaseData(option, defaultValue).Returns(result);
+            return new(extractor);
         }
 
-        private static IEnumerable<TestCaseData> GetUpcastCases()
+        private static IEnumerable<TestCaseData> GetCases<TSource, TResult>()
+            where TSource : class, TResult
         {
-            var some = new B();
-            yield return CreateUpcastCase(Option.None(), some, some);
-            yield return CreateUpcastCase(some, new B(), some);
+            yield return Create<TSource, TResult>((option, defaultValue) => option.GetOrElse(defaultValue));
+            yield return Create<TSource, TResult>((option, defaultValue) => option.GetOrElse(() => defaultValue));
         }
 
-        [TestCaseSource(nameof(GetUpcastCases))]
-        public A Upcast_Value(Option<B> option, A defaultValue)
+        private static readonly IEnumerable<TestCaseData> StringCases = GetCases<string, string>();
+
+        [TestCaseSource(nameof(StringCases))]
+        public void Return_Default_Value_OnNone(Func<Option<string>, string, string> extractor)
         {
-            return option.GetOrElse(defaultValue);
+            const string expectedResult = "default on none";
+            var option = Option<string>.None();
+
+            var result = extractor(option, expectedResult);
+
+            result.Should().Be(expectedResult);
         }
 
-        [TestCaseSource(nameof(GetUpcastCases))]
-        public A Upcast_Func(Option<B> option1, A defaultValue)
+        [TestCaseSource(nameof(StringCases))]
+        public void Return_Value_OnSome(Func<Option<string>, string, string> extractor)
         {
-            return option1.GetOrElse(() => defaultValue);
+            const string expectedResult = "hello";
+            var option = Option<string>.Some(expectedResult);
+
+            var result = extractor(option, "ignored");
+
+            result.Should().Be(expectedResult);
+        }
+
+        private static readonly IEnumerable<TestCaseData> UpcastCases = GetCases<B, A>();
+
+        [TestCaseSource(nameof(UpcastCases))]
+        public void Upcast_OnNone(Func<Option<B>, A, A> extractor)
+        {
+            var expectedResult = new A();
+            var option = Option<B>.None();
+
+            var result = extractor(option, expectedResult);
+
+            result.Should().Be(expectedResult);
+        }
+
+        [TestCaseSource(nameof(UpcastCases))]
+        public void Upcast_OnSome(Func<Option<B>, A, A> extractor)
+        {
+            var expectedResult = new B();
+            var option = Option<B>.Some(expectedResult);
+
+            Option<A> result = extractor(option, new A());
+
+            result.Should().BeEquivalentTo(expectedResult);
         }
 
         public class A

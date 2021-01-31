@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using FluentAssertions;
-using JetBrains.Annotations;
 using Kontur.Options;
 using NUnit.Framework;
 
@@ -60,23 +59,25 @@ namespace Kontur.Tests.Options.Conversion
             result.Should().BeEquivalentTo(Option.Some("777"));
         }
 
-        [Test]
-        public void Do_Not_Call_Delegate_On_None()
+        private static TestCaseData CreateDoNoCallFactoryCase(Func<Option<string>, Option<int>> assertMapped)
         {
-            var option = Option<int>.None();
-
-            option.Map(ThrowError);
+            return new(assertMapped);
         }
 
-        [Test]
-        public void Do_Not_Call_Delegate_With_Param_On_None()
+        private static readonly TestCaseData[] CreateDoNoCallSomeFactoryOnNoneCases =
         {
-            var option = Option<int>.None();
+            CreateDoNoCallFactoryCase(option => option.Map(_ => ThrowError())),
+            CreateDoNoCallFactoryCase(option => option.Map(ThrowError)),
+        };
 
-            option.Map(_ => ThrowError());
+        [TestCaseSource(nameof(CreateDoNoCallSomeFactoryOnNoneCases))]
+        public void Do_Not_Call_Delegate_On_None(Func<Option<string>, Option<int>> assertMapped)
+        {
+            var option = Option<string>.None();
+
+            assertMapped(option);
         }
 
-        [AssertionMethod]
         private static int ThrowError()
         {
             Assert.Fail("Value factory should not be called on None");

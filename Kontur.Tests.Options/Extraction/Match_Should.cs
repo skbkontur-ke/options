@@ -12,17 +12,12 @@ namespace Kontur.Tests.Options.Extraction
     [TestFixture]
     internal class Match_Should
     {
-        private static string ToString(int value)
-        {
-            return value.ToString(CultureInfo.InvariantCulture);
-        }
-
         private static IEnumerable<Func<Option<int>, string>> CreateAllMatchMethods(string onNoneValue, string onSomeValue)
         {
-            yield return option => option.Match(() => onNoneValue, ToString);
+            yield return option => option.Match(() => onNoneValue, _ => onSomeValue);
             yield return option => option.Match(() => onNoneValue, () => onSomeValue);
             yield return option => option.Match(() => onNoneValue, onSomeValue);
-            yield return option => option.Match(onNoneValue, ToString);
+            yield return option => option.Match(onNoneValue, _ => onSomeValue);
             yield return option => option.Match(onNoneValue, () => onSomeValue);
             yield return option => option.Match(onNoneValue, onSomeValue);
         }
@@ -31,31 +26,29 @@ namespace Kontur.Tests.Options.Extraction
         {
             get
             {
-                const int expected = 42;
-                var expectedString = ToString(expected);
+                const string expected = "some-value";
 
-                return CreateAllMatchMethods("unreachable", expectedString)
-                    .Select(method => new TestCaseData(expected, method));
+                return CreateAllMatchMethods("unreachable", expected)
+                    .Select(method => new TestCaseData(method).Returns(expected));
             }
         }
 
         [TestCaseSource(nameof(ReturnOnSomeCases))]
-        public void Return_OnSome(int expected, Func<Option<int>, string> callMatch)
+        public string Return_OnSome(Func<Option<int>, string> callMatch)
         {
-            var option = Option.Some(expected);
+            var option = Option.Some(0);
 
-            var result = callMatch(option);
-
-            result.Should().Be(ToString(expected));
+            return callMatch(option);
         }
 
         private static IEnumerable<TestCaseData> ReturnOnNoneCases
         {
             get
             {
-                const string result = "on none branch";
-                return CreateAllMatchMethods(result, "unreachable")
-                    .Select(method => new TestCaseData(method).Returns(result));
+                const string expected = "none-value";
+
+                return CreateAllMatchMethods(expected, "unreachable")
+                    .Select(method => new TestCaseData(method).Returns(expected));
             }
         }
 
@@ -67,20 +60,79 @@ namespace Kontur.Tests.Options.Extraction
             return callMatch(option);
         }
 
-        [Test]
-        public void Do_Not_Call_OnSome_If_None()
+        private static TestCaseData CreateUseValueCase(Func<Option<int>, string> extractor)
+        {
+            return new(extractor);
+        }
+
+        private static IEnumerable<TestCaseData> UseValueCases
+        {
+            get
+            {
+                yield return CreateUseValueCase(option => option.Match(
+                    "unused",
+                    i => i.ToString(CultureInfo.InvariantCulture)));
+
+                yield return CreateUseValueCase(option => option.Match(
+                    () => "unused",
+                    i => i.ToString(CultureInfo.InvariantCulture)));
+            }
+        }
+
+        [TestCaseSource(nameof(UseValueCases))]
+        public void Use_Value(Func<Option<int>, string> extractor)
+        {
+            var option = Option.Some(777);
+
+            var result = extractor(option);
+
+            result.Should().Be("777");
+        }
+
+        private static TestCaseData CreateDoNoCallFactoryCase(Func<Option<string>, string> assertExtracted)
+        {
+            return new(assertExtracted);
+        }
+
+        private static string AssertSomeIsNotCalled()
+        {
+            return AssertDoNotCalled("OnSome");
+        }
+
+        private static readonly TestCaseData[] CreateDoNoCallSomeFactoryOnNoneCases =
+        {
+            CreateDoNoCallFactoryCase(option => option.Match(() => "unreachable", _ => AssertSomeIsNotCalled())),
+            CreateDoNoCallFactoryCase(option => option.Match(() => "unreachable", AssertSomeIsNotCalled)),
+            CreateDoNoCallFactoryCase(option => option.Match("unreachable", _ => AssertSomeIsNotCalled())),
+            CreateDoNoCallFactoryCase(option => option.Match("unreachable", AssertSomeIsNotCalled)),
+        };
+
+        [TestCaseSource(nameof(CreateDoNoCallSomeFactoryOnNoneCases))]
+        public void Do_Not_Call_OnSome_Factory_If_None(Func<Option<string>, string> assertExtracted)
         {
             var option = Option.None<string>();
 
-            option.Match(() => string.Empty, _ => AssertDoNotCalled("OnSome"));
+            assertExtracted(option);
         }
 
-        [Test]
-        public void Do_Not_Call_OnNone_If_Some()
+        private static string AssertNoneIsNotCalled()
+        {
+            return AssertDoNotCalled("OnNone");
+        }
+
+        private static readonly TestCaseData[] CreateDoNoCallNoneFactoryOnSomeCases =
+        {
+            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled, _ => "unreachable")),
+            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled,  () => "unreachable")),
+            CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled,  "unreachable")),
+        };
+
+        [TestCaseSource(nameof(CreateDoNoCallNoneFactoryOnSomeCases))]
+        public void Do_Not_Call_OnNone_If_Some(Func<Option<string>, string> assertExtracted)
         {
             var option = Option.Some("foo");
 
-            option.Match(() => AssertDoNotCalled("OnNone"), _ => string.Empty);
+            assertExtracted(option);
         }
 
         [AssertionMethod]

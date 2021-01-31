@@ -156,9 +156,9 @@ namespace Kontur.Options
             return Match(onNone, () => onSomeValue);
         }
 
-        public TResult Match<TResult>(Func<TResult> onNone, Func<TResult> onSomeValue)
+        public TResult Match<TResult>(Func<TResult> onNone, Func<TResult> onSome)
         {
-            return Match(onNone, _ => onSomeValue());
+            return Match(onNone, _ => onSome());
         }
 
         public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);

@@ -33,7 +33,7 @@ namespace Kontur.Tests.Options.Extraction
         {
             var option = Option.None<string>();
 
-            option.OnSome(_ => Assert.Fail("OnSome called"));
+            option.OnSome(_ => Assert.Fail("OnSome is called"));
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace Kontur.Tests.Options.Extraction
         {
             var option = Option.None<string>();
 
-            option.OnSome(() => Assert.Fail("OnSome called"));
+            option.OnSome(() => Assert.Fail("OnSome is called"));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Kontur.Tests.Options.Extraction
         {
             var option = Option.Some("foo");
 
-            option.OnNone(() => Assert.Fail("OnNone called"));
+            option.OnNone(() => Assert.Fail("OnNone is called"));
         }
 
         private static TestCaseData CreateReturnSelfCase(Option<int> option)

@@ -79,9 +79,9 @@ namespace Kontur.Tests.Options.Extraction
             var expectedResult = new B();
             var option = Option<B>.Some(expectedResult);
 
-            Option<A> result = extractor(option, new A());
+            var result = extractor(option, new A());
 
-            result.Should().BeEquivalentTo(expectedResult);
+            result.Should().Be(expectedResult);
         }
 
         public class A

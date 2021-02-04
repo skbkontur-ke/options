@@ -9,7 +9,7 @@ namespace Kontur.Tests.Options.Extraction
     internal class ToString_Should
     {
         [Test]
-        public void OnSome()
+        public void Some()
         {
             var expected = Guid.NewGuid();
             var option = Option.Some(expected);
@@ -20,7 +20,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [Test]
-        public void OnNone()
+        public void None()
         {
             var option = Option.None<Guid>();
 

@@ -20,7 +20,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [Test]
-        public void Pass_Value_OnSome()
+        public void Pass_Value_If_Some()
         {
             const string expected = "foo";
             var option = Option.Some(expected);
@@ -67,7 +67,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [Test]
-        public void Do_Not_Call_On_None_If_Some()
+        public void Do_Not_Call_OnNone_If_Some()
         {
             var option = Option.Some("foo");
 

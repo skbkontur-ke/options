@@ -41,7 +41,7 @@ namespace Kontur.Tests.Options.Conversion
         }
 
         [Test]
-        public void Do_Not_Call_Delegate_On_Some()
+        public void Do_Not_Call_Delegate_If_Some()
         {
             var option = Option.Some(0);
 

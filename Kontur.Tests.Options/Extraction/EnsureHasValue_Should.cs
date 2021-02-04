@@ -10,7 +10,7 @@ namespace Kontur.Tests.Options.Extraction
     internal class EnsureHasValue_Should
     {
         [Test]
-        public void Throw_On_None()
+        public void Throw_If_None()
         {
             var option = Option.None<int>();
 
@@ -20,7 +20,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [Test]
-        public void Do_No_Throw_On_Some()
+        public void Do_No_Throw_If_Some()
         {
             var option = Option.Some(5);
 

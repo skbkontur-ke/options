@@ -94,7 +94,7 @@ namespace Kontur.Tests.Options.Extraction
         };
 
         [TestCaseSource(nameof(DoNotCallOnNoneIfSomeCases))]
-        public void Do_Not_Call_On_None_If_Some(Func<Option<string>, Option<string>> assertOnNoneIsNotCalled)
+        public void Do_Not_Call_OnNone_If_Some(Func<Option<string>, Option<string>> assertOnNoneIsNotCalled)
         {
             var option = Option.Some("foo");
 
@@ -113,7 +113,7 @@ namespace Kontur.Tests.Options.Extraction
         };
 
         [TestCaseSource(nameof(ReturnSelfCases))]
-        public void Return_Self_On_None(Func<Option<int>, Option<int>> callSwitch)
+        public void Return_Self_If_None(Func<Option<int>, Option<int>> callSwitch)
         {
             var option = Option<int>.None();
 
@@ -123,7 +123,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [TestCaseSource(nameof(ReturnSelfCases))]
-        public void Return_Self_On_Some(Func<Option<int>, Option<int>> callSwitch)
+        public void Return_Self_If_Some(Func<Option<int>, Option<int>> callSwitch)
         {
             var option = Option<int>.Some(123);
 

@@ -22,7 +22,7 @@ namespace Kontur.Tests.Options.Extraction
             yield return option => option.Match(onNoneValue, onSomeValue);
         }
 
-        private static IEnumerable<TestCaseData> ReturnOnSomeCases
+        private static IEnumerable<TestCaseData> ReturnIfSomeCases
         {
             get
             {
@@ -33,15 +33,15 @@ namespace Kontur.Tests.Options.Extraction
             }
         }
 
-        [TestCaseSource(nameof(ReturnOnSomeCases))]
-        public string Return_OnSome(Func<Option<int>, string> callMatch)
+        [TestCaseSource(nameof(ReturnIfSomeCases))]
+        public string Return_If_Some(Func<Option<int>, string> callMatch)
         {
             var option = Option.Some(0);
 
             return callMatch(option);
         }
 
-        private static IEnumerable<TestCaseData> ReturnOnNoneCases
+        private static IEnumerable<TestCaseData> ReturnIfNoneCases
         {
             get
             {
@@ -52,8 +52,8 @@ namespace Kontur.Tests.Options.Extraction
             }
         }
 
-        [TestCaseSource(nameof(ReturnOnNoneCases))]
-        public string Return_OnNone(Func<Option<int>, string> callMatch)
+        [TestCaseSource(nameof(ReturnIfNoneCases))]
+        public string Return_If_None(Func<Option<int>, string> callMatch)
         {
             var option = Option.None<int>();
 
@@ -106,7 +106,7 @@ namespace Kontur.Tests.Options.Extraction
             return new(assertExtracted);
         }
 
-        private static readonly TestCaseData[] CreateDoNoCallSomeFactoryOnNoneCases =
+        private static readonly TestCaseData[] CreateDoNoCallSomeFactoryIfNoneCases =
         {
             CreateDoNoCallFactoryCase(option => option.Match(() => "unused", _ => AssertSomeIsNotCalled())),
             CreateDoNoCallFactoryCase(option => option.Match(() => "unused", AssertSomeIsNotCalled)),
@@ -114,7 +114,7 @@ namespace Kontur.Tests.Options.Extraction
             CreateDoNoCallFactoryCase(option => option.Match("unused", AssertSomeIsNotCalled)),
         };
 
-        [TestCaseSource(nameof(CreateDoNoCallSomeFactoryOnNoneCases))]
+        [TestCaseSource(nameof(CreateDoNoCallSomeFactoryIfNoneCases))]
         public void Do_Not_Call_OnSome_Factory_If_None(Func<Option<string>, string> assertExtracted)
         {
             var option = Option.None<string>();
@@ -127,14 +127,14 @@ namespace Kontur.Tests.Options.Extraction
             return AssertIsNotCalled("OnNone");
         }
 
-        private static readonly TestCaseData[] CreateDoNoCallNoneFactoryOnSomeCases =
+        private static readonly TestCaseData[] CreateDoNoCallNoneFactoryIfSomeCases =
         {
             CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled, _ => "unused")),
             CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled,  () => "unused")),
             CreateDoNoCallFactoryCase(option => option.Match(AssertNoneIsNotCalled,  "unused")),
         };
 
-        [TestCaseSource(nameof(CreateDoNoCallNoneFactoryOnSomeCases))]
+        [TestCaseSource(nameof(CreateDoNoCallNoneFactoryIfSomeCases))]
         public void Do_Not_Call_OnNone_If_Some(Func<Option<string>, string> assertExtracted)
         {
             var option = Option.Some("foo");

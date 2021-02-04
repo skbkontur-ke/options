@@ -12,7 +12,7 @@ namespace Kontur.Tests.Options.Extraction
     internal class GetOrThrow_Should
     {
         [Test]
-        public void Throw_InvalidOperationException_On_None()
+        public void Throw_InvalidOperationException_If_None()
         {
             var option = Option.None<int>();
 
@@ -22,7 +22,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [Test]
-        public void Throw_ValueMissingException_On_None()
+        public void Throw_ValueMissingException_If_None()
         {
             var option = Option.None<int>();
 
@@ -43,7 +43,7 @@ namespace Kontur.Tests.Options.Extraction
         };
 
         [TestCaseSource(nameof(MyExceptionCases))]
-        public void Throw_MyException_On_None(Func<Option<int>, int> extractor)
+        public void Throw_MyException_If_None(Func<Option<int>, int> extractor)
         {
             var option = Option.None<int>();
 
@@ -56,7 +56,7 @@ namespace Kontur.Tests.Options.Extraction
             .Append(CreateCase(option => option.GetOrThrow()));
 
         [TestCaseSource(nameof(SomeCases))]
-        public void Return_Value_On_Some(Func<Option<int>, int> extractor)
+        public void Return_Value_If_Some(Func<Option<int>, int> extractor)
         {
             const int expected = 5;
             var option = Option.Some(expected);
@@ -73,7 +73,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [Test]
-        public void Do_No_Create_Exception_On_Some()
+        public void Do_No_Create_Exception_If_Some()
         {
             var option = Option.Some(5);
 

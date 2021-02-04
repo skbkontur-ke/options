@@ -70,14 +70,14 @@ namespace Kontur.Tests.Options.Conversion
             return new(assertMapped);
         }
 
-        private static readonly TestCaseData[] CreateDoNoCallSomeFactoryOnNoneCases =
+        private static readonly TestCaseData[] CreateDoNoCallSomeFactoryIfNoneCases =
         {
             CreateDoNoCallFactoryCase(option => option.Map(_ => AssertIsNotCalled())),
             CreateDoNoCallFactoryCase(option => option.Map(AssertIsNotCalled)),
         };
 
-        [TestCaseSource(nameof(CreateDoNoCallSomeFactoryOnNoneCases))]
-        public void Do_Not_Call_Delegate_On_None(Func<Option<string>, Option<int>> assertMapped)
+        [TestCaseSource(nameof(CreateDoNoCallSomeFactoryIfNoneCases))]
+        public void Do_Not_Call_Delegate_If_None(Func<Option<string>, Option<int>> assertMapped)
         {
             var option = Option<string>.None();
 

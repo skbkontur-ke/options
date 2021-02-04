@@ -16,7 +16,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [Test]
-        public void Do_Not_Call_Delegate_On_Some()
+        public void Do_Not_Call_Delegate_If_Some()
         {
             var options = Option<int>.Some(0);
 
@@ -39,7 +39,7 @@ namespace Kontur.Tests.Options.Extraction
         private static readonly IEnumerable<TestCaseData> StringCases = GetCases<string, string>();
 
         [TestCaseSource(nameof(StringCases))]
-        public void Return_Default_Value_OnNone(Func<Option<string>, string, string> extractor)
+        public void Return_Default_Value_If_None(Func<Option<string>, string, string> extractor)
         {
             const string expectedResult = "default on none";
             var option = Option<string>.None();
@@ -50,7 +50,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [TestCaseSource(nameof(StringCases))]
-        public void Return_Value_OnSome(Func<Option<string>, string, string> extractor)
+        public void Return_Value_If_Some(Func<Option<string>, string, string> extractor)
         {
             const string expectedResult = "hello";
             var option = Option<string>.Some(expectedResult);
@@ -63,7 +63,7 @@ namespace Kontur.Tests.Options.Extraction
         private static readonly IEnumerable<TestCaseData> UpcastCases = GetCases<B, A>();
 
         [TestCaseSource(nameof(UpcastCases))]
-        public void Upcast_OnNone(Func<Option<B>, A, A> extractor)
+        public void Upcast_If_None(Func<Option<B>, A, A> extractor)
         {
             var expectedResult = new A();
             var option = Option<B>.None();
@@ -74,7 +74,7 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [TestCaseSource(nameof(UpcastCases))]
-        public void Upcast_OnSome(Func<Option<B>, A, A> extractor)
+        public void Upcast_If_Some(Func<Option<B>, A, A> extractor)
         {
             var expectedResult = new B();
             var option = Option<B>.Some(expectedResult);

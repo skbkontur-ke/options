@@ -48,9 +48,9 @@ namespace Kontur.Tests.Options.Extraction
             counter.Received().Increment();
         }
 
-        private static TestCaseData CreateCallSwitchCase<TValue>(Func<Option<TValue>, Option<TValue>> assertOnNoneIsNotCalled)
+        private static TestCaseData CreateCallSwitchCase<TValue>(Func<Option<TValue>, Option<TValue>> callSwitch)
         {
-            return new(assertOnNoneIsNotCalled);
+            return new(callSwitch);
         }
 
         private static TestCaseData CreateDoNotCallOnSomeIfNoneCase(Func<Option<string>, Option<string>> assertOnSomeIsNotCalled)

@@ -2,7 +2,7 @@
 
 namespace Kontur.Options
 {
-    public static class ActionExtensions
+    public static class OnSomeExtensions
     {
         public static Option<TValue> OnSome<TValue>(this Option<TValue> option, Action<TValue> action)
         {
@@ -12,11 +12,6 @@ namespace Kontur.Options
         public static Option<TValue> OnSome<TValue>(this Option<TValue> option, Action action)
         {
             return option.OnSome(_ => action());
-        }
-
-        public static Option<TValue> OnNone<TValue>(this Option<TValue> option, Action action)
-        {
-            return option.Switch(action, () => { });
         }
     }
 }

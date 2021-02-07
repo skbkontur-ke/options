@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Kontur.Options;
 using NSubstitute;
@@ -101,32 +103,26 @@ namespace Kontur.Tests.Options.Extraction
             assertOnNoneIsNotCalled(option);
         }
 
-        private static TestCaseData CreateReturnSelfCase(Func<Option<int>, Option<int>> callSwitch)
+        private static readonly Func<Option<int>, Option<int>>[] SwitchMethods =
         {
-            return CreateCallSwitchCase(callSwitch);
-        }
-
-        private static readonly TestCaseData[] ReturnSelfCases =
-        {
-            CreateReturnSelfCase(option => option.Switch(() => { }, _ => { })),
-            CreateReturnSelfCase(option => option.Switch(() => { }, () => { })),
+            option => option.Switch(() => { }, _ => { }),
+            option => option.Switch(() => { }, () => { }),
         };
 
-        [TestCaseSource(nameof(ReturnSelfCases))]
-        public void Return_Self_If_None(Func<Option<int>, Option<int>> callSwitch)
+        private static readonly Option<int>[] OptionExamples =
         {
-            var option = Option<int>.None();
+            Option<int>.Some(123),
+            Option<int>.None(),
+        };
 
-            var result = callSwitch(option);
-
-            result.Should().BeEquivalentTo(option);
-        }
+        private static readonly IEnumerable<TestCaseData> ReturnSelfCases =
+            from option in OptionExamples
+            from method in SwitchMethods
+            select new TestCaseData(option, method);
 
         [TestCaseSource(nameof(ReturnSelfCases))]
-        public void Return_Self_If_Some(Func<Option<int>, Option<int>> callSwitch)
+        public void Return_Self(Option<int> option, Func<Option<int>, Option<int>> callSwitch)
         {
-            var option = Option<int>.Some(123);
-
             var result = callSwitch(option);
 
             result.Should().BeEquivalentTo(option);

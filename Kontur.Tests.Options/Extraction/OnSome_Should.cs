@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
 using Kontur.Options;
 using NSubstitute;
 using NUnit.Framework;
@@ -8,13 +11,24 @@ namespace Kontur.Tests.Options.Extraction
     [TestFixture]
     public class OnSome_Should
     {
-        [Test]
-        public void Call_OnSome_With_Argument_If_Some()
+        private static TestCaseData CreateCallOnSomeIfSomeCase(Func<Option<string>, ICounter, Option<string>> callOnSome)
+        {
+            return new(callOnSome);
+        }
+
+        private static readonly TestCaseData[] CallOnSomeIfSomeCases =
+        {
+            CreateCallOnSomeIfSomeCase((option, counter) => option.OnSome(counter.Increment)),
+            CreateCallOnSomeIfSomeCase((option, counter) => option.OnSome(_ => counter.Increment())),
+        };
+
+        [TestCaseSource(nameof(CallOnSomeIfSomeCases))]
+        public void Call_OnSome_If_Some(Func<Option<string>, ICounter, Option<string>> callOnSome)
         {
             var counter = Substitute.For<ICounter>();
             var option = Option.Some("foo");
 
-            option.OnSome(_ => counter.Increment());
+            callOnSome(option, counter);
 
             counter.Received().Increment();
         }
@@ -24,60 +38,58 @@ namespace Kontur.Tests.Options.Extraction
         {
             const string expected = "foo";
             var option = Option.Some(expected);
+            var consumer = Substitute.For<IConsumer>();
 
-            option.OnSome(value => value.Should().Be(expected));
+            option.OnSome(value => consumer.Consume(value));
+
+            consumer.Received().Consume(expected);
         }
 
-        [Test]
-        public void Do_Not_Call_OnSome_With_Argument_If_None()
+        private static TestCaseData CreateDoNotCallOnSomeIfNoneCase(Func<Option<string>, Option<string>> assertOnSomeIsNotCalled)
         {
-            var option = Option.None<string>();
-
-            option.OnSome(_ => Assert.Fail("OnSome is called"));
+            return new(assertOnSomeIsNotCalled);
         }
 
-        [Test]
-        public void Call_OnSome_Without_Argument_If_Some()
+        private static void EnsureOnSomeIsNotCalled()
         {
-            var counter = Substitute.For<ICounter>();
-            var option = Option.Some("foo");
-
-            option.OnSome(() => counter.Increment());
-
-            counter.Received().Increment();
+            Assert.Fail("OnSome is called");
         }
 
-        [Test]
-        public void Do_Not_Call_OnSome_Without_Argument_If_None()
+        private static readonly TestCaseData[] DoNotCallOnSomeIfNoneCases =
         {
-            var option = Option.None<string>();
-
-            option.OnSome(() => Assert.Fail("OnSome is called"));
-        }
-
-        private static TestCaseData CreateReturnSelfCase(Option<int> option)
-        {
-            return new(option);
-        }
-
-        private static readonly TestCaseData[] ReturnSelfCases =
-        {
-            CreateReturnSelfCase(Option.None()),
-            CreateReturnSelfCase(1),
+            CreateDoNotCallOnSomeIfNoneCase(option => option.OnSome(EnsureOnSomeIsNotCalled)),
+            CreateDoNotCallOnSomeIfNoneCase(option => option.OnSome(_ => EnsureOnSomeIsNotCalled())),
         };
 
-        [TestCaseSource(nameof(ReturnSelfCases))]
-        public void Return_Self_OnSome_With_Argument(Option<int> option)
+        [TestCaseSource(nameof(DoNotCallOnSomeIfNoneCases))]
+        public void Do_Not_Call_OnSome_If_None(Func<Option<string>, Option<string>> assertOnSomeIsNotCalled)
         {
-            var result = option.OnSome(_ => { });
+            var option = Option.None<string>();
 
-            result.Should().BeEquivalentTo(option);
+            assertOnSomeIsNotCalled(option);
         }
 
-        [TestCaseSource(nameof(ReturnSelfCases))]
-        public void Return_Self_OnSome_Without_Argument(Option<int> option)
+        private static readonly Func<Option<int>, Option<int>>[] OnSomeMethods =
         {
-            var result = option.OnSome(() => { });
+            option => option.OnSome(_ => { }),
+            option => option.OnSome(() => { }),
+        };
+
+        private static readonly Option<int>[] OptionExamples =
+        {
+            Option<int>.Some(123),
+            Option<int>.None(),
+        };
+
+        private static readonly IEnumerable<TestCaseData> ReturnSelfCases =
+                from option in OptionExamples
+                from method in OnSomeMethods
+                select new TestCaseData(option, method);
+
+        [TestCaseSource(nameof(ReturnSelfCases))]
+        public void Return_Self(Option<int> option, Func<Option<int>, Option<int>> callOnSome)
+        {
+            var result = callOnSome(option);
 
             result.Should().BeEquivalentTo(option);
         }

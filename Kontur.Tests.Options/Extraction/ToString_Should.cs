@@ -16,7 +16,7 @@ namespace Kontur.Tests.Options.Extraction
 
             var result = option.ToString();
 
-            result.Should().Contain(expected.ToString());
+            result.Should().ContainAll(nameof(Guid), "Some", expected.ToString());
         }
 
         [Test]

@@ -17,9 +17,9 @@ namespace Kontur.Options
         {
         }
 
-        public bool IsNone => !HasSome;
-
         public bool HasSome => Match(false, true);
+
+        public bool IsNone => !HasSome;
 
         protected static string TypeArgumentString => $"<{TypeArgument.Name}>";
 

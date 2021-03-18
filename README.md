@@ -29,6 +29,7 @@
     * [GetOrThrow](#getorthrow)
     * [GetOrDefault](#getordefault)
     * [EnsureHasValue](#ensurehasvalue)
+    * [EnsureNone](#ensurenone)
 * [Conversion of `Option<TValue>` to another Option type](#conversion-of-optiontvalue-to-another-option-type)
     * [Select](#select)
     * [Upcast](#upcast)
@@ -347,6 +348,15 @@ Option<string> option = ...;
 // Nothing if `Some`
 // Exception is thrown if `None`
 option.EnsureHasValue();
+```
+
+### EnsureNone
+```
+Option<string> option = ...;
+
+// Nothing if `None`
+// Exception is thrown if `Some`
+option.EnsureNone();
 ```
 
 ## Conversion of `Option<TValue>` to another Option type

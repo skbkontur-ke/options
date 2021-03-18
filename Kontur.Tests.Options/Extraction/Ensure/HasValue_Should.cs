@@ -4,10 +4,10 @@ using Kontur.Options;
 using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction
+namespace Kontur.Tests.Options.Extraction.Ensure
 {
     [TestFixture]
-    internal class EnsureHasValue_Should
+    internal class HasValue_Should
     {
         [Test]
         public void Throw_If_None()

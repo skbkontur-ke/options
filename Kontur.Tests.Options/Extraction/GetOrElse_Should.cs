@@ -18,9 +18,9 @@ namespace Kontur.Tests.Options.Extraction
         [Test]
         public void Do_Not_Call_Delegate_If_Some()
         {
-            var options = Option<int>.Some(0);
+            var option = Option<int>.Some(0);
 
-            options.GetOrElse(AssertIsNotCalled);
+            option.GetOrElse(AssertIsNotCalled);
         }
 
         private static TestCaseData Create<TSource, TResult>(Func<Option<TSource>, TResult, TResult> extractor)

@@ -2,9 +2,9 @@
 
 namespace Kontur.Options.Unsafe
 {
-    public class ValueMissingException : InvalidOperationException
+    public sealed class ValueMissingException : InvalidOperationException
     {
-        public ValueMissingException(string message)
+        internal ValueMissingException(string message)
             : base(message)
         {
         }

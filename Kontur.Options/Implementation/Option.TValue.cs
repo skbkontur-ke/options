@@ -26,12 +26,12 @@ namespace Kontur.Options
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Only type is needed")]
         public static implicit operator Option<TValue>(NoneMarker _)
         {
-            return new None<TValue>();
+            return None();
         }
 
         public static implicit operator Option<TValue>(TValue value)
         {
-            return new Some<TValue>(value);
+            return Some(value);
         }
 
         public static implicit operator bool(Option<TValue> option)

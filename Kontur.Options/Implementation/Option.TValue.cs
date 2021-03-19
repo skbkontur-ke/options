@@ -78,7 +78,7 @@ namespace Kontur.Options
 
         public Option<TResult> Select<TResult>(Func<TValue, Option<TResult>> resultSelector)
         {
-            return Match(Option.None<TResult>, resultSelector);
+            return Match(Option<TResult>.None, resultSelector);
         }
 
         public Option<TResult> Select<TResult>(Func<TValue, TResult> resultSelector)
@@ -88,7 +88,7 @@ namespace Kontur.Options
 
         public Option<TValue> Where(Func<TValue, bool> predicate)
         {
-            return Select(value => predicate(value) ? Option.Some(value) : None());
+            return Select(value => predicate(value) ? Some(value) : None());
         }
 
         public Option<TResult> SelectMany<TOtherValue, TResult>(
@@ -103,9 +103,9 @@ namespace Kontur.Options
             Func<TValue, TOtherValue, Option<TResult>> resultSelector)
         {
             return Match(
-                Option.None<TResult>,
+                Option<TResult>.None,
                 myValue => optionSelector(myValue).Match(
-                    Option.None<TResult>,
+                    Option<TResult>.None,
                     otherValue => resultSelector(myValue, otherValue)));
         }
 
@@ -121,7 +121,7 @@ namespace Kontur.Options
             Func<TValue, TItemValue, Option<TResult>> resultSelector)
         {
             return Match(
-                () => Task.FromResult(Option.None<TResult>()),
+                () => Task.FromResult(Option<TResult>.None()),
                 async value =>
                 {
                     var item = await optionSelector(value).ConfigureAwait(false);

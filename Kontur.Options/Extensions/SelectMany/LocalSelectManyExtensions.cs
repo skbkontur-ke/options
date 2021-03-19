@@ -19,7 +19,7 @@ namespace Kontur.Options
             Func<TValue, TItemValue, Option<TResult>> resultSelector)
         {
             return option.SelectMany(
-                async value => Option.Some(await taskSelector(value).ConfigureAwait(false)),
+                async value => Option<TItemValue>.Some(await taskSelector(value).ConfigureAwait(false)),
                 resultSelector);
         }
 
@@ -37,7 +37,7 @@ namespace Kontur.Options
             Func<TValue1, TValue2, Option<TResult>> resultSelector)
         {
             return optionTask.SelectMany(
-                async item => Option.Some(await taskSelector(item).ConfigureAwait(false)),
+                async item => Option<TValue2>.Some(await taskSelector(item).ConfigureAwait(false)),
                 resultSelector);
         }
 
@@ -74,7 +74,7 @@ namespace Kontur.Options
         {
             var value1 = await task.ConfigureAwait(false);
             var option = await optionSelector(value1).ConfigureAwait(false);
-            return option.Match(Option.None<TResult>, value2 => resultSelector(value1, value2));
+            return option.Match(Option<TResult>.None, value2 => resultSelector(value1, value2));
         }
     }
 }

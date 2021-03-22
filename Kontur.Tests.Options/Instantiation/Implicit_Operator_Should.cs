@@ -24,7 +24,7 @@ namespace Kontur.Tests.Options.Instantiation
         {
             Option<int> option = Option.None();
 
-            option.HasSome.Should().Be(false);
+            option.HasSome.Should().BeFalse();
         }
     }
 }

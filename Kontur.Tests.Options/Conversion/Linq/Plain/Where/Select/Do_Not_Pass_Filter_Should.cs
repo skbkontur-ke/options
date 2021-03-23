@@ -10,12 +10,17 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.Select
     {
         private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(1).ToNoneTestCases();
 
+        private static bool Check(int value)
+        {
+            return value < 0;
+        }
+
         [TestCaseSource(nameof(Cases))]
         public Option<int> OneOption(Option<int> option)
         {
             return
                 from value in option
-                where value < 0
+                where Check(value)
                 select value;
         }
 
@@ -24,7 +29,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.Select
         {
             return
                 from value in Task.FromResult(option)
-                where value < 0
+                where Check(value)
                 select value;
         }
     }

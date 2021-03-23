@@ -10,13 +10,18 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.SelectMany
     {
         private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(2).ToNoneTestCases();
 
+        private static bool Check(int x)
+        {
+            return x < 0;
+        }
+
         [TestCaseSource(nameof(Cases))]
         public Option<int> Option_Option_Where(Option<int> option1, Option<int> option2)
         {
             return
                 from x in option1
                 from y in option2
-                where x < 0
+                where Check(x)
                 select x + y;
         }
 
@@ -26,7 +31,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.SelectMany
             return
                 from x in Task.FromResult(option1)
                 from y in option2
-                where x < 0
+                where Check(x)
                 select x + y;
         }
 
@@ -36,7 +41,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.SelectMany
             return
                 from x in option1
                 from y in Task.FromResult(option2)
-                where x < 0
+                where Check(x)
                 select x + y;
         }
 
@@ -46,7 +51,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.SelectMany
             return
                 from x in Task.FromResult(option1)
                 from y in Task.FromResult(option2)
-                where x < 0
+                where Check(x)
                 select x + y;
         }
 
@@ -55,7 +60,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.SelectMany
         {
             return
                 from x in option1
-                where x < 0
+                where Check(x)
                 from y in option2
                 select x + y;
         }
@@ -65,7 +70,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.SelectMany
         {
             return
                 from x in Task.FromResult(option1)
-                where x < 0
+                where Check(x)
                 from y in option2
                 select x + y;
         }
@@ -75,7 +80,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.SelectMany
         {
             return
                 from x in option1
-                where x < 0
+                where Check(x)
                 from y in Task.FromResult(option2)
                 select x + y;
         }
@@ -85,7 +90,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.SelectMany
         {
             return
                 from x in Task.FromResult(option1)
-                where x < 0
+                where Check(x)
                 from y in Task.FromResult(option2)
                 select x + y;
         }

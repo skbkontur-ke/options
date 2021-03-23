@@ -8,7 +8,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where
     [TestFixture]
     internal class Select_Should
     {
-        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(1).ToTestCases();
+        private static readonly IEnumerable<TestCaseData> Cases = WhereCaseGenerator.Create(1);
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> OneOption(Option<int> option, IsSuitable isSuitable)

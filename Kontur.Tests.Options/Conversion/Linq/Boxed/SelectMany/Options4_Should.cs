@@ -8,7 +8,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany
     internal class Options4_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {
-        private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.GenerateCases(4);
+        private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.CreateSelectCases(4);
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> Option_Option_Option_Option(

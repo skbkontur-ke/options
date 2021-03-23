@@ -9,7 +9,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Where.SelectMany
     [TestFixture]
     internal class Pass_Filter_Should
     {
-        private static readonly IEnumerable<TestCaseData> Cases = Common.Cases.Select(testCase => new TestCaseData(testCase.Args).Returns(testCase.Result));
+        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(2).Select(testCase => new TestCaseData(testCase.Args).Returns(testCase.Result));
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> Option_Option_Where(Option<int> option1, Option<int> option2)

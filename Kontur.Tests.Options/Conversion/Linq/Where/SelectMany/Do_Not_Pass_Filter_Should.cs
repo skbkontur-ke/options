@@ -9,7 +9,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Where.SelectMany
     [TestFixture]
     internal class Do_Not_Pass_Filter_Should
     {
-        private static readonly IEnumerable<TestCaseData> Cases = Common.Cases
+        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(2)
             .Select(testCase => new TestCaseData(testCase.Args).Returns(Option.None<int>()));
 
         [TestCaseSource(nameof(Cases))]

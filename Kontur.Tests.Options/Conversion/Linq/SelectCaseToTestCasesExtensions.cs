@@ -12,7 +12,7 @@ namespace Kontur.Tests.Options.Conversion.Linq
             this IEnumerable<SelectCase> cases,
             Func<Option<int>, Option<int>> resultSelector)
         {
-            return cases.Select(testCase => new TestCaseData(testCase.Args).Returns(resultSelector(testCase.Result)));
+            return cases.Select(testCase => new TestCaseData(testCase.Args.Cast<object>().ToArray()).Returns(resultSelector(testCase.Result)));
         }
     }
 }

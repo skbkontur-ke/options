@@ -6,17 +6,15 @@ namespace Kontur.Tests.Options.Conversion.Linq
 {
     internal class SelectCase
     {
-        private readonly IEnumerable<Option<int>> args;
-
         internal SelectCase(IEnumerable<Option<int>> args, Option<int> result)
         {
-            this.args = args;
+            Args = args;
             Result = result;
         }
 
-        internal Option<int> Result { get; }
+        internal IEnumerable<Option<int>> Args { get; }
 
-        internal object[] Args => args.Cast<object>().ToArray();
+        internal Option<int> Result { get; }
 
         public override bool Equals(object? obj)
         {
@@ -25,17 +23,17 @@ namespace Kontur.Tests.Options.Conversion.Linq
 
         private bool Equals(SelectCase other)
         {
-            return Result.Equals(other.Result) && args.SequenceEqual(other.args);
+            return Result.Equals(other.Result) && Args.SequenceEqual(other.Args);
         }
 
         public override int GetHashCode()
         {
-            return (args, Result).GetHashCode();
+            return (args: Args, Result).GetHashCode();
         }
 
         public override string ToString()
         {
-            var serialized = string.Join("; ", args.Select(a => $"({a})"));
+            var serialized = string.Join("; ", Args.Select(a => $"({a})"));
             return $"Result: {Result}. Args: " + serialized;
         }
     }

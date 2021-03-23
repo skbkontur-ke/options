@@ -15,14 +15,13 @@ public static class GlobalSelectManyExtensions
         return optionTask.SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
     }
 
-    public static Task<Option<TResult>> SelectMany<TValue1, TValue2, TResult>(
+    public static async Task<Option<TResult>> SelectMany<TValue1, TValue2, TResult>(
         this Task<Option<TValue1>> optionTask,
         Func<TValue1, Option<TValue2>> optionSelector,
         Func<TValue1, TValue2, Option<TResult>> resultSelector)
     {
-        return optionTask.SelectMany(
-            value => Task.FromResult(optionSelector(value)),
-            resultSelector);
+        var option = await optionTask.ConfigureAwait(false);
+        return option.SelectMany(optionSelector, resultSelector);
     }
 
     public static Task<Option<TResult>> SelectMany<TValue1, TValue2, TResult>(

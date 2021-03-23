@@ -49,14 +49,13 @@ namespace Kontur.Options
             return task.SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
         }
 
-        public static Task<Option<TResult>> SelectMany<TValue1, TValue2, TResult>(
+        public static async Task<Option<TResult>> SelectMany<TValue1, TValue2, TResult>(
             this Task<TValue1> task,
             Func<TValue1, Option<TValue2>> optionSelector,
             Func<TValue1, TValue2, Option<TResult>> resultSelector)
         {
-            return task.SelectMany(
-                item => Task.FromResult(optionSelector(item)),
-                resultSelector);
+            var value1 = await task.ConfigureAwait(false);
+            return optionSelector(value1).Select(value2 => resultSelector(value1, value2));
         }
 
         public static Task<Option<TResult>> SelectMany<TValue1, TValue2, TResult>(
@@ -74,7 +73,7 @@ namespace Kontur.Options
         {
             var value1 = await task.ConfigureAwait(false);
             var option = await optionSelector(value1).ConfigureAwait(false);
-            return option.Match(Option<TResult>.None, value2 => resultSelector(value1, value2));
+            return option.Select(value2 => resultSelector(value1, value2));
         }
     }
 }

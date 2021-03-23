@@ -5,10 +5,10 @@ using NUnit.Framework;
 
 namespace Kontur.Tests.Options.Conversion.Linq.Boxed
 {
-    internal class Select_Should<TFixtureCase> : LinqAsIsTestBase<TFixtureCase>
+    internal class Select_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {
-        private static readonly IEnumerable<TestCaseData> Cases = GenerateCases(1);
+        private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.GenerateCases(1);
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> OneOption(Option<int> option)

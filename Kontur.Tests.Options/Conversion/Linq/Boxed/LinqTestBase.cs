@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Kontur.Options;
+﻿using Kontur.Options;
 using NUnit.Framework;
 
 namespace Kontur.Tests.Options.Conversion.Linq.Boxed
@@ -15,16 +13,8 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed
         {
         }
 
-        private static readonly TFixtureCase FixtureCase = new();
+        protected static readonly TFixtureCase FixtureCase = new();
 
-        protected static Option<int> GetOption(int value) => FixtureCase.GetResult(value);
-
-        protected static IEnumerable<TestCaseData> GenerateCases(int argumentsCount, Func<int, int> convertValue)
-        {
-            return SelectCasesGenerator
-                .Create(argumentsCount)
-                .ToTestCases(result => result.Select(
-                    value => GetOption(convertValue(value))));
-        }
+        protected static Option<int> GetOption(int value) => FixtureCase.GetOption(value);
     }
 }

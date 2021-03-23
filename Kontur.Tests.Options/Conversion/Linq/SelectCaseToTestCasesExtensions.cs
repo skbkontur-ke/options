@@ -19,10 +19,5 @@ namespace Kontur.Tests.Options.Conversion.Linq
         {
             return cases.ToTestCases(option => option);
         }
-
-        internal static IEnumerable<TestCaseData> ToTestCases<TValue>(this IEnumerable<SelectCase> cases, TValue value)
-        {
-            return cases.ToTestCases(_ => value);
-        }
     }
 }

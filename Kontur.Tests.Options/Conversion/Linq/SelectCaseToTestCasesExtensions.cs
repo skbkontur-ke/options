@@ -8,9 +8,9 @@ namespace Kontur.Tests.Options.Conversion.Linq
 {
     internal static class SelectCaseToTestCasesExtensions
     {
-        internal static IEnumerable<TestCaseData> ToTestCases<TResult>(
+        internal static IEnumerable<TestCaseData> ToTestCases(
             this IEnumerable<SelectCase> cases,
-            Func<Option<int>, TResult> resultSelector)
+            Func<Option<int>, Option<int>> resultSelector)
         {
             return cases.Select(testCase => new TestCaseData(testCase.Args).Returns(resultSelector(testCase.Result)));
         }

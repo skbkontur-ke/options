@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Where.Select
+namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.Select
 {
     [TestFixture]
     internal class Do_Not_Pass_Filter_Should
     {
-        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(1)
-            .Select(testCase => new TestCaseData(testCase.Args).Returns(Option.None<int>()));
+        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(1).ToNoneTestCases();
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> OneOption(Option<int> option)

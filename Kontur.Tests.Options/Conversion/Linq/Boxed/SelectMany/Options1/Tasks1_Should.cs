@@ -3,16 +3,16 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
+namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1
 {
-    [TestFixture]
-    internal class None_Should
+    internal class Tasks1_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
+        where TFixtureCase : IFixtureCase, new()
     {
-        private static readonly Option<int> None = Option.None();
+        private const int TaskTerm = 1000;
+        private static readonly Task<int> Task1000 = Task.FromResult(TaskTerm);
 
-        private static readonly Task<int> Task1000 = Task.FromResult(1000);
-
-        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(1).ToTestCases(None);
+        private static readonly IEnumerable<TestCaseData> Cases =
+            GenerateCases(1, sum => sum + TaskTerm);
 
         [TestCaseSource(nameof(Cases))]
         public Task<Option<int>> Task_Option(Option<int> option)
@@ -20,7 +20,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
             return
                 from x in Task1000
                 from y in option
-                select None;
+                select GetOption(x + y);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -29,7 +29,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
             return
                 from x in Task1000
                 from y in Task.FromResult(option)
-                select None;
+                select GetOption(x + y);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -38,7 +38,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
             return
                 from x in option
                 from y in Task1000
-                select None;
+                select GetOption(x + y);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -47,7 +47,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
             return
                 from x in Task.FromResult(option)
                 from y in Task1000
-                select None;
+                select GetOption(x + y);
         }
     }
 }

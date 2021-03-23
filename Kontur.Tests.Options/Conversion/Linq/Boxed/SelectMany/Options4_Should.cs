@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
+namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany
 {
-    [TestFixture]
-    internal class Some_Should
+    internal class Options4_Should<TFixtureCase> : LinqAsIsTestBase<TFixtureCase>
+        where TFixtureCase : IFixtureCase, new()
     {
-        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(4).ToTestCases();
+        private static readonly IEnumerable<TestCaseData> Cases = GenerateCases(4);
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> Option_Option_Option_Option(
@@ -22,7 +22,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in option2
                 from z in option3
                 from m in option4
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -37,7 +37,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in option2
                 from z in option3
                 from m in option4
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -52,7 +52,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in Task.FromResult(option2)
                 from z in option3
                 from m in option4
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -67,7 +67,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in option2
                 from z in Task.FromResult(option3)
                 from m in option4
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -82,7 +82,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in option2
                 from z in option3
                 from m in Task.FromResult(option4)
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -97,7 +97,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in Task.FromResult(option2)
                 from z in option3
                 from m in option4
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -112,7 +112,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in option2
                 from z in Task.FromResult(option3)
                 from m in option4
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -127,7 +127,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in option2
                 from z in option3
                 from m in Task.FromResult(option4)
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -142,7 +142,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in Task.FromResult(option2)
                 from z in Task.FromResult(option3)
                 from m in option4
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -157,7 +157,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in Task.FromResult(option2)
                 from z in option3
                 from m in Task.FromResult(option4)
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -172,7 +172,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in option2
                 from z in Task.FromResult(option3)
                 from m in Task.FromResult(option4)
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -187,7 +187,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in Task.FromResult(option2)
                 from z in Task.FromResult(option3)
                 from m in option4
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -202,7 +202,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in Task.FromResult(option2)
                 from z in option3
                 from m in Task.FromResult(option4)
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -217,7 +217,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in option2
                 from z in Task.FromResult(option3)
                 from m in Task.FromResult(option4)
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -232,7 +232,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in Task.FromResult(option2)
                 from z in Task.FromResult(option3)
                 from m in Task.FromResult(option4)
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -247,7 +247,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
                 from y in Task.FromResult(option2)
                 from z in Task.FromResult(option3)
                 from m in Task.FromResult(option4)
-                select Option.Some(x + y + z + m);
+                select GetOption(x + y + z + m);
         }
     }
 }

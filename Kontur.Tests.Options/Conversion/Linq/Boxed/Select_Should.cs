@@ -3,19 +3,19 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Select
+namespace Kontur.Tests.Options.Conversion.Linq.Boxed
 {
-    [TestFixture]
-    internal class Some_Should
+    internal class Select_Should<TFixtureCase> : LinqAsIsTestBase<TFixtureCase>
+        where TFixtureCase : IFixtureCase, new()
     {
-        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(1).ToTestCases();
+        private static readonly IEnumerable<TestCaseData> Cases = GenerateCases(1);
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> OneOption(Option<int> option)
         {
             return
                 from value in option
-                select Option.Some(value);
+                select GetOption(value);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -23,7 +23,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Select
         {
             return
                 from value in Task.FromResult(option)
-                select Option.Some(value);
+                select GetOption(value);
         }
     }
 }

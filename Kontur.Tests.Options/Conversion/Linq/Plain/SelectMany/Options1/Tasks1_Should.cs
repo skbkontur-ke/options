@@ -11,7 +11,8 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options1
         private const int TaskTerm = 1000;
         private static readonly Task<int> Task1000 = Task.FromResult(TaskTerm);
 
-        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(1)
+        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator
+            .Create(1)
             .ToTestCases(option => option.Map(sum => sum + TaskTerm));
 
         [TestCaseSource(nameof(Cases))]

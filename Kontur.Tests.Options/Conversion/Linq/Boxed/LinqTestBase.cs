@@ -7,6 +7,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed
 {
     [TestFixture(typeof(NoneFixtureCase))]
     [TestFixture(typeof(SomeFixtureCase))]
+    [TestFixture(typeof(SomeConstantFixtureCase))]
     internal abstract class LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {

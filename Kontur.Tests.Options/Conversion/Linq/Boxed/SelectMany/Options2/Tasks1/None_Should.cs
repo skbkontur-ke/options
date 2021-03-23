@@ -10,7 +10,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options2.Tasks1
     {
         private static readonly Option<int> None = Option.None();
 
-        private static readonly Task<int> Task1000 = Common.Task1000;
+        private static readonly Task<int> Task1000 = Task.FromResult(1000);
 
         private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(2).ToTestCases(None);
 

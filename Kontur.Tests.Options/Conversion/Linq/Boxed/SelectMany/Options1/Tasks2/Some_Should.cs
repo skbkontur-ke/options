@@ -8,10 +8,13 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks2
     [TestFixture]
     internal class Some_Should
     {
-        private static readonly Task<int> Task1000 = Common.Task1000;
-        private static readonly Task<int> Task10000 = Common.Task10000;
+        private const int TaskTerm1 = 1000;
+        private const int TaskTerm2 = 10000; 
+        private static readonly Task<int> Task1000 = Task.FromResult(TaskTerm1);
+        private static readonly Task<int> Task10000 = Task.FromResult(TaskTerm2);
 
-        private static readonly IEnumerable<TestCaseData> Cases = Common.Cases;
+        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(1)
+            .ToTestCases(option => option.Map(sum => sum + TaskTerm1 + TaskTerm2));
 
         [TestCaseSource(nameof(Cases))]
         public Task<Option<int>> Task_Option_Task(Option<int> option)

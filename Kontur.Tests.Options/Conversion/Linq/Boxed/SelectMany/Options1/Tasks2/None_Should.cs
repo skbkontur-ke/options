@@ -8,8 +8,8 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks2
     [TestFixture]
     internal class None_Should
     {
-        private static readonly Task<int> Task1000 = Common.Task1000;
-        private static readonly Task<int> Task10000 = Common.Task10000;
+        private static readonly Task<int> Task1000 = Task.FromResult(1000);
+        private static readonly Task<int> Task10000 = Task.FromResult(10000);
 
         private static readonly Option<int> None = Option.None();
 

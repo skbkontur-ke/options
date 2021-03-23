@@ -6,9 +6,11 @@ namespace Kontur.Tests.Options.Conversion.Linq
 {
     internal static class SelectCasesGenerator
     {
+        internal const int InitialValue = 10;
+
         internal static IEnumerable<SelectCase> Create(int argumentsCount)
         {
-            var terms = Enumerable.Range(10, argumentsCount).ToArray();
+            var terms = Enumerable.Range(InitialValue, argumentsCount).ToArray();
 
             var someCase = new SelectCase(terms.Select(Option.Some), terms.Sum());
 

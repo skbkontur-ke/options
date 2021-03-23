@@ -10,7 +10,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.SelectMany.Options2.Plain
     {
         private static readonly Option<int> None = Option.None();
 
-        private static readonly IEnumerable<TestCaseData> Cases = Options2Common.NoneCases;
+        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(2).ToTestCases(None);
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> Option_Option(Option<int> option1, Option<int> option2)

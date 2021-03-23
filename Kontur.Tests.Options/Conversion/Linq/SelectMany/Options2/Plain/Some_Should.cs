@@ -8,7 +8,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.SelectMany.Options2.Plain
     [TestFixture]
     internal class Some_Should
     {
-        private static readonly IEnumerable<TestCaseData> Cases = Common.ResultCases;
+        private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(2).ToTestCases();
 
         [TestCaseSource(nameof(Cases))]
         public Option<int> Option_Option(Option<int> option1, Option<int> option2)

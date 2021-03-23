@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
@@ -11,8 +10,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Select
     {
         private static readonly Option<int> None = Option.None();
 
-        private static readonly IEnumerable<TestCaseData> NoneCases = Common.Cases
-            .Select(testCase => new TestCaseData(testCase.Args).Returns(None));
+        private static readonly IEnumerable<TestCaseData> NoneCases = SelectCasesGenerator.Create(1).ToTestCases(None);
 
         [TestCaseSource(nameof(NoneCases))]
         public Option<int> OneOption(Option<int> option)

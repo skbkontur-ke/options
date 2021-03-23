@@ -102,10 +102,8 @@ namespace Kontur.Options
             Func<TValue, Option<TOtherValue>> optionSelector,
             Func<TValue, TOtherValue, Option<TResult>> resultSelector)
         {
-            return Match(
-                Option<TResult>.None,
-                value => optionSelector(value).Match(
-                    Option<TResult>.None,
+            return Select(
+                value => optionSelector(value).Select(
                     otherValue => resultSelector(value, otherValue)));
         }
 
@@ -125,7 +123,7 @@ namespace Kontur.Options
                 async value =>
                 {
                     var otherValue = await optionSelector(value).ConfigureAwait(false);
-                    return otherValue.Match(Option<TResult>.None, itemValue => resultSelector(value, itemValue));
+                    return otherValue.Select(itemValue => resultSelector(value, itemValue));
                 });
         }
 

@@ -104,28 +104,28 @@ namespace Kontur.Options
         {
             return Match(
                 Option<TResult>.None,
-                myValue => optionSelector(myValue).Match(
+                value => optionSelector(value).Match(
                     Option<TResult>.None,
-                    otherValue => resultSelector(myValue, otherValue)));
+                    otherValue => resultSelector(value, otherValue)));
         }
 
-        public Task<Option<TResult>> SelectMany<TItemValue, TResult>(
-            Func<TValue, Task<Option<TItemValue>>> optionSelector,
-            Func<TValue, TItemValue, TResult> resultSelector)
+        public Task<Option<TResult>> SelectMany<TOtherValue, TResult>(
+            Func<TValue, Task<Option<TOtherValue>>> optionSelector,
+            Func<TValue, TOtherValue, TResult> resultSelector)
         {
             return SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
         }
 
-        public Task<Option<TResult>> SelectMany<TItemValue, TResult>(
-            Func<TValue, Task<Option<TItemValue>>> optionSelector,
-            Func<TValue, TItemValue, Option<TResult>> resultSelector)
+        public Task<Option<TResult>> SelectMany<TOtherValue, TResult>(
+            Func<TValue, Task<Option<TOtherValue>>> optionSelector,
+            Func<TValue, TOtherValue, Option<TResult>> resultSelector)
         {
             return Match(
                 () => Task.FromResult(Option<TResult>.None()),
                 async value =>
                 {
-                    var item = await optionSelector(value).ConfigureAwait(false);
-                    return item.Match(Option<TResult>.None, itemValue => resultSelector(value, itemValue));
+                    var otherValue = await optionSelector(value).ConfigureAwait(false);
+                    return otherValue.Match(Option<TResult>.None, itemValue => resultSelector(value, itemValue));
                 });
         }
 

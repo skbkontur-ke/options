@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Kontur.Options
 {
-    public abstract class Option<TValue>
-        : IEnumerable<TValue>, IOptionMatch<TValue>
+    public abstract class Option<TValue> : IMatchable<TValue>
     {
         protected static readonly Type TypeArgument = typeof(TValue);
 
@@ -51,15 +47,8 @@ namespace Kontur.Options
             return new Some<TValue>(value);
         }
 
-        TResult IOptionMatch<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
+        TResult IMatchable<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
             Match(onNone, onSome);
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        public IEnumerator<TValue> GetEnumerator()
-        {
-            return Match(Enumerable.Empty<TValue>, value => new[] { value }).GetEnumerator();
-        }
 
         public Option<TResult> Map<TResult>(TResult result)
         {

@@ -458,4 +458,4 @@ Where:
 
 ## Contributing
 
-Add safe methods into `Option.TValue.cs` if possible. That allows simplier upcasts.
+Add safe methods into `Option.TValue.cs` if simple upcasts by specifing one generic argument are possible.

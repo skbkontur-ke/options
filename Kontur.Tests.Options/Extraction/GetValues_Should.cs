@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Kontur.Tests.Options.Extraction
 {
     [TestFixture]
-    internal class GetEnumerator_Should
+    internal class GetValues_Should
     {
         private static TestCaseData CreateCase(Option<int> option, IEnumerable<int> results)
         {
@@ -20,12 +20,9 @@ namespace Kontur.Tests.Options.Extraction
         };
 
         [TestCaseSource(nameof(Cases))]
-        public IEnumerable<int> Foreach_With_Type_Safety(Option<int> option)
+        public IEnumerable<int> Enumerated_With_Type_Safety(Option<int> option)
         {
-            foreach (var value in option)
-            {
-                yield return value;
-            }
+            return option.GetValues();
         }
     }
 }

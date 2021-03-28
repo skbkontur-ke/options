@@ -21,11 +21,7 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Class
         [TestCaseSource(nameof(ReturnBooleanCases))]
         public bool Return_Boolean(Option<string?> option)
         {
-#if NETFRAMEWORK
-#pragma warning disable CS8620
-#endif
             return option.TryGet(out _);
-#pragma warning restore CS8620
         }
 
         private static TestCaseData CreateGetCase(string? expectedValue)

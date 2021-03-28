@@ -24,7 +24,6 @@ namespace Kontur.Tests.Options.Equality
         [TestCaseSource(nameof(NotEqualCases))]
         public void Throw_If_Different<TValue1, TValue2>(Option<TValue1> option1, Option<TValue2> option2)
         {
-
             Action assertion = () => option1.Should().BeEquivalentTo(option2);
 
             assertion.Should().Throw<AssertionException>();

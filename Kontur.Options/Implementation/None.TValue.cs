@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace Kontur.Options
 {
@@ -24,16 +25,18 @@ namespace Kontur.Options
             return onNone();
         }
 
-#if !NETSTANDARD2_0
-        [System.Diagnostics.Contracts.Pure]
+        [Pure]
         public override bool TryGet(
+#if NETSTANDARD2_0
+            out TValue? value)
+#else
             [System.Diagnostics.CodeAnalysis.MaybeNullWhen(returnValue: false)]
             out TValue value)
+#endif
         {
             value = default;
             return false;
         }
-#endif
 
         private protected override void SwitchInternal(Action onNone, Action<TValue> onSome)
         {

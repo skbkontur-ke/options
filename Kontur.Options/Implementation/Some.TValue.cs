@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace Kontur.Options
 {
@@ -31,15 +32,13 @@ namespace Kontur.Options
             return onSome(value);
         }
 
-#if !NETSTANDARD2_0
         // ReSharper disable once ParameterHidesMember
-        [System.Diagnostics.Contracts.Pure]
+        [Pure]
         public override bool TryGet(out TValue value)
         {
             value = this.value;
             return true;
         }
-#endif
 
         private protected override void SwitchInternal(Action onNone, Action<TValue> onSome)
         {

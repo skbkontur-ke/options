@@ -150,9 +150,12 @@ namespace Kontur.Options
 
         public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);
 
-#if !NETSTANDARD2_0
         [Pure]
-        public abstract bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value);
+        public abstract bool TryGet(
+#if NETSTANDARD2_0
+            out TValue? value);
+#else
+            [MaybeNullWhen(returnValue: false)] out TValue value);
 #endif
 
         public abstract override string ToString();

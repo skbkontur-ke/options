@@ -9,8 +9,12 @@ namespace Kontur.Tests.Options.Equality
     internal class Equals_Should
     {
         private static readonly IEnumerable<TestCaseData> Cases =
-            Common.CreateNonEqualsCases().Select(testCase => testCase.Returns(false))
-                .Concat(Common.CreateEqualsCases().Select(testCase => testCase.Returns(true)));
+            new[]
+                {
+                    (Cases: Common.CreateNonEqualsCases(), Result: false),
+                    (Cases: Common.CreateEqualsCases(), Result: true),
+                }.
+                SelectMany(pair => pair.Cases.Select(testCase => testCase.Returns(pair.Result)));
 
         [TestCaseSource(nameof(Cases))]
         public bool Compare<TValue1, TValue2>(Option<TValue1> option1, Option<TValue2> option2)

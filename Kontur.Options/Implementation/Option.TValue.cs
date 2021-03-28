@@ -155,6 +155,12 @@ namespace Kontur.Options
         public abstract bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value);
 #endif
 
+        public abstract override string ToString();
+
+        public abstract override bool Equals(object obj);
+
+        public abstract override int GetHashCode();
+
         private protected abstract void SwitchInternal(Action onNone, Action<TValue> onSome);
     }
 }

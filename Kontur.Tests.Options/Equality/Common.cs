@@ -17,6 +17,20 @@ namespace Kontur.Tests.Options.Equality
             yield return Create(Option.None<int>(), Option.None<int>());
             yield return Create(Option.Some(2), Option.Some(2));
             yield return Create(Option.Some<string?>(null), Option.Some<string?>(null));
+            yield return Create(Option.Some("hello"), Option.Some("hello"));
+        }
+
+        internal static IEnumerable<TestCaseData> CreateNonEqualsCases()
+        {
+            yield return Create(Option.None<string>(), Option.None<int>());
+            yield return Create(Option.None<int>(), Option.None<string>());
+
+            yield return Create(Option.None<int>(), Option.Some(1));
+            yield return Create(Option.Some(1), Option.None<int>());
+            yield return Create(Option.Some(1), Option.Some(2));
+            yield return Create(Option.Some("hello"), Option.Some("hi"));
+
+            yield return Create(Option.Some(2), Option.Some(2.0));
         }
     }
 }

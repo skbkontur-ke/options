@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Kontur.Tests.Options.Conversion.Linq
 {
     [TestFixture]
-    internal class BitMapper_Should
+    internal class KPermutationOfBool_Should
     {
         private static TestCaseData Create(int length, params IEnumerable<bool>[] expectedResult)
         {
@@ -15,8 +15,13 @@ namespace Kontur.Tests.Options.Conversion.Linq
         private static readonly TestCaseData[] Cases =
         {
             Create(0),
-            Create(1, new[] { false }),
-            Create(2, new[] { false, false }, new[] { false, true }, new[] { true, false }),
+            Create(1, new[] { false }, new[] { true }),
+            Create(
+                2,
+                new[] { false, false },
+                new[] { false, true },
+                new[] { true, false },
+                new[] { true, true }),
             Create(
                 3,
                 new[] { false, false, false },
@@ -25,13 +30,14 @@ namespace Kontur.Tests.Options.Conversion.Linq
                 new[] { false, true, true },
                 new[] { true, false, false },
                 new[] { true, false, true },
-                new[] { true, true, false }),
+                new[] { true, true, false },
+                new[] { true, true, true }),
         };
 
         [TestCaseSource(nameof(Cases))]
-        public void Construct_Map(int length, IEnumerable<IEnumerable<bool>> expectedResult)
+        public void Create_Permutations(int length, IEnumerable<IEnumerable<bool>> expectedResult)
         {
-            var result = BitMapper.Get(length);
+            var result = KPermutationOfBool.Create(length);
 
             result.Should().BeEquivalentTo(expectedResult);
         }

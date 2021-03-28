@@ -12,20 +12,37 @@ namespace Kontur.Tests.Options.Conversion.Linq
         {
             var terms = Enumerable.Range(InitialValue, argumentsCount).ToArray();
 
-            var someCase = new SelectCase(terms.Select(Option.Some), terms.Sum());
-
-            return GetNoneCases(terms)
-                .Select(n => new SelectCase(n, Option.None()))
-                .Append(someCase);
+            return GetCases(terms, Option<int>.Some(terms.Sum()));
         }
 
-        private static IEnumerable<IEnumerable<Option<int>>> GetNoneCases(IReadOnlyCollection<int> items)
+        private static IEnumerable<SelectCase> GetCases(
+            IReadOnlyCollection<int> terms,
+            Option<int> successResult)
         {
-            var maps = BitMapper.Get(items.Count);
-            return maps
-                .Select(map => map.Zip(
-                    items,
-                    (isSome, element) => isSome ? Option<int>.Some(element) : Option<int>.None()));
+            var boolPermutations = KPermutationOfBool.Create(terms.Count);
+            return boolPermutations
+                .Select(permutation => permutation
+                    .Zip(terms, (success, value) => new TermInfo(success, value)))
+                .Select(termInfos => CreateSelectCase(termInfos, successResult));
         }
+
+        private static SelectCase CreateSelectCase(
+            IEnumerable<TermInfo> terms,
+            Option<int> successResult)
+        {
+            return terms
+                .Aggregate(
+                    new SelectCase(Enumerable.Empty<Option<int>>(), successResult),
+                    (accumulator, term) =>
+                    {
+                        var (arg, newResult) = term.Success
+                            ? (Option<int>.Some(term.Value), accumulator.Result)
+                            : (Option<int>.None(), Option<int>.None());
+
+                        return new SelectCase(accumulator.Args.Append(arg), newResult);
+                    });
+        }
+
+        private record TermInfo(bool Success, int Value);
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Kontur.Options
 {
-    public abstract class Option<TValue> : IMatchable<TValue>
+    public abstract class Option<TValue> : IOptionMatchable<TValue>
     {
         protected static readonly Type TypeArgument = typeof(TValue);
 
@@ -47,7 +47,7 @@ namespace Kontur.Options
             return new Some<TValue>(value);
         }
 
-        TResult IMatchable<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
+        TResult IOptionMatchable<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
             Match(onNone, onSome);
 
         public Option<TResult> Map<TResult>(TResult result)

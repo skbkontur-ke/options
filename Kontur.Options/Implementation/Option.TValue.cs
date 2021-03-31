@@ -5,17 +5,13 @@ using System.Threading.Tasks;
 
 namespace Kontur.Options
 {
-    public abstract class Option<TValue> : IOptionMatchable<TValue>
+    public abstract class Option<TValue> : OptionBase<TValue>
     {
         protected static readonly Type TypeArgument = typeof(TValue);
 
         private protected Option()
         {
         }
-
-        public bool HasSome => Match(false, true);
-
-        public bool IsNone => !HasSome;
 
         protected static string TypeArgumentString => $"<{TypeArgument.Name}>";
 
@@ -30,11 +26,6 @@ namespace Kontur.Options
             return Some(value);
         }
 
-        public static implicit operator bool(Option<TValue> option)
-        {
-            return option.HasSome;
-        }
-
         [Pure]
         public static Option<TValue> None()
         {
@@ -46,9 +37,6 @@ namespace Kontur.Options
         {
             return new Some<TValue>(value);
         }
-
-        TResult IOptionMatchable<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
-            Match(onNone, onSome);
 
         public Option<TResult> Map<TResult>(TResult result)
         {
@@ -121,42 +109,6 @@ namespace Kontur.Options
             SwitchInternal(onNone, onSome);
             return this;
         }
-
-        [Pure]
-        public TResult Match<TResult>(TResult onNoneValue, TResult onSomeValue)
-        {
-            return Match(() => onNoneValue, onSomeValue);
-        }
-
-        public TResult Match<TResult>(TResult onNoneValue, Func<TResult> onSome)
-        {
-            return Match(() => onNoneValue, onSome);
-        }
-
-        public TResult Match<TResult>(TResult onNoneValue, Func<TValue, TResult> onSome)
-        {
-            return Match(() => onNoneValue, onSome);
-        }
-
-        public TResult Match<TResult>(Func<TResult> onNone, TResult onSomeValue)
-        {
-            return Match(onNone, () => onSomeValue);
-        }
-
-        public TResult Match<TResult>(Func<TResult> onNone, Func<TResult> onSome)
-        {
-            return Match(onNone, _ => onSome());
-        }
-
-        public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);
-
-        [Pure]
-        public abstract bool TryGet(
-#if NETSTANDARD2_0
-            out TValue? value);
-#else
-            [MaybeNullWhen(returnValue: false)] out TValue value);
-#endif
 
         public abstract override string ToString();
 

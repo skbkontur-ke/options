@@ -19,6 +19,11 @@ namespace Kontur.Options
 
         protected static string TypeArgumentString => $"<{TypeArgument.Name}>";
 
+        public static implicit operator bool(Option<TValue> option)
+        {
+            return option.HasSome;
+        }
+
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Only type is needed")]
         public static implicit operator Option<TValue>(NoneMarker _)
         {
@@ -28,11 +33,6 @@ namespace Kontur.Options
         public static implicit operator Option<TValue>(TValue value)
         {
             return Some(value);
-        }
-
-        public static implicit operator bool(Option<TValue> option)
-        {
-            return option.HasSome;
         }
 
         [Pure]

@@ -8,13 +8,13 @@ namespace Kontur.Options
     public static class EnumerableExtensions
     {
         [Pure]
-        public static IEnumerator<TValue> GetEnumerator<TValue>(this OptionBase<TValue> option)
+        public static IEnumerator<TValue> GetEnumerator<TValue>(this Option<TValue> option)
         {
             return option.GetValues().GetEnumerator();
         }
 
         public static IEnumerable<TResult> SelectMany<TValue, TItem, TResult>(
-            this OptionBase<TValue> option,
+            this Option<TValue> option,
             Func<TValue, IEnumerable<TItem>> collectionSelector,
             Func<TValue, TItem, TResult> resultSelector)
         {
@@ -23,7 +23,7 @@ namespace Kontur.Options
 
         public static IEnumerable<TResult> SelectMany<TItem, TValue, TResult>(
             this IEnumerable<TItem> collection,
-            Func<TItem, OptionBase<TValue>> optionSelector,
+            Func<TItem, Option<TValue>> optionSelector,
             Func<TItem, TValue, TResult> resultSelector)
         {
             return collection.SelectMany(value => optionSelector(value).GetValues(), resultSelector);

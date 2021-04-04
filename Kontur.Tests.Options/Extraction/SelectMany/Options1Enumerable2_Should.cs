@@ -8,7 +8,8 @@ namespace Kontur.Tests.Options.Extraction.SelectMany
     [TestFixture]
     internal class Options1Enumerable2_Should
     {
-        private static readonly Option<int> None = Option.None();
+        private static readonly Option<int> None = Option<int>.None();
+        private static readonly Option<int> Some4 = Option<int>.Some(4);
         private static readonly IEnumerable<int> Empty = Enumerable.Empty<int>();
 
         private static TestCaseData Create(
@@ -31,15 +32,15 @@ namespace Kontur.Tests.Options.Extraction.SelectMany
             Create(None, new[] { 3, 11 }, Empty, Empty),
             Create(None, new[] { 3, 11 }, new[] { 17 }, Empty),
             Create(None, new[] { 3, 11 }, new[] { 17, 29 }, Empty),
-            Create(4, Empty, Empty, Empty),
-            Create(4, Empty, new[] { 17 }, Empty),
-            Create(4, Empty, new[] { 17, 29 }, Empty),
-            Create(4, new[] { 3 }, Empty, Empty),
-            Create(4, new[] { 3 }, new[] { 17 }, new[] { 24 }),
-            Create(4, new[] { 3 }, new[] { 17, 29 }, new[] { 24, 36 }),
-            Create(4, new[] { 3, 11 }, Empty, Empty),
-            Create(4, new[] { 3, 11 }, new[] { 17 }, new[] { 24, 32 }),
-            Create(4, new[] { 3, 11 }, new[] { 17, 29 }, new[] { 24, 36, 32, 44 }),
+            Create(Some4, Empty, Empty, Empty),
+            Create(Some4, Empty, new[] { 17 }, Empty),
+            Create(Some4, Empty, new[] { 17, 29 }, Empty),
+            Create(Some4, new[] { 3 }, Empty, Empty),
+            Create(Some4, new[] { 3 }, new[] { 17 }, new[] { 24 }),
+            Create(Some4, new[] { 3 }, new[] { 17, 29 }, new[] { 24, 36 }),
+            Create(Some4, new[] { 3, 11 }, Empty, Empty),
+            Create(Some4, new[] { 3, 11 }, new[] { 17 }, new[] { 24, 32 }),
+            Create(Some4, new[] { 3, 11 }, new[] { 17, 29 }, new[] { 24, 36, 32, 44 }),
         };
 
         [TestCaseSource(nameof(Cases))]

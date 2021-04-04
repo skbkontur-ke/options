@@ -8,7 +8,8 @@ namespace Kontur.Tests.Options.Extraction.SelectMany
     [TestFixture]
     internal class Options2Enumerable1_Should
     {
-        private static readonly Option<int> None = Option.None();
+        private static readonly Option<int> None = Option<int>.None();
+        private static readonly Option<int> Some4 = Option<int>.Some(4);
         private static readonly IEnumerable<int> Empty = Enumerable.Empty<int>();
 
         private static TestCaseData Create(
@@ -28,12 +29,12 @@ namespace Kontur.Tests.Options.Extraction.SelectMany
             Create(None, 17, Empty, Empty),
             Create(None, 17, new[] { 3 }, Empty),
             Create(None, 17, new[] { 3, 11 }, Empty),
-            Create(4, None, Empty, Empty),
-            Create(4, None, new[] { 3 }, Empty),
-            Create(4, None, new[] { 3, 11 }, Empty),
-            Create(4, 17, Empty, Empty),
-            Create(4, 17, new[] { 3 }, new[] { 24 }),
-            Create(4, 17, new[] { 3, 11 }, new[] { 24, 32 }),
+            Create(Some4, None, Empty, Empty),
+            Create(Some4, None, new[] { 3 }, Empty),
+            Create(Some4, None, new[] { 3, 11 }, Empty),
+            Create(Some4, 17, Empty, Empty),
+            Create(Some4, 17, new[] { 3 }, new[] { 24 }),
+            Create(Some4, 17, new[] { 3, 11 }, new[] { 24, 32 }),
         };
 
         [TestCaseSource(nameof(Cases))]

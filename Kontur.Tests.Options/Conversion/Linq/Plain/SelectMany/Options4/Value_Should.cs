@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany
+namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options4
 {
     [TestFixture]
-    internal class Options4_Should
+    internal class Value_Should
     {
         private static readonly IEnumerable<TestCaseData> Cases = SelectCasesGenerator.Create(4).ToTestCases();
 

@@ -3,21 +3,21 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where
+namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where.SelectMany
 {
-    internal class SelectMany_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
+    internal class Task_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {
         private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.CreateWhereCases(2);
 
         [TestCaseSource(nameof(Cases))]
-        public Option<int> Option_Option_Where(Option<int> option1, Option<int> option2, IsSuitable isSuitable)
+        public Task<Option<int>> Option_Option_Where(Option<int> option1, Option<int> option2, IsSuitable isSuitable)
         {
             return
                 from x in option1
                 from y in option2
                 where isSuitable(x)
-                select GetOption(x + y);
+                select Task.FromResult(GetOption(x + y));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -27,7 +27,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where
                 from x in Task.FromResult(option1)
                 from y in option2
                 where isSuitable(x)
-                select GetOption(x + y);
+                select Task.FromResult(GetOption(x + y));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -37,7 +37,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where
                 from x in option1
                 from y in Task.FromResult(option2)
                 where isSuitable(x)
-                select GetOption(x + y);
+                select Task.FromResult(GetOption(x + y));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -47,17 +47,17 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where
                 from x in Task.FromResult(option1)
                 from y in Task.FromResult(option2)
                 where isSuitable(x)
-                select GetOption(x + y);
+                select Task.FromResult(GetOption(x + y));
         }
 
         [TestCaseSource(nameof(Cases))]
-        public Option<int> Option_Where_Option(Option<int> option1, Option<int> option2, IsSuitable isSuitable)
+        public Task<Option<int>> Option_Where_Option(Option<int> option1, Option<int> option2, IsSuitable isSuitable)
         {
             return
                 from x in option1
                 where isSuitable(x)
                 from y in option2
-                select GetOption(x + y);
+                select Task.FromResult(GetOption(x + y));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -67,7 +67,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where
                 from x in Task.FromResult(option1)
                 where isSuitable(x)
                 from y in option2
-                select GetOption(x + y);
+                select Task.FromResult(GetOption(x + y));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -77,7 +77,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where
                 from x in option1
                 where isSuitable(x)
                 from y in Task.FromResult(option2)
-                select GetOption(x + y);
+                select Task.FromResult(GetOption(x + y));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -87,7 +87,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where
                 from x in Task.FromResult(option1)
                 where isSuitable(x)
                 from y in Task.FromResult(option2)
-                select GetOption(x + y);
+                select Task.FromResult(GetOption(x + y));
         }
     }
 }

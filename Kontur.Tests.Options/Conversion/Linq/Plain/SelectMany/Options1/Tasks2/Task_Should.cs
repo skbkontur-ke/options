@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options1
+namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options1.Tasks2
 {
     [TestFixture]
-    internal class Tasks2_Should
+    internal class Task_Should
     {
         private const int TaskTerm1 = 1000;
         private const int TaskTerm2 = 10000;
@@ -24,7 +24,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options1
                 from x in Task1000
                 from y in option
                 from z in Task10000
-                select x + y + z;
+                select Task.FromResult(x + y + z);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -34,7 +34,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options1
                 from x in Task1000
                 from y in Task.FromResult(option)
                 from z in Task10000
-                select x + y + z;
+                select Task.FromResult(x + y + z);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -44,7 +44,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options1
                 from x in option
                 from y in Task1000
                 from z in Task10000
-                select x + y + z;
+                select Task.FromResult(x + y + z);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -54,7 +54,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options1
                 from x in Task.FromResult(option)
                 from y in Task1000
                 from z in Task10000
-                select x + y + z;
+                select Task.FromResult(x + y + z);
         }
     }
 }

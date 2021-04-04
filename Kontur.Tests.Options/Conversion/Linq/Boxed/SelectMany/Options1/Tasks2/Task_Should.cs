@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1
+namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks2
 {
-    internal class Tasks2_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
+    internal class Task_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {
         private const int TaskTerm1 = 1000;
@@ -23,7 +23,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1
                 from x in Task1000
                 from y in option
                 from z in Task10000
-                select GetOption(x + y + z);
+                select Task.FromResult(GetOption(x + y + z));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -33,7 +33,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1
                 from x in Task1000
                 from y in Task.FromResult(option)
                 from z in Task10000
-                select GetOption(x + y + z);
+                select Task.FromResult(GetOption(x + y + z));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -43,7 +43,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1
                 from x in option
                 from y in Task1000
                 from z in Task10000
-                select GetOption(x + y + z);
+                select Task.FromResult(GetOption(x + y + z));
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -53,7 +53,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1
                 from x in Task.FromResult(option)
                 from y in Task1000
                 from z in Task10000
-                select GetOption(x + y + z);
+                select Task.FromResult(GetOption(x + y + z));
         }
     }
 }

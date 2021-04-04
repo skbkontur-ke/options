@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany
+namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options3
 {
-    internal class Options3_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
+    internal class Value_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {
         private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.CreateSelectCases(3);

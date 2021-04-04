@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options2
+namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options2.Tasks1
 {
-    internal class Tasks1_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
+    internal class Value_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {
         private const int TaskTerm = 1000;

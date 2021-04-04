@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options2
+namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options2.Tasks1
 {
     [TestFixture]
-    internal class Tasks1_Should
+    internal class Value_Should
     {
         private const int TaskTerm = 1000;
         private static readonly Task<int> Task1000 = Task.FromResult(TaskTerm);

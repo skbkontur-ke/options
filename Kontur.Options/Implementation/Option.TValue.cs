@@ -126,6 +126,42 @@ namespace Kontur.Options
                 });
         }
 
+        public Task<Option<TResult>> SelectMany<TOtherValue, TResult>(
+            Func<TValue, Option<TOtherValue>> optionSelector,
+            Func<TValue, TOtherValue, Task<TResult>> resultSelector)
+        {
+            return SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
+        }
+
+        public Task<Option<TResult>> SelectMany<TOtherValue, TResult>(
+            Func<TValue, Option<TOtherValue>> optionSelector,
+            Func<TValue, TOtherValue, Task<Option<TResult>>> resultSelector)
+        {
+            return Select(
+                value => optionSelector(value).Select(
+                    otherValue => resultSelector(value, otherValue)));
+        }
+
+        public Task<Option<TResult>> SelectMany<TOtherValue, TResult>(
+            Func<TValue, Task<Option<TOtherValue>>> optionSelector,
+            Func<TValue, TOtherValue, Task<TResult>> resultSelector)
+        {
+            return SelectMany(optionSelector, FunctionResultToOption.Wrap(resultSelector));
+        }
+
+        public Task<Option<TResult>> SelectMany<TOtherValue, TResult>(
+            Func<TValue, Task<Option<TOtherValue>>> optionSelector,
+            Func<TValue, TOtherValue, Task<Option<TResult>>> resultSelector)
+        {
+            return Match(
+                () => Task.FromResult(Option<TResult>.None()),
+                async value =>
+                {
+                    var otherValue = await optionSelector(value).ConfigureAwait(false);
+                    return await otherValue.Select(itemValue => resultSelector(value, itemValue)).ConfigureAwait(false);
+                });
+        }
+
         public Option<TValue> Switch(Action onNone, Action<TValue> onSome)
         {
             SwitchInternal(onNone, onSome);

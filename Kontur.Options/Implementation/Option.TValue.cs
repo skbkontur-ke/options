@@ -75,6 +75,16 @@ namespace Kontur.Options
             return Select(value => Option<TResult>.Some(resultSelector(value)));
         }
 
+        public Task<Option<TResult>> Select<TResult>(Func<TValue, Task<Option<TResult>>> resultSelector)
+        {
+            return Match(() => Task.FromResult(Option<TResult>.None()), resultSelector);
+        }
+
+        public Task<Option<TResult>> Select<TResult>(Func<TValue, Task<TResult>> resultSelector)
+        {
+            return Select(async value => Option<TResult>.Some(await resultSelector(value).ConfigureAwait(false)));
+        }
+
         public Option<TValue> Where(Func<TValue, bool> predicate)
         {
             return Select(value => predicate(value) ? Some(value) : None());

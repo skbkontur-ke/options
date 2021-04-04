@@ -3,20 +3,20 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where.Select
+namespace Kontur.Tests.Options.Conversion.Linq.Plain.Where.Plain.Select
 {
-    internal class Value_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
-        where TFixtureCase : IFixtureCase, new()
+    [TestFixture]
+    internal class Task_Should
     {
-        private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.CreateWhereCases(1);
+        private static readonly IEnumerable<TestCaseData> Cases = WhereCaseGenerator.Create(1);
 
         [TestCaseSource(nameof(Cases))]
-        public Option<int> OneOption(Option<int> option, IsSuitable isSuitable)
+        public Task<Option<int>> OneOption(Option<int> option, IsSuitable isSuitable)
         {
             return
                 from value in option
                 where isSuitable(value)
-                select GetOption(value);
+                select Task.FromResult(value);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -25,7 +25,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where.Select
             return
                 from value in Task.FromResult(option)
                 where isSuitable(value)
-                select GetOption(value);
+                select Task.FromResult(value);
         }
     }
 }

@@ -13,8 +13,8 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Class
 
         private static readonly TestCaseData[] Cases =
         {
-            Create(Option.None(), false),
-            Create("foo", true),
+            Create(Option<string>.None(), false),
+            Create(Option<string>.Some("foo"), true),
         };
 
         [TestCaseSource(nameof(Cases))]
@@ -25,7 +25,7 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Class
 
         private static readonly TestCaseData[] GetCases =
         {
-            new TestCaseData(Option.Some("foo")).Returns("foo"),
+            new TestCaseData(Option<string>.Some("foo")).Returns("foo"),
         };
 
         [TestCaseSource(nameof(GetCases))]

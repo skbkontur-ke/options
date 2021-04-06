@@ -8,6 +8,13 @@ namespace Kontur.Tests.Options.Conversion.Linq
     [TestFixture]
     internal class SelectCaseGenerator_Should
     {
+        private static readonly Option<int> None = Option<int>.None();
+        private static readonly Option<int> Some10 = CreateSome(10);
+        private static readonly Option<int> Some11 = CreateSome(11);
+        private static readonly Option<int> Some12 = CreateSome(12);
+
+        private static Option<int> CreateSome(int value) => Option<int>.Some(value);
+
         private static TestCaseData Create(int argsCount, params SelectCase[] expectedResult)
         {
             return new(argsCount, expectedResult);
@@ -17,24 +24,24 @@ namespace Kontur.Tests.Options.Conversion.Linq
         {
             Create(
                 1,
-                new SelectCase(new[] { Option<int>.None() }, Option.None()),
-                new SelectCase(new[] { Option.Some(10) }, 10)),
+                new SelectCase(new[] { None }, None),
+                new SelectCase(new[] { Some10 }, Some10)),
             Create(
                 2,
-                new SelectCase(new[] { Option<int>.None(), Option<int>.None() }, Option.None()),
-                new SelectCase(new[] { Option.Some(10), Option<int>.None() }, Option.None()),
-                new SelectCase(new[] { Option<int>.None(), Option.Some(11) }, Option.None()),
-                new SelectCase(new[] { Option.Some(10), Option.Some(11) }, 21)),
+                new SelectCase(new[] { None, None }, None),
+                new SelectCase(new[] { Some10, None }, None),
+                new SelectCase(new[] { None, Some11 }, None),
+                new SelectCase(new[] { Some10, Some11 }, CreateSome(21))),
             Create(
                 3,
-                new SelectCase(new[] { Option<int>.None(), Option<int>.None(), Option<int>.None() }, Option.None()),
-                new SelectCase(new[] { Option.Some(10), Option<int>.None(), Option<int>.None() }, Option.None()),
-                new SelectCase(new[] { Option<int>.None(), Option.Some(11), Option<int>.None() }, Option.None()),
-                new SelectCase(new[] { Option.Some(10), Option.Some(11), Option<int>.None() }, Option.None()),
-                new SelectCase(new[] { Option<int>.None(), Option<int>.None(), Option.Some(12) }, Option.None()),
-                new SelectCase(new[] { Option.Some(10), Option<int>.None(), Option.Some(12) }, Option.None()),
-                new SelectCase(new[] { Option<int>.None(), Option.Some(11), Option.Some(12) }, Option.None()),
-                new SelectCase(new[] { Option.Some(10), Option.Some(11), Option.Some(12) }, 33)),
+                new SelectCase(new[] { None, None, None }, None),
+                new SelectCase(new[] { Some10, None, None }, None),
+                new SelectCase(new[] { None, Some11, None }, None),
+                new SelectCase(new[] { Some10, Some11, None }, None),
+                new SelectCase(new[] { None, None, Some12 }, None),
+                new SelectCase(new[] { Some10, None, Some12 }, None),
+                new SelectCase(new[] { None, Some11, Some12 }, None),
+                new SelectCase(new[] { Some10, Some11, Some12 }, CreateSome(33))),
         };
 
         [TestCaseSource(nameof(Cases))]

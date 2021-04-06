@@ -79,7 +79,6 @@ namespace Kontur.Tests.Options.Conversion.Linq.Plain.SelectMany.Options2.Plain
                 select x + y;
         }
 
-
         [TestCaseSource(nameof(Cases))]
         public Task<Option<int>> TaskOption_Let_Option_Let(Option<int> option1, Option<int> option2)
         {

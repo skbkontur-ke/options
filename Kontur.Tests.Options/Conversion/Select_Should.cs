@@ -15,8 +15,8 @@ namespace Kontur.Tests.Options.Conversion
 
         private static readonly TestCaseData[] Cases =
         {
-            Create(Option.None(), Option.None()),
-            Create(1, "1"),
+            Create(Option<int>.None(), Option<string>.None()),
+            Create(Option<int>.Some(1), Option<string>.Some("1")),
         };
 
         [TestCaseSource(nameof(Cases))]
@@ -34,7 +34,7 @@ namespace Kontur.Tests.Options.Conversion
         [Test]
         public void Convert_Some_To_None()
         {
-            var option = Option.Some("unused");
+            var option = Option<string>.Some("unused");
 
             var result = option.Select(_ => Option<string>.None());
 

@@ -14,7 +14,7 @@ namespace Kontur.Tests.Options.Extraction
         [Test]
         public void Throw_InvalidOperationException_If_None()
         {
-            var option = Option.None<int>();
+            var option = Option<int>.None();
 
             Func<int> action = () => option.GetOrThrow();
 
@@ -24,7 +24,7 @@ namespace Kontur.Tests.Options.Extraction
         [Test]
         public void Throw_ValueMissingException_If_None()
         {
-            var option = Option.None<int>();
+            var option = Option<int>.None();
 
             Func<int> action = () => option.GetOrThrow();
 
@@ -45,7 +45,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(MyExceptionCases))]
         public void Throw_MyException_If_None(Func<Option<int>, int> extractor)
         {
-            var option = Option.None<int>();
+            var option = Option<int>.None();
 
             Func<int> action = () => extractor(option);
 
@@ -59,7 +59,7 @@ namespace Kontur.Tests.Options.Extraction
         public void Return_Value_If_Some(Func<Option<int>, int> extractor)
         {
             const int expected = 5;
-            var option = Option.Some(expected);
+            var option = Option<int>.Some(expected);
 
             var result = extractor(option);
 
@@ -75,7 +75,7 @@ namespace Kontur.Tests.Options.Extraction
         [Test]
         public void Do_No_Create_Exception_If_Some()
         {
-            var option = Option.Some(5);
+            var option = Option<int>.Some(5);
 
             option.GetOrThrow(AssertIsNotCalled);
         }

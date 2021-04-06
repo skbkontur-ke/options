@@ -14,10 +14,10 @@ namespace Kontur.Tests.Options.Conversion
 
         private static IEnumerable<TestCaseData> GetCases()
         {
-            yield return CreateCase(Option.None(), Option.None());
+            yield return CreateCase(Option<B>.None(), Option<A>.None());
 
             var b = new B();
-            yield return CreateCase(b, b);
+            yield return CreateCase(Option<B>.Some(b), Option<A>.Some(b));
         }
 
         [TestCaseSource(nameof(GetCases))]

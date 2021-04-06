@@ -13,9 +13,9 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Struct
 
         private static readonly TestCaseData[] ReturnBooleanCases =
         {
-            CreateReturnBooleanCase(Option.None(), false),
+            CreateReturnBooleanCase(Option<int?>.None(), false),
             CreateReturnBooleanCase(Option<int?>.Some(null), true),
-            CreateReturnBooleanCase(1, true),
+            CreateReturnBooleanCase(Option<int?>.Some(1), true),
         };
 
         [TestCaseSource(nameof(ReturnBooleanCases))]
@@ -26,7 +26,7 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Struct
 
         private static TestCaseData CreateGetCase(int? expectedValue)
         {
-            return new TestCaseData(Option.Some(expectedValue)).Returns(expectedValue);
+            return new TestCaseData(Option<int?>.Some(expectedValue)).Returns(expectedValue);
         }
 
         private static readonly TestCaseData[] GetCases =

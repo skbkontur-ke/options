@@ -12,12 +12,12 @@ namespace Kontur.Tests.Options.Conversion.Linq
     {
         private static Task<int> GetCurrentIndex() => Task.FromResult(10);
 
-        private static Task<Option<Product>> GetCurrentProduct() => Task.FromResult(Option.Some(new Product("Pizza")));
+        private static Task<Option<Product>> GetCurrentProduct() => Task.FromResult(Option<Product>.Some(new Product("Pizza")));
 
         private static Task<Option<string>> GetMessage(Guid userId, int index, Product product)
         {
             var result = $"{userId.ToString().Substring(0, 2)}-{index}-{product.Name}";
-            return Task.FromResult(Option.Some(result));
+            return Task.FromResult(Option<string>.Some(result));
         }
 
         private static Task<Format> GetFormat(int index, string message)
@@ -30,7 +30,7 @@ namespace Kontur.Tests.Options.Conversion.Linq
         private static Option<ConvertResult> Convert(string message, Format format)
         {
             var result = format.Prefix + ": " + message;
-            return new ConvertResult(result);
+            return Option<ConvertResult>.Some(new ConvertResult(result));
         }
 
         private static TestCaseData Create(Option<Guid> user, Option<string> result)
@@ -40,10 +40,10 @@ namespace Kontur.Tests.Options.Conversion.Linq
 
         private static readonly TestCaseData[] Cases =
         {
-            Create(Option.None(), Option.None()),
-            Create(Option.Some(Guid.Empty), Option.None()),
-            Create(Option.Some(Guid.Parse("00dc7316-e772-479f-9f6e-f6a776b17e00")), Option.Some("a11: 00-11-Pizza")),
-            Create(Option.Some(Guid.Parse("e2dc7316-e772-479f-9f6e-f6a776b17ebb")), Option.Some("a11: e2-11-Pizza")),
+            Create(Option<Guid>.None(), Option<string>.None()),
+            Create(Option<Guid>.Some(Guid.Empty), Option<string>.None()),
+            Create(Option<Guid>.Some(Guid.Parse("00dc7316-e772-479f-9f6e-f6a776b17e00")), Option<string>.Some("a11: 00-11-Pizza")),
+            Create(Option<Guid>.Some(Guid.Parse("e2dc7316-e772-479f-9f6e-f6a776b17ebb")), Option<string>.Some("a11: e2-11-Pizza")),
         };
 
         [TestCaseSource(nameof(Cases))]

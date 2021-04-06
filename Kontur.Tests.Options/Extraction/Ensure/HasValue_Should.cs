@@ -12,7 +12,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure
         [Test]
         public void Throw_If_None()
         {
-            var option = Option.None<int>();
+            var option = Option<int>.None();
 
             Action action = () => option.EnsureHasValue();
 
@@ -22,7 +22,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure
         [Test]
         public void Do_No_Throw_If_Some()
         {
-            var option = Option.Some(5);
+            var option = Option<int>.Some(5);
 
             Action action = () => option.EnsureHasValue();
 

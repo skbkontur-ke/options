@@ -26,7 +26,7 @@ namespace Kontur.Tests.Options.Extraction
         public void Call_OnNone_If_None(Func<Option<string>, ICounter, Option<string>> callSwitch)
         {
             var counter = Substitute.For<ICounter>();
-            var option = Option.None<string>();
+            var option = Option<string>.None();
 
             callSwitch(option, counter);
 
@@ -43,7 +43,7 @@ namespace Kontur.Tests.Options.Extraction
         public void Call_OnSome_If_Some(Func<Option<string>, ICounter, Option<string>> callSwitch)
         {
             var counter = Substitute.For<ICounter>();
-            var option = Option.Some("foo");
+            var option = Option<string>.Some("foo");
 
             callSwitch(option, counter);
 
@@ -74,7 +74,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(DoNotCallOnSomeIfNoneCases))]
         public void Do_Not_Call_OnSome_If_None(Func<Option<string>, Option<string>> assertOnSomeIsNotCalled)
         {
-            var option = Option.None<string>();
+            var option = Option<string>.None();
 
             assertOnSomeIsNotCalled(option);
         }
@@ -98,7 +98,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(DoNotCallOnNoneIfSomeCases))]
         public void Do_Not_Call_OnNone_If_Some(Func<Option<string>, Option<string>> assertOnNoneIsNotCalled)
         {
-            var option = Option.Some("foo");
+            var option = Option<string>.Some("foo");
 
             assertOnNoneIsNotCalled(option);
         }
@@ -132,7 +132,7 @@ namespace Kontur.Tests.Options.Extraction
         public void Pass_Value_OnSome()
         {
             const string expected = "foo";
-            var option = Option.Some(expected);
+            var option = Option<string>.Some(expected);
             var consumer = Substitute.For<IConsumer>();
 
             option.Switch(() => { }, value => consumer.Consume(value));

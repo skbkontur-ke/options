@@ -7,7 +7,7 @@ namespace Kontur.Tests.Options.Conversion
     [TestFixture]
     internal class Or_Should
     {
-        private static readonly Option<int> None = Option.None();
+        private static readonly Option<int> None = Option<int>.None();
 
         private static TestCaseData CreateIntCase(Option<int> option1, Option<int> option2, Option<int> result)
         {
@@ -17,9 +17,9 @@ namespace Kontur.Tests.Options.Conversion
         private static readonly TestCaseData[] IntCases =
         {
             CreateIntCase(None, None, None),
-            CreateIntCase(1, None, 1),
-            CreateIntCase(None, 2, 2),
-            CreateIntCase(1, 2, 1),
+            CreateIntCase(Option<int>.Some(1), None, Option<int>.Some(1)),
+            CreateIntCase(None, Option<int>.Some(2), Option<int>.Some(2)),
+            CreateIntCase(Option<int>.Some(1), Option<int>.Some(2), Option<int>.Some(1)),
         };
 
         [TestCaseSource(nameof(IntCases))]
@@ -43,7 +43,7 @@ namespace Kontur.Tests.Options.Conversion
         [Test]
         public void Do_Not_Call_Delegate_If_Some()
         {
-            var option = Option.Some(0);
+            var option = Option<int>.Some(0);
 
             option.Or(AssertIsNotCalled);
         }
@@ -55,12 +55,12 @@ namespace Kontur.Tests.Options.Conversion
 
         private static IEnumerable<TestCaseData> GetUpcastCases()
         {
-            yield return CreateUpcastCase(Option.None(), Option.None(), Option.None());
+            yield return CreateUpcastCase(Option<B>.None(), Option<A>.None(), Option<A>.None());
 
             var example = new B();
-            yield return CreateUpcastCase(Option.None(), example, example);
-            yield return CreateUpcastCase(example, Option.None(), example);
-            yield return CreateUpcastCase(example, new B(), example);
+            yield return CreateUpcastCase(Option<B>.None(), Option<A>.Some(example), Option<A>.Some(example));
+            yield return CreateUpcastCase(Option<B>.Some(example), Option<A>.None(), Option<A>.Some(example));
+            yield return CreateUpcastCase(Option<B>.Some(example), Option<A>.Some(new B()), Option<A>.Some(example));
         }
 
         [TestCaseSource(nameof(GetUpcastCases))]

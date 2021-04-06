@@ -14,9 +14,9 @@ namespace Kontur.Tests.Options.Extraction.GetOrDefault.Struct
 
         private static readonly TestCaseData[] Cases =
         {
-            CreateCase(Option.None(), null),
-            CreateCase(Option.Some<int?>(null), null),
-            CreateCase(1, 1),
+            CreateCase(Option<int?>.None(), null),
+            CreateCase(Option<int?>.Some(null), null),
+            CreateCase(Option<int?>.Some(1), 1),
         };
 
         [TestCaseSource(nameof(Cases))]

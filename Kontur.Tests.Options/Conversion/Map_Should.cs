@@ -35,16 +35,16 @@ namespace Kontur.Tests.Options.Conversion
 
             var result = converter(option);
 
-            result.Should().BeEquivalentTo(Option.None<int>());
+            result.Should().BeEquivalentTo(Option<int>.None());
         }
 
         private static readonly IEnumerable<TestCaseData> ConvertSomeCases = MapCases
-            .Select(testCase => testCase.Returns(Option.Some(ExpectedResult)));
+            .Select(testCase => testCase.Returns(Option<int>.Some(ExpectedResult)));
 
         [TestCaseSource(nameof(ConvertSomeCases))]
         public Option<int> Convert_Some(Func<Option<string>, Option<int>> converter)
         {
-            var option = Option.Some("unused");
+            var option = Option<string>.Some("unused");
 
             return converter(option);
         }
@@ -52,11 +52,11 @@ namespace Kontur.Tests.Options.Conversion
         [Test]
         public void Use_Value()
         {
-            var option = Option.Some(777);
+            var option = Option<int>.Some(777);
 
             var result = option.Map(i => i.ToString(CultureInfo.InvariantCulture));
 
-            result.Should().BeEquivalentTo(Option.Some("777"));
+            result.Should().BeEquivalentTo(Option<string>.Some("777"));
         }
 
         private static int AssertIsNotCalled()

@@ -12,7 +12,7 @@ namespace Kontur.Tests.Options.Extraction
         public void Some()
         {
             var expected = Guid.NewGuid();
-            var option = Option.Some(expected);
+            var option = Option<Guid>.Some(expected);
 
             var result = option.ToString();
 
@@ -22,7 +22,7 @@ namespace Kontur.Tests.Options.Extraction
         [Test]
         public void None()
         {
-            var option = Option.None<Guid>();
+            var option = Option<Guid>.None();
 
             var result = option.ToString();
 

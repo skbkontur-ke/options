@@ -36,7 +36,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(ReturnIfSomeCases))]
         public string Return_If_Some(Func<Option<int>, string> callMatch)
         {
-            var option = Option.Some(0);
+            var option = Option<int>.Some(0);
 
             return callMatch(option);
         }
@@ -55,7 +55,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(ReturnIfNoneCases))]
         public string Return_If_None(Func<Option<int>, string> callMatch)
         {
-            var option = Option.None<int>();
+            var option = Option<int>.None();
 
             return callMatch(option);
         }
@@ -82,7 +82,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(UseValueCases))]
         public void Use_Value(Func<Option<int>, string> extractor)
         {
-            var option = Option.Some(777);
+            var option = Option<int>.Some(777);
 
             var result = extractor(option);
 
@@ -117,7 +117,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(CreateDoNoCallSomeFactoryIfNoneCases))]
         public void Do_Not_Call_OnSome_Factory_If_None(Func<Option<string>, string> assertExtracted)
         {
-            var option = Option.None<string>();
+            var option = Option<string>.None();
 
             assertExtracted(option);
         }
@@ -137,7 +137,7 @@ namespace Kontur.Tests.Options.Extraction
         [TestCaseSource(nameof(CreateDoNoCallNoneFactoryIfSomeCases))]
         public void Do_Not_Call_OnNone_If_Some(Func<Option<string>, string> assertExtracted)
         {
-            var option = Option.Some("foo");
+            var option = Option<string>.Some("foo");
 
             assertExtracted(option);
         }

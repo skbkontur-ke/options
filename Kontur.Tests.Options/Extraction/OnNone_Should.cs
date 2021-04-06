@@ -12,7 +12,7 @@ namespace Kontur.Tests.Options.Extraction
         public void Call_OnNone_If_None()
         {
             var counter = Substitute.For<ICounter>();
-            var option = Option.None<string>();
+            var option = Option<string>.None();
 
             option.OnNone(() => counter.Increment());
 
@@ -22,7 +22,7 @@ namespace Kontur.Tests.Options.Extraction
         [Test]
         public void Do_Not_Call_OnNone_If_Some()
         {
-            var option = Option.Some("foo");
+            var option = Option<string>.Some("foo");
 
             option.OnNone(() => Assert.Fail("OnNone is called"));
         }
@@ -34,8 +34,8 @@ namespace Kontur.Tests.Options.Extraction
 
         private static readonly TestCaseData[] ReturnSelfCases =
         {
-            CreateReturnSelfCase(Option.None()),
-            CreateReturnSelfCase(1),
+            CreateReturnSelfCase(Option<int>.None()),
+            CreateReturnSelfCase(Option<int>.Some(1)),
         };
 
         [TestCaseSource(nameof(ReturnSelfCases))]

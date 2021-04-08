@@ -3,45 +3,50 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Select
+namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Select.DifferentTypes
 {
     internal class Task_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {
-        private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.CreateSelectCases(1);
+        private static readonly IEnumerable<TestCaseData> Cases = CreateSelectCases(1);
 
-        [TestCaseSource(nameof(Cases))]
-        public Task<Option<int>> OneOption(Option<int> option)
+        private static Task<Option<string>> SelectResult(int value)
         {
-            return
-                from value in option
-                select Task.FromResult(GetOption(value));
+            return Task.FromResult(GetOption(ConvertToString(value)));
         }
 
         [TestCaseSource(nameof(Cases))]
-        public Task<Option<int>> Option_Let(Option<int> option)
+        public Task<Option<string>> OneOption(Option<int> option)
+        {
+            return
+                from value in option
+                select SelectResult(value);
+        }
+
+        [TestCaseSource(nameof(Cases))]
+        public Task<Option<string>> Option_Let(Option<int> option)
         {
             return
                 from valueLet in option
                 let value = valueLet
-                select Task.FromResult(GetOption(value));
+                select SelectResult(value);
         }
 
         [TestCaseSource(nameof(Cases))]
-        public Task<Option<int>> TaskOption(Option<int> option)
+        public Task<Option<string>> TaskOption(Option<int> option)
         {
             return
                 from value in Task.FromResult(option)
-                select Task.FromResult(GetOption(value));
+                select SelectResult(value);
         }
 
         [TestCaseSource(nameof(Cases))]
-        public Task<Option<int>> TaskOption_Let(Option<int> option)
+        public Task<Option<string>> TaskOption_Let(Option<int> option)
         {
             return
                 from valueLet in Task.FromResult(option)
                 let value = valueLet
-                select Task.FromResult(GetOption(value));
+                select SelectResult(value);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where.Tasks.SelectMany
     internal class Value_Should<TFixtureCase> : LinqTestBase<TFixtureCase>
         where TFixtureCase : IFixtureCase, new()
     {
-        private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.CreateWhereCases(2);
+        private static readonly IEnumerable<TestCaseData> Cases = FixtureCase.CreateWhereCases(Constant, 2);
 
         [TestCaseSource(nameof(Cases))]
         public Task<Option<int>> Option_Option_Where(Option<int> option1, Option<int> option2, IsSuitable isSuitable)

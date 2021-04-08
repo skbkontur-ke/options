@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Linq.Plain.Select
+namespace Kontur.Tests.Options.Conversion.Linq.Plain.Select.SameType
 {
     [TestFixture]
     internal class Task_Should

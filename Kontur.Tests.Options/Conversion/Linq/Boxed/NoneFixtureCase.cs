@@ -4,6 +4,6 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed
 {
     internal class NoneFixtureCase : IFixtureCase
     {
-        public Option<int> GetOption(int value) => Option<int>.None();
+        public Option<TValue> GetOption<TValue>(TValue value, TValue constant) => Option<TValue>.None();
     }
 }

@@ -11,8 +11,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
         private const int TaskTerm = 1000;
         private static readonly Task<int> Task1000 = Task.FromResult(TaskTerm);
 
-        private static readonly IEnumerable<TestCaseData> Cases =
-            FixtureCase.CreateSelectCases(1, sum => sum + TaskTerm);
+        private static readonly IEnumerable<TestCaseData> Cases = CreateSelectCases(1, sum => sum + TaskTerm);
 
         [TestCaseSource(nameof(Cases))]
         public Task<Option<int>> Task_Option(Option<int> option)

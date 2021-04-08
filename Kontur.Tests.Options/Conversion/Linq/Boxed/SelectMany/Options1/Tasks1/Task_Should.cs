@@ -11,8 +11,12 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
         private const int TaskTerm = 1000;
         private static readonly Task<int> Task1000 = Task.FromResult(TaskTerm);
 
-        private static readonly IEnumerable<TestCaseData> Cases =
-            FixtureCase.CreateSelectCases(1, sum => sum + TaskTerm);
+        private static readonly IEnumerable<TestCaseData> Cases = CreateSelectCases(1, sum => sum + TaskTerm);
+
+        private static Task<Option<int>> SelectResult(int value)
+        {
+            return Task.FromResult(GetOption(value));
+        }
 
         [TestCaseSource(nameof(Cases))]
         public Task<Option<int>> Task_Option(Option<int> option)
@@ -20,7 +24,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
             return
                 from x in Task1000
                 from y in option
-                select Task.FromResult(GetOption(x + y));
+                select SelectResult(x + y);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -29,7 +33,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
             return
                 from x in Task1000
                 from y in Task.FromResult(option)
-                select Task.FromResult(GetOption(x + y));
+                select SelectResult(x + y);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -38,7 +42,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
             return
                 from x in option
                 from y in Task1000
-                select Task.FromResult(GetOption(x + y));
+                select SelectResult(x + y);
         }
 
         [TestCaseSource(nameof(Cases))]
@@ -47,7 +51,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options1.Tasks1
             return
                 from x in Task.FromResult(option)
                 from y in Task1000
-                select Task.FromResult(GetOption(x + y));
+                select SelectResult(x + y);
         }
     }
 }

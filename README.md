@@ -21,9 +21,9 @@
     * [IsNone](#isnone)
     * [Implicit conversion to bool](#implicit-conversion-to-bool)
     * [foreach](#foreach)
+    * [LINQ query sytnax](#linq-query-sytnax)
     * [Conversion to IEnumerable](#conversion-to-ienumerable)
     * [LINQ method syntax](#linq-method-syntax)
-    * [LINQ query sytnax](#linq-query-sytnax)
     * [ToString](#tostring)
 * [Unsafe extraction of data from Option instance](#unsafe-extraction-of-data-from-option-instance)
     * [GetOrThrow](#getorthrow)
@@ -31,6 +31,7 @@
     * [EnsureHasValue](#ensurehasvalue)
     * [EnsureNone](#ensurenone)
 * [Conversion of `Option<TValue>` to another Option type](#conversion-of-optiontvalue-to-another-option-type)
+    * [Map](#map)
     * [Select](#select)
     * [Upcast](#upcast)
     * [Or](#or)
@@ -60,27 +61,28 @@ Example:
 abstract Option<Guid> GetCurrentUserId();
 abstract Task<int> GetCurrentIndex();
 abstract Task<Option<Product>> GetCurrentProduct();
-abstract Task<Option<string>> GetMessage(Guid userId, int index, Product product);
+abstract Task<Option<string>> GetMessage(Guid userId, int index, Product product));
 abstract Task<Format> GetFormat(int index, string message);
 abstract Option<ConvertResult> Convert(string message, Format format);
+abstract Task<bool> IsValid(index);
 
 Task<Option<ConvertResult>> result =
   from userId  in GetCurrentUserId() // A
-  where userId != Guid.Empty
-  from index   in GetCurrentIndex() // B
-  from product in GetCurrentProduct() // C
+  where userId != Guid.Empty       // B
+  from index   in GetCurrentIndex() // C
+  from product in GetCurrentProduct() // D
   let nextIndex = index + 1
-  where nextIndex > 0
-  from message in GetMessage(userId, nextIndex, product) // D
-  from format  in GetFormat(nextIndex, message) // E
-  select Convert(message, format); // F
+  where IsValid(nextIndex) // E
+  from message in GetMessage(userId, nextIndex, product) // F
+  from format  in GetFormat(nextIndex, message) // G
+  select Convert(message, format); // H
 
 ```
 Where:
-* `A` or `B` must return `Option<T>` or `Task<Option<T>>`.
-* `B`, `C`, `D` and `E` may return one of `Option<T>`, `Task<T>` or `Task<Option<T>>`. Expressions may depend on previous expressions (`D` and `E` for example) or may not depend on previous expressions (`B` and `C` for example). Count of B, C, D and E-like statements is efficiently unlimited.
-* `F` should return `TResult` or `Option<TResult>`.
-
+* `A` or `C` or both (first two `from`/`in` clauses) must return either `Option<T>` or `Task<Option<T>>`.
+* `A`, `C`, `D`, `F` and `G` may return one of `Option<T>`, `Task<T>` or `Task<Option<T>>`. Subsequent expressions may depend on previous expressions (`F` and `G` for example) or may not depend on previous expressions (`C` and `D` for example). Number of `B`, `C`, `D`, `E`, `F` and `G`-like statements is efficiently unlimited.
+* `B` and `E` may return either `bool` or `Task<bool>`.
+* `H` should return either `TResult` or `Option<TResult>`.
 
 ### Other features
 
@@ -95,6 +97,7 @@ Where:
 
 ## Instantiation of Option type
 
+Explicit variants:
 ```
 var option = Option.Some("hello");
 var option = Option<string>.Some("hello");
@@ -112,6 +115,10 @@ Option<string> option = Option.None();
 var option = flag
   ? Option.Some("Hello")
   : Option.None();
+
+var option = flag
+  ? "Hello"
+  : Option<string>.None();
 
 Option<string> option = flag
   ? "Hello"
@@ -135,7 +142,7 @@ object result = option.GetOrElse<object>(new Exception("no value"));
 ### TryGet
 It works for nullable and non-nullable reference and value types.
 
-Remark: On netstandard2.0 and below for reference type it returns nullable variant of generic type if nullable reference types are enabled.
+Remark: On netstandard2.0 and below for reference types it returns nullable variant of generic type if nullable reference types are enabled.
 
 ```
 Option<string> option = ...;
@@ -258,24 +265,6 @@ string FindValue(Option<int> option)
 
 ```
 
-### Conversion to IEnumerable
-```
-Option<int> option = ...;
-
-// `[]` if `None`
-// `[value]` if `Some`
-IEnumerable<int> converted = option;
-```
-
-### LINQ method syntax
-```
-Option<string> option = ...;
-
-// `[]` if `None`
-// `[value]` if `Some`
-string[] values = option.ToArray();
-```
-
 ### LINQ query sytnax
 ```
 Option<int> option = Option.Some(10);
@@ -312,6 +301,25 @@ IEnumerable<int> result =
 
 ```
 
+### Conversion to IEnumerable
+```
+Option<int> option = ...;
+
+// `[]` if `None`
+// `[value]` if `Some`
+IEnumerable<int> converted = option.GetValues();
+```
+
+### LINQ method syntax
+```
+Option<string> option = ...;
+
+// `[]` if `None`
+// `[value]` if `Some`
+string[] values = option.GetValues().ToArray();
+```
+
+
 ### ToString
 ```
 Option<string> option = ...;
@@ -327,7 +335,7 @@ string str = option.ToString();
 ```
 Option<string> option = ...;
 
-string result = option.GetOrThrow();
+string result = option.GetOrThrow(); // Throws `ValueMissingException` on None
 string result = option.GetOrThrow(new Exception("There is no value"));
 string result = option.GetOrThrow(() => new Exception("There is no value"));
 ```
@@ -361,21 +369,43 @@ option.EnsureNone();
 
 ## Conversion of `Option<TValue>` to another Option type
 
-### Select
+### Map
+
+Map changes value or/and type of `TValue`s
+
 ```
 Option<int> option = ...;
 
+Option<int> result = option.Map(i => i + 1);
+Option<string> result = option.Map(i => i.ToString());
+Option<object> result = option.Map<object>(i => i);
+```
+
+### Select
+
+`Select` is same as map but allows selecting an `Option` in addition to selecting a plain value.
+That even allows to change `Some` to `None` for some values.
+
+```
+Option<int> option = ...;
+
+Option<string> result = option.Select(i => i > 0 ? Option.Some(i) : Option.None());
+Option<int> result = option.Select(i => i + 1);
 Option<string> result = option.Select(i => i.ToString());
-Option<object> result = option.Select<object>(i => i.ToString());
+Option<object> result = option.Select<object>(i => i);
 ```
 
 ### Upcast
+
+Only safe upcasts are allowed.
+
 ```
 Option<string> option = ...;
 
+// Compiles
 Option<object> objectOption = option.Upcast<object>();
 
-// Do not compiled
+// Does not compile
 var result = objectOption.Upcast<string>();
 ```
 
@@ -420,7 +450,7 @@ Option<ConvertResult> result =
   select Convert(message, product);
 
 ```
-The last `select` expression can return `Option<TResult>` or just `TResult`.
+The last `select` expression can return either `Option<TResult>` or just `TResult`.
 
 
 ### Do-notation with tasks
@@ -431,23 +461,25 @@ abstract Task<Option<Product>> GetCurrentProduct();
 abstract Task<Option<string>> GetMessage(Guid userId, int index, Product product));
 abstract Task<Format> GetFormat(int index, string message);
 abstract Option<ConvertResult> Convert(string message, Format format);
+abstract Task<bool> IsValid(index);
 
 Task<Option<ConvertResult>> result =
   from userId  in GetCurrentUserId() // A
-  where userId != Guid.Empty
-  from index   in GetCurrentIndex() // B
-  from product in GetCurrentProduct() // C
+  where userId != Guid.Empty       // B
+  from index   in GetCurrentIndex() // C
+  from product in GetCurrentProduct() // D
   let nextIndex = index + 1
-  where nextIndex > 0
-  from message in GetMessage(userId, nextIndex, product) // D
-  from format  in GetFormat(nextIndex, message) // E
-  select Convert(message, format); // F
+  where IsValid(nextIndex) // E
+  from message in GetMessage(userId, nextIndex, product) // F
+  from format  in GetFormat(nextIndex, message) // G
+  select Convert(message, format); // H
 
 ```
 Where:
-* `A` or `B` must return `Option<T>` or `Task<Option<T>>`.
-* `B`, `C`, `D` and `E` may return one of `Option<T>`, `Task<T>` or `Task<Option<T>>`. Expressions may depend on previous expressions (`D` and `E` for example) or may not depend on previous expressions (`B` and `C` for example). Count of B, C, D and E-like statements is efficiently unlimited.
-* `F` should return `TResult` or `Option<TResult>`.
+* `A` or `C` or both (first two `from`/`in` clauses) must return either `Option<T>` or `Task<Option<T>>`.
+* `A`, `C`, `D`, `F` and `G` may return one of `Option<T>`, `Task<T>` or `Task<Option<T>>`. Subsequent expressions may depend on previous expressions (`F` and `G` for example) or may not depend on previous expressions (`C` and `D` for example). Number of `B`, `C`, `D`, `E`, `F` and `G`-like statements is efficiently unlimited.
+* `B` and `E` may return either `bool` or `Task<bool>`.
+* `H` should return either `TResult` or `Option<TResult>`.
 
 
 ## Other
@@ -458,4 +490,4 @@ Where:
 
 ## Contributing
 
-Add safe methods into `Option.TValue.cs` if simple upcasts by specifing one generic argument are possible.
+Add safe methods with one generic parameter used as return value directly into `Option.TValue.cs` file instead adding as extension method for simplier upcasts by specifing only one generic argument.

@@ -371,7 +371,7 @@ option.EnsureNone();
 
 ### Map
 
-Map changes value or/and type of `TValue`s
+Map changes value or/and type of `TValue`
 
 ```
 Option<int> option = ...;

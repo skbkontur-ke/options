@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
 using Kontur.Options;
 using NSubstitute;
 using NUnit.Framework;
@@ -44,6 +47,27 @@ namespace Kontur.Tests.Options.Extraction
             var result = option.OnNone(() => { });
 
             result.Should().BeEquivalentTo(option);
+        }
+
+        private static readonly Func<Option<Child>, Option<Base>>[] UpcastMethods =
+        {
+            option => option.OnNone<Base>(() => { }),
+        };
+
+        private static readonly IEnumerable<TestCaseData> UpcastCases =
+            from testCase in UpcastExamples.Get()
+            from method in UpcastMethods
+            select new TestCaseData(testCase.Source, method, testCase.Result);
+
+        [TestCaseSource(nameof(UpcastCases))]
+        public void Return_Self_On_Upcast(
+            Option<Child> option,
+            Func<Option<Child>, Option<Base>> callOnNone,
+            Option<Base> expectedResult)
+        {
+            var result = callOnNone(option);
+
+            result.Should().BeEquivalentTo(expectedResult);
         }
     }
 }

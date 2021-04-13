@@ -93,5 +93,27 @@ namespace Kontur.Tests.Options.Extraction
 
             result.Should().BeEquivalentTo(option);
         }
+
+        private static readonly Func<Option<Child>, Option<Base>>[] UpcastMethods =
+        {
+            option => option.OnSome<Base>(_ => { }),
+            option => option.OnSome<Base>(() => { }),
+        };
+
+        private static readonly IEnumerable<TestCaseData> UpcastCases =
+            from testCase in UpcastExamples.Get()
+            from method in UpcastMethods
+            select new TestCaseData(testCase.Source, method, testCase.Result);
+
+        [TestCaseSource(nameof(UpcastCases))]
+        public void Return_Self_On_Upcast(
+            Option<Child> option,
+            Func<Option<Child>, Option<Base>> callOnSome,
+            Option<Base> expectedResult)
+        {
+            var result = callOnSome(option);
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
     }
 }

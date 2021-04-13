@@ -14,7 +14,7 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.SelectMany.Options4
         {
             return Task.FromResult(GetOption(value));
         }
-        
+
         [TestCaseSource(nameof(Cases))]
         public Task<Option<int>> Option_Option_Option_Option(
             Option<int> option1,

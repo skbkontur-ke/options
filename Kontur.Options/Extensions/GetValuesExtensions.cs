@@ -7,7 +7,7 @@ namespace Kontur.Options
     public static class GetValuesExtensions
     {
         [Pure]
-        public static IEnumerable<TValue> GetValues<TValue>(this Option<TValue> option)
+        public static IEnumerable<TValue> GetValues<TValue>(this IOptionMatchable<TValue> option)
         {
             return option.Match(Enumerable.Empty<TValue>, value => new[] { value });
         }

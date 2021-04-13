@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
+using Kontur.Options.Holders;
 
 namespace Kontur.Options
 {
@@ -169,10 +170,18 @@ namespace Kontur.Options
                 });
         }
 
-        public Option<TValue> Switch(Action onNone, Action<TValue> onSome)
+        [Pure]
+        public bool TryGet(
+#if NETSTANDARD2_0
+            out TValue? value)
+#else
+            [MaybeNullWhen(returnValue: false)] out TValue value)
+#endif
         {
-            SwitchInternal(onNone, onSome);
-            return this;
+            return Match<Holder<TValue>>(
+                    () => new NoneHolder<TValue>(),
+                    val => new SomeHolder<TValue>(val))
+                .TryGet(out value);
         }
 
         [Pure]
@@ -203,20 +212,10 @@ namespace Kontur.Options
 
         public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);
 
-        [Pure]
-        public abstract bool TryGet(
-#if NETSTANDARD2_0
-            out TValue? value);
-#else
-            [MaybeNullWhen(returnValue: false)] out TValue value);
-#endif
-
         public abstract override string ToString();
 
         public abstract override bool Equals(object obj);
 
         public abstract override int GetHashCode();
-
-        private protected abstract void SwitchInternal(Action onNone, Action<TValue> onSome);
     }
 }

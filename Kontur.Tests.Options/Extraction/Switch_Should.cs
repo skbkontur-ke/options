@@ -139,5 +139,34 @@ namespace Kontur.Tests.Options.Extraction
 
             consumer.Received().Consume(expected);
         }
+
+        private static readonly Func<Option<Child>, Option<Base>>[] UpcastMethods =
+        {
+            option => option.Switch<Base>(() => { }, _ => { }),
+            option => option.Switch<Base>(() => { }, () => { }),
+        };
+
+        private static IEnumerable<(Option<Child> Source, Option<Base> Result)> UpcastExamples()
+        {
+            var child = new Child();
+            yield return (Option<Child>.Some(child), Option<Base>.Some(child));
+            yield return (Option<Child>.None(), Option<Base>.None());
+        }
+
+        private static readonly IEnumerable<TestCaseData> UpcastCases =
+            from testCase in UpcastExamples()
+            from method in UpcastMethods
+            select new TestCaseData(testCase.Source, method, testCase.Result);
+
+        [TestCaseSource(nameof(UpcastCases))]
+        public void Return_Self_On_Upcast(
+            Option<Child> option,
+            Func<Option<Child>, Option<Base>> callSwitch,
+            Option<Base> expectedResult)
+        {
+            var result = callSwitch(option);
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
     }
 }

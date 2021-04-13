@@ -13,7 +13,7 @@ namespace Kontur.Options.Holders
 
         // ReSharper disable once ParameterHidesMember
         [Pure]
-        public override bool TryGet(out TValue value)
+        internal override bool TryGet(out TValue value)
         {
             value = this.value;
             return true;

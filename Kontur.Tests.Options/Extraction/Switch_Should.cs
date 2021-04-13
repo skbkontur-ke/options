@@ -146,15 +146,8 @@ namespace Kontur.Tests.Options.Extraction
             option => option.Switch<Base>(() => { }, () => { }),
         };
 
-        private static IEnumerable<(Option<Child> Source, Option<Base> Result)> UpcastExamples()
-        {
-            var child = new Child();
-            yield return (Option<Child>.Some(child), Option<Base>.Some(child));
-            yield return (Option<Child>.None(), Option<Base>.None());
-        }
-
         private static readonly IEnumerable<TestCaseData> UpcastCases =
-            from testCase in UpcastExamples()
+            from testCase in UpcastExamples.Get()
             from method in UpcastMethods
             select new TestCaseData(testCase.Source, method, testCase.Result);
 

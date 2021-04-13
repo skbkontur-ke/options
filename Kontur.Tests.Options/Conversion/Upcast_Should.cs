@@ -7,31 +7,23 @@ namespace Kontur.Tests.Options.Conversion
     [TestFixture]
     internal class Upcast_Should
     {
-        private static TestCaseData CreateCase(Option<B> option, Option<A> result)
+        private static TestCaseData CreateCase(Option<Child> option, Option<Base> result)
         {
             return new TestCaseData(option).Returns(result);
         }
 
         private static IEnumerable<TestCaseData> GetCases()
         {
-            yield return CreateCase(Option<B>.None(), Option<A>.None());
+            yield return CreateCase(Option<Child>.None(), Option<Base>.None());
 
-            var b = new B();
-            yield return CreateCase(Option<B>.Some(b), Option<A>.Some(b));
+            var child = new Child();
+            yield return CreateCase(Option<Child>.Some(child), Option<Base>.Some(child));
         }
 
         [TestCaseSource(nameof(GetCases))]
-        public Option<A> Process_Option(Option<B> option)
+        public Option<Base> Process_Option(Option<Child> option)
         {
-            return option.Upcast<A>();
-        }
-
-        public class A
-        {
-        }
-
-        public class B : A
-        {
+            return option.Upcast<Base>();
         }
     }
 }

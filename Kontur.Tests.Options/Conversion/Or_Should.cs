@@ -48,39 +48,31 @@ namespace Kontur.Tests.Options.Conversion
             option.Or(AssertIsNotCalled);
         }
 
-        private static TestCaseData CreateUpcastCase(Option<B> option1, Option<A> option2, Option<A> result)
+        private static TestCaseData CreateUpcastCase(Option<Child> option1, Option<Base> option2, Option<Base> result)
         {
             return new TestCaseData(option1, option2).Returns(result);
         }
 
         private static IEnumerable<TestCaseData> GetUpcastCases()
         {
-            yield return CreateUpcastCase(Option<B>.None(), Option<A>.None(), Option<A>.None());
+            yield return CreateUpcastCase(Option<Child>.None(), Option<Base>.None(), Option<Base>.None());
 
-            var example = new B();
-            yield return CreateUpcastCase(Option<B>.None(), Option<A>.Some(example), Option<A>.Some(example));
-            yield return CreateUpcastCase(Option<B>.Some(example), Option<A>.None(), Option<A>.Some(example));
-            yield return CreateUpcastCase(Option<B>.Some(example), Option<A>.Some(new B()), Option<A>.Some(example));
+            var example = new Child();
+            yield return CreateUpcastCase(Option<Child>.None(), Option<Base>.Some(example), Option<Base>.Some(example));
+            yield return CreateUpcastCase(Option<Child>.Some(example), Option<Base>.None(), Option<Base>.Some(example));
+            yield return CreateUpcastCase(Option<Child>.Some(example), Option<Base>.Some(new Child()), Option<Base>.Some(example));
         }
 
         [TestCaseSource(nameof(GetUpcastCases))]
-        public Option<A> Upcast_Value(Option<B> option1, Option<A> option2)
+        public Option<Base> Upcast_Value(Option<Child> option1, Option<Base> option2)
         {
             return option1.Or(option2);
         }
 
         [TestCaseSource(nameof(GetUpcastCases))]
-        public Option<A> Upcast_Func(Option<B> option1, Option<A> option2)
+        public Option<Base> Upcast_Func(Option<Child> option1, Option<Base> option2)
         {
             return option1.Or(() => option2);
-        }
-
-        public class A
-        {
-        }
-
-        public class B : A
-        {
         }
     }
 }

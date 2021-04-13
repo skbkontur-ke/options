@@ -60,13 +60,13 @@ namespace Kontur.Tests.Options.Extraction
             result.Should().Be(expectedResult);
         }
 
-        private static readonly IEnumerable<TestCaseData> UpcastCases = GetCases<B, A>();
+        private static readonly IEnumerable<TestCaseData> UpcastCases = GetCases<Child, Base>();
 
         [TestCaseSource(nameof(UpcastCases))]
-        public void Upcast_If_None(Func<Option<B>, A, A> extractor)
+        public void Upcast_If_None(Func<Option<Child>, Base, Base> extractor)
         {
-            var expectedResult = new A();
-            var option = Option<B>.None();
+            var expectedResult = new Base();
+            var option = Option<Child>.None();
 
             var result = extractor(option, expectedResult);
 
@@ -74,22 +74,14 @@ namespace Kontur.Tests.Options.Extraction
         }
 
         [TestCaseSource(nameof(UpcastCases))]
-        public void Upcast_If_Some(Func<Option<B>, A, A> extractor)
+        public void Upcast_If_Some(Func<Option<Child>, Base, Base> extractor)
         {
-            var expectedResult = new B();
-            var option = Option<B>.Some(expectedResult);
+            var expectedResult = new Child();
+            var option = Option<Child>.Some(expectedResult);
 
-            var result = extractor(option, new A());
+            var result = extractor(option, new Base());
 
             result.Should().Be(expectedResult);
-        }
-
-        public class A
-        {
-        }
-
-        public class B : A
-        {
         }
     }
 }

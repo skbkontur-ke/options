@@ -4,6 +4,6 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed
 {
     internal interface IFixtureCase
     {
-        public Option<T> GetOption<T>(T value, T constant);
+        public Option<TValue> GetOption<TValue>(TValue value, TValue constant);
     }
 }

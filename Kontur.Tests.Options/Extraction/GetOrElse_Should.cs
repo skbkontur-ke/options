@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentAssertions;
+using System.Linq;
 using Kontur.Options;
 using NUnit.Framework;
 
@@ -23,65 +23,50 @@ namespace Kontur.Tests.Options.Extraction
             option.GetOrElse(AssertIsNotCalled);
         }
 
-        private static TestCaseData Create<TSource, TResult>(Func<Option<TSource>, TResult, TResult> extractor)
-            where TSource : TResult
-        {
-            return new(extractor);
-        }
-
-        private static IEnumerable<TestCaseData> GetCases<TSource, TResult>()
+        private static IEnumerable<Func<Option<TSource>, TResult>> GetMethods<TSource, TResult>(TResult defaultValue)
             where TSource : class, TResult
         {
-            yield return Create<TSource, TResult>((option, defaultValue) => option.GetOrElse(defaultValue));
-            yield return Create<TSource, TResult>((option, defaultValue) => option.GetOrElse(() => defaultValue));
+            yield return option => option.GetOrElse(defaultValue);
+            yield return option => option.GetOrElse(() => defaultValue);
         }
 
-        private static readonly IEnumerable<TestCaseData> StringCases = GetCases<string, string>();
-
-        [TestCaseSource(nameof(StringCases))]
-        public void Return_Default_Value_If_None(Func<Option<string>, string, string> extractor)
+        private static IEnumerable<TestCaseData> GetStringCases()
         {
-            const string expectedResult = "default on none";
-            var option = Option<string>.None();
+            const string defaultValue = "default on none";
+            const string someValue = "bar";
 
-            var result = extractor(option, expectedResult);
+            var testCases = new (Option<string> Option, string Result)[]
+            {
+                (Option<string>.None(), defaultValue),
+                (Option<string>.Some(someValue), someValue),
+            };
 
-            result.Should().Be(expectedResult);
+            return
+                from testCase in testCases
+                from method in GetMethods<string, string>(defaultValue)
+                select new TestCaseData(testCase.Option, method).Returns(testCase.Result);
         }
 
-        [TestCaseSource(nameof(StringCases))]
-        public void Return_Value_If_Some(Func<Option<string>, string, string> extractor)
+        [TestCaseSource(nameof(GetStringCases))]
+        public string Return_Result(Option<string> option, Func<Option<string>, string> callGetOrElse)
         {
-            const string expectedResult = "hello";
-            var option = Option<string>.Some(expectedResult);
-
-            var result = extractor(option, "ignored");
-
-            result.Should().Be(expectedResult);
+            return callGetOrElse(option);
         }
 
-        private static readonly IEnumerable<TestCaseData> UpcastCases = GetCases<Child, Base>();
-
-        [TestCaseSource(nameof(UpcastCases))]
-        public void Upcast_If_None(Func<Option<Child>, Base, Base> extractor)
+        private static IEnumerable<TestCaseData> GetUpcastCases()
         {
-            var expectedResult = new Base();
-            var option = Option<Child>.None();
+            var defaultValue = new Base();
 
-            var result = extractor(option, expectedResult);
-
-            result.Should().Be(expectedResult);
+            return
+                from testCase in UpcastExamples.Get(defaultValue, value => value)
+                from method in GetMethods<Child, Base>(defaultValue)
+                select new TestCaseData(testCase.Option, method).Returns(testCase.Result);
         }
 
-        [TestCaseSource(nameof(UpcastCases))]
-        public void Upcast_If_Some(Func<Option<Child>, Base, Base> extractor)
+        [TestCaseSource(nameof(GetUpcastCases))]
+        public Base Upcast(Option<Child> option, Func<Option<Child>, Base> callGetOrElse)
         {
-            var expectedResult = new Child();
-            var option = Option<Child>.Some(expectedResult);
-
-            var result = extractor(option, new Base());
-
-            result.Should().Be(expectedResult);
+            return callGetOrElse(option);
         }
     }
 }

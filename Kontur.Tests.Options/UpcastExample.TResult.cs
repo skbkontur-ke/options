@@ -2,15 +2,15 @@
 
 namespace Kontur.Tests.Options
 {
-    internal class UpcastExample<TValue, TResult>
+    internal class UpcastExample<TResult>
     {
-        internal UpcastExample(Option<TValue> option, TResult result)
+        internal UpcastExample(Option<Child> option, TResult result)
         {
             Option = option;
             Result = result;
         }
 
-        internal Option<TValue> Option { get; }
+        internal Option<Child> Option { get; }
 
         internal TResult Result { get; }
     }

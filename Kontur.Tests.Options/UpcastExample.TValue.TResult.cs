@@ -10,8 +10,8 @@ namespace Kontur.Tests.Options
             Result = result;
         }
 
-        public Option<TValue> Option { get; }
+        internal Option<TValue> Option { get; }
 
-        public TResult Result { get; }
+        internal TResult Result { get; }
     }
 }

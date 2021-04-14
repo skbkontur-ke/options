@@ -24,5 +24,18 @@ namespace Kontur.Tests.Options.Extraction
         {
             return option.GetValues();
         }
+
+        private static IEnumerable<TestCaseData> GetUpcastCases()
+        {
+            return UpcastExamples
+                .Get(Enumerable.Empty<Base>(), value => new[] { value })
+                .Select(testCase => new TestCaseData(testCase.Option).Returns(testCase.Result));
+        }
+
+        [TestCaseSource(nameof(GetUpcastCases))]
+        public IEnumerable<Base> Upcast(Option<Child> option)
+        {
+            return option.GetValues<Base>();
+        }
     }
 }

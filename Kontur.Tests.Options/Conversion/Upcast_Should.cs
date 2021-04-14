@@ -11,7 +11,7 @@ namespace Kontur.Tests.Options.Conversion
         private static IEnumerable<TestCaseData> GetCases() =>
             UpcastExamples
                 .Get()
-                .Select(example => new TestCaseData(example.Source).Returns(example.Result));
+                .Select(example => new TestCaseData(example.Option).Returns(example.Result));
 
         [TestCaseSource(nameof(GetCases))]
         public Option<Base> Process_Option(Option<Child> option)

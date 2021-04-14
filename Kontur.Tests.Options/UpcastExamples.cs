@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Kontur.Options;
 
 namespace Kontur.Tests.Options
 {
     internal static class UpcastExamples
     {
-        internal static IEnumerable<(Option<Child> Source, Option<Base> Result)> Get()
+        internal static IEnumerable<UpcastExample<Child, Option<Base>>> Get()
+            => Get(Option<Base>.None(), Option<Base>.Some);
+
+        internal static IEnumerable<UpcastExample<Child, TResult>> Get<TResult>(TResult noneResult, Func<Child, TResult> someResultFactory)
         {
             var child = new Child();
-            yield return (Option<Child>.Some(child), Option<Base>.Some(child));
-            yield return (Option<Child>.None(), Option<Base>.None());
+            yield return new(Option<Child>.Some(child), someResultFactory(child));
+            yield return new(Option<Child>.None(), noneResult);
         }
     }
 }

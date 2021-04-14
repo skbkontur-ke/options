@@ -57,7 +57,7 @@ namespace Kontur.Tests.Options.Extraction
         private static readonly IEnumerable<TestCaseData> UpcastCases =
             from testCase in UpcastExamples.Get()
             from method in UpcastMethods
-            select new TestCaseData(testCase.Source, method, testCase.Result);
+            select new TestCaseData(testCase.Option, method, testCase.Result);
 
         [TestCaseSource(nameof(UpcastCases))]
         public void Return_Self_On_Upcast(

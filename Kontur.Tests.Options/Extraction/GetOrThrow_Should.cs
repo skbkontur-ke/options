@@ -80,6 +80,41 @@ namespace Kontur.Tests.Options.Extraction
             option.GetOrThrow(AssertIsNotCalled);
         }
 
+        private static IEnumerable<Func<Option<TSource>, TResult>> GetMethods<TSource, TResult>()
+            where TSource : class, TResult
+        {
+            yield return option => option.GetOrThrow<TResult>();
+            yield return option => option.GetOrThrow<TResult>(new MyException());
+            yield return option => option.GetOrThrow<TResult>(() => new MyException());
+        }
+
+        private static IEnumerable<TestCaseData> GetUpcastCases()
+        {
+            return GetMethods<Child, Base>()
+                .Select(method => new TestCaseData(method));
+        }
+
+        [TestCaseSource(nameof(GetUpcastCases))]
+        public void Upcast_On_Some(Func<Option<Child>, Base> callGetOrThrow)
+        {
+            var expected = new Child();
+            var option = Option<Child>.Some(expected);
+
+            var value = callGetOrThrow(option);
+
+            value.Should().Be(expected);
+        }
+
+        [TestCaseSource(nameof(GetUpcastCases))]
+        public void Upcast_On_None(Func<Option<Child>, Base> callGetOrThrow)
+        {
+            var option = Option<Child>.None();
+
+            Func<Base> action = () => callGetOrThrow(option);
+
+            action.Should().Throw<Exception>();
+        }
+
         private class MyException : Exception
         {
         }

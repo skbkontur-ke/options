@@ -17,6 +17,7 @@
     * [OnSome](#onsome)
     * [OnNone](#onnone)
     * [Switch/OnSome/OnNone methods chaining](#switchonsomeonnone-methods-chaining)
+    * [Switch/OnSome/OnNone return value upcasting](#switchonsomeonnone-return-value-upcasting)
     * [HasSome](#hassome)
     * [IsNone](#isnone)
     * [Implicit conversion to bool](#implicit-conversion-to-bool)
@@ -45,7 +46,7 @@ MIT
 
 ## Using option type
 
-Use [cement](https://github.com/skbkontur/cement#get-started) to add reference to Option type assembly.
+Use [cement](https://github.com/skbkontur/cement#get-started) to add reference to `Option` type assembly.
 
 Execute that command in your cement module:
 `cm ref add ke-options your-csproj.csproj`
@@ -64,7 +65,7 @@ abstract Task<Option<Product>> GetCurrentProduct();
 abstract Task<Option<string>> GetMessage(Guid userId, int index, Product product));
 abstract Task<Format> GetFormat(int index, string message);
 abstract Option<ConvertResult> Convert(string message, Format format);
-abstract Task<bool> IsValid(index);
+abstract Task<bool> IsValid(int index);
 
 Task<Option<ConvertResult>> result =
   from userId  in GetCurrentUserId() // A
@@ -86,16 +87,16 @@ Where:
 
 ### Other features
 
-* Assembly contains only Option type implementation. There are no other stuff.
-* Option type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. So there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag.
+* Assembly contains only `Option` type implementation. There are no other stuff.
+* `Option` type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. So there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag.
 * There is no specific handling of nulls. Use C# 8 nullable reference types to handle nulls.
 
 ### Drawbacks
 
-* As implementation is based on abstract classes polymorphism, Option type is not `readonly` `struct`.
+* As implementation is based on abstract classes polymorphism, `Option` type is not `readonly` `struct`.
 
 
-## Instantiation of Option type
+## Instantiation of `Option` type
 
 Explicit variants:
 ```
@@ -123,9 +124,20 @@ var option = flag
 Option<string> option = flag
   ? "Hello"
   : Option.None();
+
+Option<int> GetResult(Random random) {
+  int randomValue = random.Next(0, 10);
+  if (randomValue > 10)
+  {
+    return randomValue;
+  }
+
+  return Option.None();
+}
 ```
 
-## Safe extraction of data from Option instance
+
+## Safe extraction of data from `Option` instance
 
 ### GetOrElse
 ```
@@ -134,10 +146,16 @@ Option<string> option = ...;
 string result = option.GetOrElse(() => "defaultValue");
 string result = option.GetOrElse("defaultValue");
 
-object result = option.GetOrElse(() => new object());
-object result = option.GetOrElse<object>(new Exception("no value"));
-```
+object upcasted = option.GetOrElse(() => new object());
+object upcasted = option.GetOrElse(new object());
 
+object upcasted = option.GetOrElse<object>(() => new Exception("There is no value"));
+object upcasted = option.GetOrElse<object>(new Exception("There is no value"));
+
+Option<object> objectOption = ...;
+object upcasted = objectOption.GetOrElse(() => "defaultValue");
+object upcasted = objectOption.GetOrElse("defaultValue");
+```
 
 ### TryGet
 It works for nullable and non-nullable reference and value types.
@@ -149,22 +167,43 @@ Option<string> option = ...;
 
 if (option.TryGet(out var value))
 {
-  // value is not null here (see remark above for reference type and old framework versions)
+  // value is not null here
 }
 
 // value may be null here
 ```
 
-
 ### Match
 ```
 Option<int> option = ...;
 
-string result = option.Match(onNone: () => "valueOnNone", onSome: str => $"Number {i}");
-string result = option.Match(onNoneValue: "valueOnNone", onSome: str => $"Number {i}");
+string result = option.Match(onNone: () => "valueOnNone", onSome: i => $"Number {i}");
+string result = option.Match(onNone: () => "valueOnNone", onSome: () => "Number is present");
+string result = option.Match(onNone: () => "valueOnNone", onSomeValue: "Number is present");
+string result = option.Match(onNoneValue: "valueOnNone", onSome: i => $"Number {i}");
+string result = option.Match(onNoneValue: "valueOnNone", onSome: () => "Number is present");
+string result = option.Match(onNoneValue: "valueOnNone", onSomeValue: "Number is present");
 
-object result = option.Match<object>(onNone: () => "valueOnNone", onSome: str => $"Number {i}");
-object result = option.Match<object>(onNoneValue: "valueOnNone", onSome: str => $"Number {i}");
+object upcasted = option.Match(onNone: () => new object(), onSome: i => $"Number {i}");
+object upcasted = option.Match(onNone: () => new object(), onSome: () => "Number is present");
+object upcasted = option.Match(onNone: () => new object(), onSomeValue: "Number is present");
+object upcasted = option.Match(onNoneValue: new object(), onSome: i => $"Number {i}");
+object upcasted = option.Match(onNoneValue: new object(), onSome: () => "Number is present");
+object upcasted = option.Match(onNoneValue: new object(), onSomeValue: "Number is present");
+
+object upcasted = option.Match(onNone: () => "valueOnNone", onSome: _ => new object());
+object upcasted = option.Match(onNone: () => "valueOnNone", onSome: () => new object());
+object upcasted = option.Match(onNone: () => "valueOnNone", onSomeValue: new object());
+object upcasted = option.Match(onNoneValue: "valueOnNone", onSome: _ => new object());
+object upcasted = option.Match(onNoneValue: "valueOnNone", onSome: () => new object());
+object upcasted = option.Match(onNoneValue: "valueOnNone", onSomeValue: new object());
+
+object upcasted = option.Match<object>(onNone: () => new Exception("There is no value"), onSome: i => $"Number {i}");
+object upcasted = option.Match<object>(onNone: () => new Exception("There is no value"), onSome: () => "Number is present");
+object upcasted = option.Match<object>(onNone: () => new Exception("There is no value"), onSomeValue: "Number is present");
+object upcasted = option.Match<object>(onNoneValue: new Exception("There is no value"), onSome: i => $"Number {i}");
+object upcasted = option.Match<object>(onNoneValue: new Exception("There is no value"), onSome: () => "Number is present");
+object upcasted = option.Match<object>(onNoneValue: new Exception("There is no value"), onSomeValue: "Number is present");
 ```
 
 ### Switch
@@ -174,6 +213,11 @@ Option<int> option = ...;
 option.Switch(
   onNone: () => Console.WriteLine("There is no value"),
   onSome: value => Console.WriteLine($"Value is {value}")
+);
+
+option.Switch(
+  onNone: () => Console.WriteLine("There is no value"),
+  onSome: () => Console.WriteLine("Value is present")
 );
 ```
 
@@ -198,11 +242,31 @@ Option<int> option = ...;
 
 string result = option
   .Switch(
-    onNone: () => Console.WriteLine("There is no value")),
-    onSome: value => Console.WriteLine($"Value is {value}")
+    onNone: () => Console.WriteLine("There is no value"),
+    onSome: value => Console.WriteLine($"Value is {value}"))
   .OnSome(value => log.Info($"Value is {value}"))
   .OnNone(() => log.Info("There is no value"))
   .Match(onSome: value => value.ToString(), onNoneValue: "valueOnNone");
+```
+
+### Switch/OnSome/OnNone return value upcasting
+
+```
+Option<string> option = ...;
+
+Option<object> upcasted = option.Switch<object>(
+  onNone: () => Console.WriteLine("There is no value"),
+  onSome: value => Console.WriteLine($"Value is {value}")
+);
+Option<object> upcasted = option.Switch<object>(
+  onNone: () => Console.WriteLine("There is no value"),
+  onSome: () => Console.WriteLine("Value is present")
+);
+
+Option<object> upcasted = option.OnSome<object>(value => Console.WriteLine($"Value is {value}"));
+Option<object> upcasted = option.OnSome<object>(() => Console.WriteLine("Value is present"));
+
+Option<object> upcasted = option.OnNone<object>(() => Console.WriteLine("There is no value"));
 ```
 
 ### HasSome
@@ -211,14 +275,14 @@ string result = option
 Option<string> option = "has value";
 
 // true
-var result = opton.HasSome;
+bool result = option.HasSome;
 ```
 
 ```
 Option<string> option = Option.None();
 
 // false
-var result = opton.HasSome;
+bool result = option.HasSome;
 ```
 
 ### IsNone
@@ -227,14 +291,14 @@ var result = opton.HasSome;
 Option<string> option = "has value";
 
 // false
-var result = opton.IsNone;
+bool result = option.IsNone;
 ```
 
 ```
 Option<string> option = Option.None();
 
 // true
-var result = opton.IsNone;
+bool result = option.IsNone;
 ```
 
 ### Implicit conversion to bool
@@ -249,13 +313,15 @@ else
 {
   // On none
 }
+
+bool result = option;
 ```
 
 ### foreach
 ```
 string FindValue(Option<int> option)
 {
-  foreach(string value in option)
+  foreach(var value in option)
   {
     return value + " is found!";
   }
@@ -303,11 +369,13 @@ IEnumerable<int> result =
 
 ### Conversion to IEnumerable
 ```
-Option<int> option = ...;
+Option<string> option = ...;
 
 // `[]` if `None`
 // `[value]` if `Some`
-IEnumerable<int> converted = option.GetValues();
+IEnumerable<string> values = option.GetValues();
+
+IEnumerable<object> upcasted = option.GetValues<object>();
 ```
 
 ### LINQ method syntax
@@ -319,7 +387,6 @@ Option<string> option = ...;
 string[] values = option.GetValues().ToArray();
 ```
 
-
 ### ToString
 ```
 Option<string> option = ...;
@@ -328,6 +395,7 @@ Option<string> option = ...;
 // `Some<string> value={Value}` if `Some`
 string str = option.ToString();
 ```
+
 
 ## Unsafe extraction of data from Option instance
 
@@ -338,6 +406,10 @@ Option<string> option = ...;
 string result = option.GetOrThrow(); // Throws `ValueMissingException` on None
 string result = option.GetOrThrow(new Exception("There is no value"));
 string result = option.GetOrThrow(() => new Exception("There is no value"));
+
+object upcasted = option.GetOrThrow<object>();
+object upcasted = option.GetOrThrow<object>(new Exception("There is no value"));
+object upcasted = option.GetOrThrow<object>(() => new Exception("There is no value"));
 ```
 
 ### GetOrDefault
@@ -347,6 +419,8 @@ It works for nullable and non-nullable reference and value types.
 Option<string> option = ...;
 
 string? result = option.GetOrDefault();
+
+object? upcasted = option.GetOrDefault<object>();
 ```
 
 ### EnsureHasValue
@@ -367,6 +441,7 @@ Option<string> option = ...;
 option.EnsureNone();
 ```
 
+
 ## Conversion of `Option<TValue>` to another Option type
 
 ### Map
@@ -374,11 +449,12 @@ option.EnsureNone();
 Map changes value or/and type of `TValue`
 
 ```
-Option<int> option = ...;
+Option<string> option = ...;
 
-Option<int> result = option.Map(i => i + 1);
-Option<string> result = option.Map(i => i.ToString());
-Option<object> result = option.Map<object>(i => i);
+Option<string> result = option.Map(str => str + "suffix");
+Option<int> result = option.Map(str => int.Parse(str));
+
+Option<object> upcasted = option.Map<object>(str => str);
 ```
 
 ### Select
@@ -387,17 +463,18 @@ Option<object> result = option.Map<object>(i => i);
 That even allows to change `Some` to `None` for some values.
 
 ```
-Option<int> option = ...;
+Option<string> option = ...;
 
-Option<string> result = option.Select(i => i > 0 ? Option.Some(i) : Option.None());
-Option<int> result = option.Select(i => i + 1);
-Option<string> result = option.Select(i => i.ToString());
-Option<object> result = option.Select<object>(i => i);
+Option<string> result = option.Select(str => str.Length > 5 ? Option.Some(str) : Option.None());
+Option<string> result = option.Select(str => str + "suffix");
+Option<int> result = option.Select(str => int.Parse(str));
+
+Option<object> upcasted = option.Select<object>(str => str);
 ```
 
 ### Upcast
 
-Only safe upcasts are allowed.
+Only safe upcasts are allowed. That rule applies to all other methods which support upcasts.
 
 ```
 Option<string> option = ...;
@@ -407,6 +484,7 @@ Option<object> objectOption = option.Upcast<object>();
 
 // Does not compile
 var result = objectOption.Upcast<string>();
+
 ```
 
 ### Or
@@ -416,8 +494,8 @@ Option<string> option2 = ...;
 
 // If option1 is Some then option1 is returned.
 // Otherwise option2 is returned.
-Option<string> result = option.Or(option2); 
-Option<string> result = option.Or(() => option2); 
+Option<string> result = option1.Or(option2); 
+Option<string> result = option1.Or(() => option2);
 ```
 
 Variants with upcast:
@@ -425,12 +503,16 @@ Variants with upcast:
 Option<string> option1 = ...;
 Option<object> option2 = ...;
 
-// If option1 is Some then option1 is returned.
-// Otherwise option2 is returned.
-Option<object> result = option.Or(option2); 
-Option<object> result = option.Or(() => option2); 
-```
+Option<object> upcasted = option1.Or(option2);
+Option<object> upcasted = option1.Or(() => option2);
 
+
+Option<object> option1 = ...;
+Option<string> option2 = ...;
+
+Option<object> upcasted = option1.Or(option2);
+Option<object> upcasted = option1.Or(() => option2);
+```
 
 ### Do-notation without tasks
 ```
@@ -452,7 +534,6 @@ Option<ConvertResult> result =
 ```
 The last `select` expression can return either `Option<TResult>` or just `TResult`.
 
-
 ### Do-notation with tasks
 ```
 abstract Option<Guid> GetCurrentUserId();
@@ -461,7 +542,7 @@ abstract Task<Option<Product>> GetCurrentProduct();
 abstract Task<Option<string>> GetMessage(Guid userId, int index, Product product));
 abstract Task<Format> GetFormat(int index, string message);
 abstract Option<ConvertResult> Convert(string message, Format format);
-abstract Task<bool> IsValid(index);
+abstract Task<bool> IsValid(int index);
 
 Task<Option<ConvertResult>> result =
   from userId  in GetCurrentUserId() // A
@@ -490,4 +571,6 @@ Where:
 
 ## Contributing
 
-Add safe methods with one generic parameter used as return value directly into `Option.TValue.cs` file instead adding as extension method for simplier upcasts by specifing only one generic argument.
+If new method can return `Generic<TValue>` or just `TValue` of some `Option<TValue>` or base type of `TValue`, then add the method as extension method and require `IOptionMatchable<TValue>` instead of `Option<TValue>`. That allows simple and safe upcasts by providing additional arguments or specifing a one generic argument on method call.
+If new method has exactly one extra generic parameter in addition to `TValue` of `Option<TValue>` and method is safe, then add the method directly into `Option.TValue.cs`. That allows simple and safe upcasts by specifing generic argument on method call.
+Add all other methods as as extension methods.

@@ -48,29 +48,61 @@ namespace Kontur.Tests.Options.Conversion
             option.Or(AssertIsNotCalled);
         }
 
-        private static TestCaseData CreateUpcastCase(Option<Child> option1, Option<Base> option2, Option<Base> result)
+        private static TestCaseData CreateUpcastCase<TValue1, TValue2, TResult>(Option<TValue1> option1, Option<TValue2> option2, Option<TResult> result)
         {
             return new TestCaseData(option1, option2).Returns(result);
         }
 
-        private static IEnumerable<TestCaseData> GetUpcastCases()
+        private static TestCaseData CreateUpcastFirstCase(Option<Child> option1, Option<Base> option2, Option<Base> result)
         {
-            yield return CreateUpcastCase(Option<Child>.None(), Option<Base>.None(), Option<Base>.None());
-
-            var example = new Child();
-            yield return CreateUpcastCase(Option<Child>.None(), Option<Base>.Some(example), Option<Base>.Some(example));
-            yield return CreateUpcastCase(Option<Child>.Some(example), Option<Base>.None(), Option<Base>.Some(example));
-            yield return CreateUpcastCase(Option<Child>.Some(example), Option<Base>.Some(new Child()), Option<Base>.Some(example));
+            return CreateUpcastCase(option1, option2, result);
         }
 
-        [TestCaseSource(nameof(GetUpcastCases))]
-        public Option<Base> Upcast_Value(Option<Child> option1, Option<Base> option2)
+        private static IEnumerable<TestCaseData> GetUpcastFirstCases()
+        {
+            yield return CreateUpcastFirstCase(Option<Child>.None(), Option<Base>.None(), Option<Base>.None());
+
+            var example = new Child();
+            yield return CreateUpcastFirstCase(Option<Child>.None(), Option<Base>.Some(example), Option<Base>.Some(example));
+            yield return CreateUpcastFirstCase(Option<Child>.Some(example), Option<Base>.None(), Option<Base>.Some(example));
+            yield return CreateUpcastFirstCase(Option<Child>.Some(example), Option<Base>.Some(new Child()), Option<Base>.Some(example));
+        }
+
+        [TestCaseSource(nameof(GetUpcastFirstCases))]
+        public Option<Base> Upcast_First(Option<Child> option1, Option<Base> option2)
         {
             return option1.Or(option2);
         }
 
-        [TestCaseSource(nameof(GetUpcastCases))]
-        public Option<Base> Upcast_Func(Option<Child> option1, Option<Base> option2)
+        [TestCaseSource(nameof(GetUpcastFirstCases))]
+        public Option<Base> Upcast_First_Func(Option<Child> option1, Option<Base> option2)
+        {
+            return option1.Or(() => option2);
+        }
+
+        private static TestCaseData CreateUpcastSecondCase(Option<Base> option1, Option<Child> option2, Option<Base> result)
+        {
+            return CreateUpcastCase(option1, option2, result);
+        }
+
+        private static IEnumerable<TestCaseData> GetUpcastSecondCases()
+        {
+            yield return CreateUpcastSecondCase(Option<Base>.None(), Option<Child>.None(), Option<Base>.None());
+
+            var example = new Child();
+            yield return CreateUpcastSecondCase(Option<Base>.None(), Option<Child>.Some(example), Option<Base>.Some(example));
+            yield return CreateUpcastSecondCase(Option<Base>.Some(example), Option<Child>.None(), Option<Base>.Some(example));
+            yield return CreateUpcastSecondCase(Option<Base>.Some(example), Option<Child>.Some(new Child()), Option<Base>.Some(example));
+        }
+
+        [TestCaseSource(nameof(GetUpcastSecondCases))]
+        public Option<Base> Upcast_Second(Option<Base> option1, Option<Child> option2)
+        {
+            return option1.Or(option2);
+        }
+
+        [TestCaseSource(nameof(GetUpcastSecondCases))]
+        public Option<Base> Upcast_Second_Func(Option<Base> option1, Option<Child> option2)
         {
             return option1.Or(() => option2);
         }

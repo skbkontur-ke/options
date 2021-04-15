@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Kontur.Options;
 using Kontur.Options.Unsafe;
 using NUnit.Framework;
@@ -8,17 +9,11 @@ namespace Kontur.Tests.Options.Extraction.GetOrDefault.Upcast
     [TestFixture]
     internal class NotNullable_Should
     {
-        private static TestCaseData CreateCase(Option<Child> option, Base? result)
-        {
-            return new TestCaseData(option).Returns(result);
-        }
-
         private static IEnumerable<TestCaseData> GetCases()
         {
-            yield return CreateCase(Option<Child>.None(), null);
-
-            var child = new Child();
-            yield return CreateCase(Option<Child>.Some(child), child);
+            return UpcastExamples
+                .Get<Base?>(null, value => value)
+                .Select(testCase => new TestCaseData(testCase.Option).Returns(testCase.Result));
         }
 
         [TestCaseSource(nameof(GetCases))]

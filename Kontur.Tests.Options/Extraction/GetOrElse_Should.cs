@@ -68,5 +68,34 @@ namespace Kontur.Tests.Options.Extraction
         {
             return callGetOrElse(option);
         }
+
+        private static IEnumerable<Func<Option<Base>, Base>> GetUpcastDefaultValueMethods(Child defaultValue)
+        {
+            yield return option => option.GetOrElse(defaultValue);
+            yield return option => option.GetOrElse(() => defaultValue);
+        }
+
+        private static IEnumerable<TestCaseData> GetUpcastDefaultValueCases()
+        {
+            var defaultValue = new Child();
+            var someValue = new Base();
+
+            var methods = new (Option<Base> Option, Base Result)[]
+            {
+                (Option<Base>.Some(someValue), someValue),
+                (Option<Base>.None(), defaultValue),
+            };
+
+            return
+                from testCase in methods
+                from method in GetUpcastDefaultValueMethods(defaultValue)
+                select new TestCaseData(testCase.Option, method).Returns(testCase.Result);
+        }
+
+        [TestCaseSource(nameof(GetUpcastDefaultValueCases))]
+        public Base Upcast_Default_Value(Option<Base> option, Func<Option<Base>, Base> callGetOrElse)
+        {
+            return callGetOrElse(option);
+        }
     }
 }

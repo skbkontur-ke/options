@@ -2,7 +2,7 @@
 
 namespace Kontur.Options
 {
-    public static class UpcastExtension
+    public static class UpcastExtensions
     {
         [Pure]
         public static Option<TResult> Upcast<TResult>(this IOptionMatchable<TResult> option)

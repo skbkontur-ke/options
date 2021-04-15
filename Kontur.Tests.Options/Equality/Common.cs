@@ -42,6 +42,7 @@ namespace Kontur.Tests.Options.Equality
             yield return CreateNotEqual(Option<int>.Some(1), Option<int>.Some(2));
             yield return CreateNotEqual(Option<string>.Some("hello"), Option<string>.Some("hi"));
             yield return CreateNotEqual(Option<int>.Some(2), Option<double>.Some(2.0));
+            yield return CreateNotEqual(Option<string>.Some("hello"), Option<object>.Some("hello"));
         }
 
         internal static IEnumerable<TestCaseData> CreateNonEqualsCases()

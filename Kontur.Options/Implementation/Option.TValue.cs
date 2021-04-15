@@ -8,7 +8,7 @@ namespace Kontur.Options
 {
     public abstract class Option<TValue> : IOptionMatchable<TValue>
     {
-        protected static readonly Type TypeArgument = typeof(TValue);
+        private static readonly Type TypeArgument = typeof(TValue);
 
         private protected Option()
         {
@@ -17,8 +17,6 @@ namespace Kontur.Options
         public bool HasSome => Match(false, true);
 
         public bool IsNone => !HasSome;
-
-        protected static string TypeArgumentString => $"<{TypeArgument.Name}>";
 
         public static implicit operator bool(Option<TValue> option)
         {
@@ -212,21 +210,28 @@ namespace Kontur.Options
 
         public abstract TResult Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome);
 
-        public abstract override string ToString();
+        public sealed override string ToString()
+        {
+            var typeArguments = $"<{TypeArgument.Name}>";
+            return Match(
+                () => $"{nameof(None<TValue>)}{typeArguments}",
+                value => $"{nameof(Some<TValue>)}{typeArguments} value={value}");
+        }
 
         public sealed override bool Equals(object obj)
         {
-            return obj is Option<TValue> other && other.GetData().Equals(GetData());
+            return obj is Option<TValue> other && other.GetState().Equals(GetState());
         }
 
         public sealed override int GetHashCode()
         {
-            return (TypeArgument, GetData()).GetHashCode();
+            return (TypeArgument, GetState()).GetHashCode();
         }
 
-        private (bool Success, object? Value) GetData()
+        [Pure]
+        private (bool Success, TValue? Value) GetState()
         {
-            return Match<(bool, object?)>(() => (false, default), value => (true, value));
+            return Match<(bool, TValue?)>(() => (false, default), value => (true, value));
         }
     }
 }

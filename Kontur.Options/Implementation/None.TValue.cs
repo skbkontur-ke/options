@@ -8,10 +8,5 @@ namespace Kontur.Options
         {
             return onNone();
         }
-
-        public override string ToString()
-        {
-            return $"{nameof(None<TValue>)}{TypeArgumentString}";
-        }
     }
 }

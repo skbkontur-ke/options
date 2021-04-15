@@ -15,10 +15,5 @@ namespace Kontur.Options
         {
             return onSome(value);
         }
-
-        public override string ToString()
-        {
-            return $"{nameof(Some<TValue>)}{TypeArgumentString} value={value}";
-        }
     }
 }

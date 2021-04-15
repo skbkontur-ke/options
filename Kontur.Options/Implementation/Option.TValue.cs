@@ -214,8 +214,19 @@ namespace Kontur.Options
 
         public abstract override string ToString();
 
-        public abstract override bool Equals(object obj);
+        public sealed override bool Equals(object obj)
+        {
+            return obj is Option<TValue> other && other.GetData().Equals(GetData());
+        }
 
-        public abstract override int GetHashCode();
+        public sealed override int GetHashCode()
+        {
+            return (TypeArgument, GetData()).GetHashCode();
+        }
+
+        private (bool Success, object? Value) GetData()
+        {
+            return Match<(bool, object?)>(() => (false, default), value => (true, value));
+        }
     }
 }

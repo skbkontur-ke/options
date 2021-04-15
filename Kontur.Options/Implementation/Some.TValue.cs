@@ -20,15 +20,5 @@ namespace Kontur.Options
         {
             return $"{nameof(Some<TValue>)}{TypeArgumentString} value={value}";
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj is Some<TValue> other && Equals(value, other.value);
-        }
-
-        public override int GetHashCode()
-        {
-            return (value, TypeArgument).GetHashCode();
-        }
     }
 }

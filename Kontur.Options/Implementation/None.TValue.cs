@@ -13,15 +13,5 @@ namespace Kontur.Options
         {
             return $"{nameof(None<TValue>)}{TypeArgumentString}";
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj is None<TValue>;
-        }
-
-        public override int GetHashCode()
-        {
-            return TypeArgument.GetHashCode();
-        }
     }
 }

@@ -125,7 +125,8 @@ Option<string> option = flag
   ? "Hello"
   : Option.None();
 
-Option<int> GetResult(Random random) {
+Option<int> GetResult(Random random)
+{
   int randomValue = random.Next(0, 10);
   if (randomValue > 10)
   {

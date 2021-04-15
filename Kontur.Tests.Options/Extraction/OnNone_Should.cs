@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Kontur.Options;
 using NSubstitute;
 using NUnit.Framework;
@@ -32,7 +31,7 @@ namespace Kontur.Tests.Options.Extraction
 
         private static TestCaseData CreateReturnSelfCase(Option<int> option)
         {
-            return new(option);
+            return new(option) { ExpectedResult = option };
         }
 
         private static readonly TestCaseData[] ReturnSelfCases =
@@ -42,11 +41,9 @@ namespace Kontur.Tests.Options.Extraction
         };
 
         [TestCaseSource(nameof(ReturnSelfCases))]
-        public void Return_Self_OnNone(Option<int> option)
+        public Option<int> Return_Self_OnNone(Option<int> option)
         {
-            var result = option.OnNone(() => { });
-
-            result.Should().BeEquivalentTo(option);
+            return option.OnNone(() => { });
         }
 
         private static readonly Func<Option<Child>, Option<Base>>[] UpcastMethods =

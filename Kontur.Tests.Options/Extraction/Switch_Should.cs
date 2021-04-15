@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Kontur.Options;
 using NSubstitute;
 using NUnit.Framework;
@@ -118,14 +117,12 @@ namespace Kontur.Tests.Options.Extraction
         private static readonly IEnumerable<TestCaseData> ReturnSelfCases =
             from option in OptionExamples
             from method in SwitchMethods
-            select new TestCaseData(option, method);
+            select new TestCaseData(option, method).Returns(option);
 
         [TestCaseSource(nameof(ReturnSelfCases))]
-        public void Return_Self(Option<int> option, Func<Option<int>, Option<int>> callSwitch)
+        public Option<int> Return_Self(Option<int> option, Func<Option<int>, Option<int>> callSwitch)
         {
-            var result = callSwitch(option);
-
-            result.Should().BeEquivalentTo(option);
+            return callSwitch(option);
         }
 
         [Test]

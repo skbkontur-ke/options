@@ -149,17 +149,14 @@ namespace Kontur.Tests.Options.Extraction
         private static readonly IEnumerable<TestCaseData> UpcastCases =
             from testCase in UpcastExamples.Get()
             from method in UpcastMethods
-            select new TestCaseData(testCase.Option, method, testCase.Result);
+            select new TestCaseData(testCase.Option, method).Returns(testCase.Result);
 
         [TestCaseSource(nameof(UpcastCases))]
-        public void Return_Self_On_Upcast(
+        public Option<Base> Return_Self_On_Upcast(
             Option<Child> option,
-            Func<Option<Child>, Option<Base>> callSwitch,
-            Option<Base> expectedResult)
+            Func<Option<Child>, Option<Base>> callSwitch)
         {
-            var result = callSwitch(option);
-
-            result.Should().BeEquivalentTo(expectedResult);
+            return callSwitch(option);
         }
     }
 }

@@ -14,7 +14,9 @@ namespace Kontur.Tests.Options.Conversion.Linq.Boxed.Where
             int argumentsCount)
             where TFixtureCase : IFixtureCase, new()
         {
-            return SelectCasesGenerator.Create(argumentsCount).SelectMany(testCase => CreateCases(testCase, value => fixtureCase.GetOption(value, constant)));
+            return SelectCasesGenerator
+                .Create(argumentsCount)
+                .SelectMany(testCase => CreateCases(testCase, value => fixtureCase.GetOption(value, constant)));
         }
 
         private static IEnumerable<TestCaseData> CreateCases(SelectCase testCase, Func<int, Option<int>> resultFactory)

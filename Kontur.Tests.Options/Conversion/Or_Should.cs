@@ -48,9 +48,11 @@ namespace Kontur.Tests.Options.Conversion
             option.Or(AssertIsNotCalled);
         }
 
-        private static TestCaseData CreateUpcastCase<TValue1, TValue2, TResult>(Option<TValue1> option1, Option<TValue2> option2, Option<TResult> result)
+        private static TestCaseData CreateUpcastCase<TValue1, TValue2>(Option<TValue1> option1, Option<TValue2> option2, Option<Base> result)
+            where TValue1 : Base
+            where TValue2 : Base
         {
-            return new TestCaseData(option1, option2).Returns(result);
+            return new(option1, option2) { ExpectedResult = result };
         }
 
         private static TestCaseData CreateUpcastFirstCase(Option<Child> option1, Option<Base> option2, Option<Base> result)

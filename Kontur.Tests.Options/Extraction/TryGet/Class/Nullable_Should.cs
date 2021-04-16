@@ -26,7 +26,7 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Class
 
         private static TestCaseData CreateGetCase(string? expectedValue)
         {
-            return new TestCaseData(Option<string?>.Some(expectedValue)).Returns(expectedValue);
+            return new(Option<string?>.Some(expectedValue)) { ExpectedResult = expectedValue };
         }
 
         private static readonly TestCaseData[] GetCases =

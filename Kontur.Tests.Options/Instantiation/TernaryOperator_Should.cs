@@ -10,7 +10,7 @@ namespace Kontur.Tests.Options.Instantiation
 
         private static TestCaseData CreateCase(bool flag, Option<int> result)
         {
-            return new TestCaseData(flag).Returns(result);
+            return new(flag) { ExpectedResult = result };
         }
 
         private static readonly TestCaseData[] Cases =

@@ -19,7 +19,7 @@ namespace Kontur.Tests.Options.Instantiation
 
         private static TestCaseData CreateCase(Func<T, Option<T>> optionFactory, bool hasSome)
         {
-            return new TestCaseData(optionFactory).Returns(hasSome);
+            return new(optionFactory) { ExpectedResult = hasSome };
         }
 
         private static readonly TestCaseData[] CreateCases =

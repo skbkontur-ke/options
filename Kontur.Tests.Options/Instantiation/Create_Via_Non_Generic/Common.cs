@@ -7,7 +7,7 @@ namespace Kontur.Tests.Options.Instantiation.Create_Via_Non_Generic
     {
         internal static TestCaseData CreateHasValueCase<TValue>(Option<TValue> option, bool hasValue)
         {
-            return new TestCaseData(option).Returns(hasValue);
+            return new(option) { ExpectedResult = hasValue };
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Struct
 
         private static readonly TestCaseData[] GetCases =
         {
-            new TestCaseData(Option<int>.Some(10)).Returns(10),
+            new(Option<int>.Some(10)) { ExpectedResult = 10 },
         };
 
         [TestCaseSource(nameof(GetCases))]

@@ -10,7 +10,7 @@ namespace Kontur.Tests.Options.Extraction
     {
         private static TestCaseData CreateCase(Option<int> option, IEnumerable<int> results)
         {
-            return new TestCaseData(option).Returns(results);
+            return new(option) { ExpectedResult = results };
         }
 
         private static readonly TestCaseData[] Cases =

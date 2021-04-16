@@ -10,7 +10,7 @@ namespace Kontur.Tests.Options.Conversion
     {
         private static TestCaseData Create(Option<int> option, Option<string> result)
         {
-            return new TestCaseData(option).Returns(result);
+            return new(option) { ExpectedResult = result };
         }
 
         private static readonly TestCaseData[] Cases =

@@ -8,7 +8,7 @@ namespace Kontur.Tests.Options.Extraction
     {
         private static TestCaseData Create(Option<int> option, bool hasSome)
         {
-            return new TestCaseData(option).Returns(hasSome);
+            return new(option) { ExpectedResult = hasSome };
         }
 
         private static readonly TestCaseData[] Cases =

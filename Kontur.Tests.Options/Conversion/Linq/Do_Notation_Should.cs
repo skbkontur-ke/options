@@ -35,7 +35,7 @@ namespace Kontur.Tests.Options.Conversion.Linq
 
         private static TestCaseData Create(Option<Guid> user, Option<string> result)
         {
-            return new TestCaseData(user).Returns(result);
+            return new(user) { ExpectedResult = result };
         }
 
         private static readonly TestCaseData[] Cases =

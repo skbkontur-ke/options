@@ -17,7 +17,7 @@ namespace Kontur.Tests.Options.Extraction.SelectMany
             IEnumerable<int> enumerable,
             IEnumerable<int> result)
         {
-            return new TestCaseData(option, enumerable).Returns(result);
+            return new(option, enumerable) { ExpectedResult = result };
         }
 
         private static readonly TestCaseData[] Cases =

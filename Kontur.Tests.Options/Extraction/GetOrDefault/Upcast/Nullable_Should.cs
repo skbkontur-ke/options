@@ -10,7 +10,7 @@ namespace Kontur.Tests.Options.Extraction.GetOrDefault.Upcast
     {
         private static TestCaseData CreateCase(Option<Child?> option, Base? result)
         {
-            return new TestCaseData(option).Returns(result);
+            return new(option) { ExpectedResult = result };
         }
 
         private static IEnumerable<TestCaseData> GetCases()

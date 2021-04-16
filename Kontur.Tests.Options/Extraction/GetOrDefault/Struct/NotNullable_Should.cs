@@ -9,7 +9,7 @@ namespace Kontur.Tests.Options.Extraction.GetOrDefault.Struct
     {
         private static TestCaseData CreateCase(Option<int> option, int result)
         {
-            return new TestCaseData(option).Returns(result);
+            return new(option) { ExpectedResult = result };
         }
 
         private static readonly TestCaseData[] Cases =

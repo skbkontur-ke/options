@@ -36,9 +36,11 @@ namespace Kontur.Tests.Options.Conversion.Linq
             string name)
         {
             var @join = string.Join(" ", args);
-            return new TestCaseData(args.Cast<object>().Append(isSuitable).ToArray())
-                .Returns(result)
-                .SetName($"{name}: {@join} to {result}");
+            return new(args.Cast<object>().Append(isSuitable).ToArray())
+            {
+                ExpectedResult = result,
+                TestName = $"{name}: {@join} to {result}",
+            };
         }
     }
 }

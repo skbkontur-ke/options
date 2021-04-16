@@ -7,7 +7,7 @@ namespace Kontur.Tests.Options.Extraction.TryGet
     {
         internal static TestCaseData CreateReturnBooleanCase<T>(Option<T> option, bool success)
         {
-            return new TestCaseData(option).Returns(success);
+            return new(option) { ExpectedResult = success };
         }
     }
 }

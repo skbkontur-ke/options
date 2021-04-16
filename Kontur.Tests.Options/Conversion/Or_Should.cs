@@ -11,7 +11,7 @@ namespace Kontur.Tests.Options.Conversion
 
         private static TestCaseData CreateIntCase(Option<int> option1, Option<int> option2, Option<int> result)
         {
-            return new TestCaseData(option1, option2).Returns(result);
+            return new(option1, option2) { ExpectedResult = result };
         }
 
         private static readonly TestCaseData[] IntCases =

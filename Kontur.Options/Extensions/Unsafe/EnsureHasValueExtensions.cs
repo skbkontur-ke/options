@@ -4,9 +4,19 @@ namespace Kontur.Options.Unsafe
 {
     public static class EnsureHasValueExtensions
     {
+        public static void EnsureHasValue<TValue>(this Option<TValue> option, Func<Exception> exceptionFactory)
+        {
+            option.OnNone(() => throw exceptionFactory());
+        }
+
+        public static void EnsureHasValue<TValue>(this Option<TValue> option, Exception exception)
+        {
+            option.EnsureHasValue(() => exception);
+        }
+
         public static void EnsureHasValue<TValue>(this Option<TValue> option)
         {
-            option.OnNone(() => throw new InvalidOperationException($"No value in {option}"));
+            option.EnsureHasValue(new InvalidOperationException($"No value in {option}"));
         }
     }
 }

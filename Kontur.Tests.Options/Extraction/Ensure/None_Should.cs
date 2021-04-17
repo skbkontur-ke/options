@@ -11,29 +11,6 @@ namespace Kontur.Tests.Options.Extraction.Ensure
     [TestFixture]
     internal class None_Should
     {
-        [Test]
-        public void Throw_If_Some()
-        {
-            var option = Option<int>.Some(5);
-
-            Action action = () => option.EnsureNone();
-
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-        [Test]
-        public void Throw_ValueExistsException_If_Some()
-        {
-            const string expected = "value";
-            var option = Option<string>.Some(expected);
-
-            Action action = () => option.EnsureNone();
-
-            action.Should()
-                .Throw<ValueExistsException>()
-                .WithMessage($"*{expected}*");
-        }
-
         private static TestCaseData CreateCase(Action<Option<int>> extractor)
         {
             return new(extractor);

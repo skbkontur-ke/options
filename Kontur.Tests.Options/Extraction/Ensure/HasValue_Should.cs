@@ -11,26 +11,6 @@ namespace Kontur.Tests.Options.Extraction.Ensure
     [TestFixture]
     internal class HasValue_Should
     {
-        [Test]
-        public void Throw_If_None()
-        {
-            var option = Option<int>.None();
-
-            Action action = () => option.EnsureHasValue();
-
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-        [Test]
-        public void Throw_ValueMissingException_If_None()
-        {
-            var option = Option<int>.None();
-
-            Action action = () => option.EnsureHasValue();
-
-            action.Should().Throw<ValueMissingException>();
-        }
-
         private static TestCaseData CreateCase(Action<Option<int>> extractor)
         {
             return new(extractor);
@@ -78,7 +58,6 @@ namespace Kontur.Tests.Options.Extraction.Ensure
 
             option.EnsureHasValue(AssertIsNotCalled);
         }
-
 
         private class MyException : Exception
         {

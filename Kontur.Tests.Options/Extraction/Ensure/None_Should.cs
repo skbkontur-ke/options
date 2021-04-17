@@ -81,7 +81,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure
 
         private static Exception AssertIsNotCalled()
         {
-            Assert.Fail("Exception should not be created on some");
+            Assert.Fail("Exception should not be created on none");
             throw new UnreachableException();
         }
 

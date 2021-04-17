@@ -21,7 +21,7 @@ namespace Kontur.Options.Unsafe
 
         public static void EnsureNone<TValue>(this Option<TValue> option)
         {
-            option.EnsureNone(new InvalidOperationException($"{option} has value"));
+            option.EnsureNone(new ValueExistsException($"{option} has value"));
         }
     }
 }

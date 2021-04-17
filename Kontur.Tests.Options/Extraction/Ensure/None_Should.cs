@@ -57,9 +57,9 @@ namespace Kontur.Tests.Options.Extraction.Ensure
         public void Pass_Value_To_Exception_Factory()
         {
             const string expected = "example";
-            var result = Option<string>.Some(expected);
+            var option = Option<string>.Some(expected);
 
-            Action action = () => result.EnsureNone(value => new Exception(value));
+            Action action = () => option.EnsureNone(value => new Exception(value));
 
             action.Should()
                 .Throw<Exception>()
@@ -92,16 +92,16 @@ namespace Kontur.Tests.Options.Extraction.Ensure
 
         private static readonly TestCaseData[] CreateDoNoCallFactoryOnCases =
         {
-            CreateDoNoCallFactoryCase(result => result.EnsureNone(_ => AssertIsNotCalled())),
-            CreateDoNoCallFactoryCase(result => result.EnsureNone(AssertIsNotCalled)),
+            CreateDoNoCallFactoryCase(option => option.EnsureNone(_ => AssertIsNotCalled())),
+            CreateDoNoCallFactoryCase(option => option.EnsureNone(AssertIsNotCalled)),
         };
 
         [TestCaseSource(nameof(CreateDoNoCallFactoryOnCases))]
         public void Do_No_Create_Exception_If_Failure(Action<Option<int>> assertExtracted)
         {
-            var result = Option<int>.None();
+            var option = Option<int>.None();
 
-            assertExtracted(result);
+            assertExtracted(option);
         }
 
         private class MyException : Exception

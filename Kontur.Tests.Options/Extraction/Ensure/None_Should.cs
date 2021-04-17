@@ -24,11 +24,14 @@ namespace Kontur.Tests.Options.Extraction.Ensure
         [Test]
         public void Throw_ValueExistsException_If_Some()
         {
-            var option = Option<int>.Some(5);
+            const string expected = "value";
+            var option = Option<string>.Some(expected);
 
             Action action = () => option.EnsureNone();
 
-            action.Should().Throw<ValueExistsException>();
+            action.Should()
+                .Throw<ValueExistsException>()
+                .WithMessage($"*{expected}*");
         }
 
         private static TestCaseData CreateCase(Action<Option<int>> extractor)

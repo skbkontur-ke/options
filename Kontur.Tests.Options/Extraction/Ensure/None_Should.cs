@@ -22,7 +22,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure
         }
 
         [Test]
-        public void Throw_ValueMissingException_If_Some()
+        public void Throw_ValueExistsException_If_Some()
         {
             var option = Option<int>.Some(5);
 

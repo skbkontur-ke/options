@@ -413,6 +413,23 @@ object upcasted = option.GetOrThrow<object>(new Exception("There is no value"));
 object upcasted = option.GetOrThrow<object>(() => new Exception("There is no value"));
 ```
 
+To override default thrown exception for specific `TValue` you can implement extentsion method with specific `TValue` in namespace of specific `TValue`.
+```
+namespace Custom
+{
+  class CustomValue
+  {
+  }
+  static class GetOrThrowExtensions
+  {
+    static CustomValue GetOrThrow(this Option<CustomValue> option)
+    {
+      return option.GetOrThrow(new Exception("Overiden!"));
+    }
+  }
+}
+```
+
 ### GetOrDefault
 It works for nullable and non-nullable reference and value types.
 
@@ -429,8 +446,26 @@ object? upcasted = option.GetOrDefault<object>();
 Option<string> option = ...;
 
 // Nothing if `Some`
-// Exception is thrown if `None`
-option.EnsureHasValue();
+option.EnsureHasValue(); // Throws `ValueMissingException` on None
+option.EnsureHasValue(new Exception("There is no value"));
+option.EnsureHasValue(() => new Exception("There is no value"))
+```
+
+To override default thrown exception for specific `TValue` you can implement extentsion method with specific `TValue` in namespace of specific `TValue`.
+```
+namespace Custom
+{
+  class CustomValue
+  {
+  }
+  static class EnsureHasValueExtensions
+  {
+    static void EnsureHasValue(this Option<CustomValue> option)
+    {
+      return option.EnsureHasValue(new Exception("Overiden!"));
+    }
+  }
+}
 ```
 
 ### EnsureNone
@@ -438,10 +473,28 @@ option.EnsureHasValue();
 Option<string> option = ...;
 
 // Nothing if `None`
-// Exception is thrown if `Some`
-option.EnsureNone();
+option.EnsureNone(); // Throws `ValueExistsException` if `Some`
+option.EnsureNone(new Exception("There is value"));
+option.EnsureNone(() => new Exception("There is value"))
+option.EnsureNone(value => new Exception($"There is value: {value}"))
 ```
 
+To override default thrown exception for specific `TValue` you can implement extentsion method with specific `TValue` in namespace of specific `TValue`.
+```
+namespace Custom
+{
+  class CustomValue
+  {
+  }
+  static class EnsureNoneExtensions
+  {
+    static void EnsureNone(this Option<CustomValue> option)
+    {
+      return option.EnsureNone(new Exception("Overiden!"));
+    }
+  }
+}
+```
 
 ## Conversion of `Option<TValue>` to another Option type
 

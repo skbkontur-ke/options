@@ -37,7 +37,7 @@ namespace Kontur.Options
         [Pure]
         public static Option<TValue> None()
         {
-            return new None<TValue>();
+            return None<TValue>.Instance;
         }
 
         [Pure]
@@ -176,8 +176,8 @@ namespace Kontur.Options
             [MaybeNullWhen(returnValue: false)] out TValue value)
 #endif
         {
-            return Match<IHolder<TValue>>(
-                    () => new NoneHolder<TValue>(),
+            return Match(
+                    () => NoneHolder<TValue>.Instance,
                     val => new SomeHolder<TValue>(val))
                 .TryGet(out value);
         }

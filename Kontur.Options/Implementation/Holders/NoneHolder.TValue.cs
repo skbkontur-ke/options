@@ -2,10 +2,10 @@
 
 namespace Kontur.Options.Holders
 {
-    internal sealed class NoneHolder<TValue> : Holder<TValue>
+    internal sealed class NoneHolder<TValue> : IHolder<TValue>
     {
         [Pure]
-        internal override bool TryGet(
+        public bool TryGet(
 #if NETSTANDARD2_0
             out TValue? value)
 #else

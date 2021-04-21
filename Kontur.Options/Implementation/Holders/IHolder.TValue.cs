@@ -2,10 +2,10 @@
 
 namespace Kontur.Options.Holders
 {
-    internal abstract class Holder<TValue>
+    internal interface IHolder<TValue>
     {
         [Pure]
-        internal abstract bool TryGet(
+        bool TryGet(
 #if NETSTANDARD2_0
             out TValue? value);
 #else

@@ -176,7 +176,7 @@ namespace Kontur.Options
             [MaybeNullWhen(returnValue: false)] out TValue value)
 #endif
         {
-            return Match<Holder<TValue>>(
+            return Match<IHolder<TValue>>(
                     () => new NoneHolder<TValue>(),
                     val => new SomeHolder<TValue>(val))
                 .TryGet(out value);

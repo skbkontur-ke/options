@@ -2,7 +2,7 @@
 
 namespace Kontur.Options.Holders
 {
-    internal sealed class SomeHolder<TValue> : Holder<TValue>
+    internal sealed class SomeHolder<TValue> : IHolder<TValue>
     {
         private readonly TValue value;
 
@@ -13,7 +13,7 @@ namespace Kontur.Options.Holders
 
         // ReSharper disable once ParameterHidesMember
         [Pure]
-        internal override bool TryGet(out TValue value)
+        public bool TryGet(out TValue value)
         {
             value = this.value;
             return true;

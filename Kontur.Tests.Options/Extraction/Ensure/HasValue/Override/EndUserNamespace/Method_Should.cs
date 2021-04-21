@@ -2,10 +2,10 @@
 using FluentAssertions;
 using Kontur.Options;
 using Kontur.Options.Unsafe;
-using Kontur.Tests.Options.Extraction.GetOrThrow.Override.LibraryNamespace;
+using Kontur.Tests.Options.Extraction.Ensure.HasValue.Override.LibraryNamespace;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.GetOrThrow.Override.EndUserNamespace
+namespace Kontur.Tests.Options.Extraction.Ensure.HasValue.Override.EndUserNamespace
 {
     [TestFixture]
     internal class Method_Should
@@ -15,7 +15,7 @@ namespace Kontur.Tests.Options.Extraction.GetOrThrow.Override.EndUserNamespace
         {
             var option = Option<string>.None();
 
-            Func<string> action = () => option.GetOrThrow();
+            Action action = () => option.EnsureHasValue();
 
             action.Should().Throw<InvalidOperationException>();
         }
@@ -25,7 +25,7 @@ namespace Kontur.Tests.Options.Extraction.GetOrThrow.Override.EndUserNamespace
         {
             var option = Option<CustomValue>.None();
 
-            Func<CustomValue> action = () => option.GetOrThrow();
+            Action action = () => option.EnsureHasValue();
 
             action.Should()
                 .Throw<Exception>()
@@ -33,14 +33,13 @@ namespace Kontur.Tests.Options.Extraction.GetOrThrow.Override.EndUserNamespace
         }
 
         [Test]
-        public void Return_Value_If_Some()
+        public void Do_Not_Throw_If_Some()
         {
-            CustomValue expected = new();
-            var option = Option<CustomValue>.Some(expected);
+            var option = Option<CustomValue>.Some(new());
 
-            var result = option.GetOrThrow();
+            Action action = () => option.EnsureHasValue();
 
-            result.Should().Be(expected);
+            action.Should().NotThrow();
         }
     }
 }

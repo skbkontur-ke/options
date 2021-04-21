@@ -8,7 +8,7 @@ namespace Kontur.Tests.Options.Extraction.GetOrThrow
 {
     [TestFixture(typeof(InvalidOperationException))]
     [TestFixture(typeof(ValueMissingException))]
-    internal class Method_Standard_Exception_Should<TException>
+    internal class Standard_Exception_Should<TException>
         where TException : Exception
     {
         [Test]

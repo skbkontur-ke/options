@@ -4,11 +4,11 @@ using Kontur.Options;
 using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Ensure
+namespace Kontur.Tests.Options.Extraction.Ensure.None
 {
     [TestFixture(typeof(InvalidOperationException))]
     [TestFixture(typeof(ValueExistsException))]
-    internal class None_Standard_Exception_Should<TException>
+    internal class Standard_Exception_Should<TException>
         where TException : Exception
     {
         [Test]

@@ -6,10 +6,10 @@ using Kontur.Options;
 using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Ensure
+namespace Kontur.Tests.Options.Extraction.Ensure.HasValue
 {
     [TestFixture]
-    internal class HasValue_Should
+    internal class Method_Should
     {
         private static TestCaseData CreateCase(Action<Option<int>> extractor)
         {

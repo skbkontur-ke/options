@@ -6,31 +6,11 @@ using Kontur.Options;
 using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction
+namespace Kontur.Tests.Options.Extraction.GetOrThrow
 {
     [TestFixture]
-    internal class GetOrThrow_Should
+    internal class Method_Should
     {
-        [Test]
-        public void Throw_InvalidOperationException_If_None()
-        {
-            var option = Option<int>.None();
-
-            Func<int> action = () => option.GetOrThrow();
-
-            action.Should().Throw<InvalidOperationException>();
-        }
-
-        [Test]
-        public void Throw_ValueMissingException_If_None()
-        {
-            var option = Option<int>.None();
-
-            Func<int> action = () => option.GetOrThrow();
-
-            action.Should().Throw<ValueMissingException>();
-        }
-
         private static TestCaseData CreateCase(Func<Option<int>, int> extractor)
         {
             return new(extractor);

@@ -8,7 +8,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure.None.Override.LibraryNamespace
     {
         public static void EnsureNone(this Option<CustomValue> option)
         {
-            option.EnsureNone(() => new Exception(Common.ExceptionMessage));
+            option.EnsureNone(new Exception(Common.ExceptionMessage));
         }
     }
 }

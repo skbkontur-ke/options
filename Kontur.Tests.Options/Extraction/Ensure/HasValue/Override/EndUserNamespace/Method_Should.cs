@@ -11,7 +11,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure.HasValue.Override.EndUserNamesp
     internal class Method_Should
     {
         [Test]
-        public void Throw_If_None_For_Other_Values_With_Imported_Namespace()
+        public void Import_Namespace_And_Do_Not_Override_Other_Values()
         {
             var option = Option<string>.None();
 

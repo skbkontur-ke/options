@@ -8,7 +8,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure.HasValue.Override.LibraryNamesp
     {
         public static void EnsureHasValue(this Option<CustomValue> option)
         {
-            option.EnsureHasValue(() => new Exception(Common.ExceptionMessage));
+            option.EnsureHasValue(new Exception(Common.ExceptionMessage));
         }
     }
 }

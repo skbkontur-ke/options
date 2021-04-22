@@ -2,13 +2,13 @@
 using FluentAssertions;
 using Kontur.Options;
 using Kontur.Options.Unsafe;
-using Kontur.Tests.Options.Extraction.Ensure.None.Override.LibraryNamespace;
+using Kontur.Tests.Options.LibraryNamespace;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Ensure.None.Override.EndUserNamespace
+namespace Kontur.Tests.Options.Extraction.Ensure.None
 {
     [TestFixture]
-    internal class Method_Should
+    internal class Override_Should
     {
         [Test]
         public void Import_Namespace_And_Do_Not_Override_Other_Values()
@@ -29,7 +29,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure.None.Override.EndUserNamespace
 
             action.Should()
                 .Throw<Exception>()
-                .WithMessage(Common.ExceptionMessage);
+                .WithMessage(LibraryException.Message);
         }
 
         [Test]

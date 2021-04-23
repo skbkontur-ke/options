@@ -39,7 +39,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure.None
             const string expected = "example";
             var option = Option<string>.Some(expected);
 
-            Action action = () => option.EnsureNone(value => new Exception(value));
+            Action action = () => option.EnsureNone(value => new(value));
 
             action.Should()
                 .Throw<Exception>()

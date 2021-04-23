@@ -12,7 +12,7 @@ namespace Kontur.Tests.Options.Conversion.Linq
     {
         private static Task<int> GetCurrentIndex() => Task.FromResult(10);
 
-        private static Task<Option<Product>> GetCurrentProduct() => Task.FromResult(Option<Product>.Some(new Product("Pizza")));
+        private static Task<Option<Product>> GetCurrentProduct() => Task.FromResult(Option<Product>.Some(new("Pizza")));
 
         private static Task<Option<string>> GetMessage(Guid userId, int index, Product product)
         {
@@ -23,14 +23,14 @@ namespace Kontur.Tests.Options.Conversion.Linq
         private static Task<Format> GetFormat(int index, string message)
         {
             var prefix = message.Last() + index.ToString(CultureInfo.InvariantCulture);
-            var result = new Format(prefix);
+            Format result = new(prefix);
             return Task.FromResult(result);
         }
 
         private static Option<ConvertResult> Convert(string message, Format format)
         {
             var result = format.Prefix + ": " + message;
-            return Option<ConvertResult>.Some(new ConvertResult(result));
+            return Option<ConvertResult>.Some(new(result));
         }
 
         private static TestCaseData Create(Option<Guid> user, Option<string> result)

@@ -5,7 +5,7 @@ namespace Kontur.Options.Holders
 {
     internal sealed class NoneHolder<TValue> : IHolder<TValue>
     {
-        private static readonly Lazy<NoneHolder<TValue>> Provider = new(() => new NoneHolder<TValue>());
+        private static readonly Lazy<NoneHolder<TValue>> Provider = new(() => new());
 
         private NoneHolder()
         {

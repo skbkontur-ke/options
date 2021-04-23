@@ -64,7 +64,7 @@ namespace Kontur.Tests.Options.Conversion
         {
             yield return CreateUpcastFirstCase(Option<Child>.None(), Option<Base>.None(), Option<Base>.None());
 
-            var example = new Child();
+            Child example = new();
             yield return CreateUpcastFirstCase(Option<Child>.None(), Option<Base>.Some(example), Option<Base>.Some(example));
             yield return CreateUpcastFirstCase(Option<Child>.Some(example), Option<Base>.None(), Option<Base>.Some(example));
             yield return CreateUpcastFirstCase(Option<Child>.Some(example), Option<Base>.Some(new Child()), Option<Base>.Some(example));
@@ -91,10 +91,10 @@ namespace Kontur.Tests.Options.Conversion
         {
             yield return CreateUpcastSecondCase(Option<Base>.None(), Option<Child>.None(), Option<Base>.None());
 
-            var example = new Child();
+            Child example = new();
             yield return CreateUpcastSecondCase(Option<Base>.None(), Option<Child>.Some(example), Option<Base>.Some(example));
             yield return CreateUpcastSecondCase(Option<Base>.Some(example), Option<Child>.None(), Option<Base>.Some(example));
-            yield return CreateUpcastSecondCase(Option<Base>.Some(example), Option<Child>.Some(new Child()), Option<Base>.Some(example));
+            yield return CreateUpcastSecondCase(Option<Base>.Some(example), Option<Child>.Some(new()), Option<Base>.Some(example));
         }
 
         [TestCaseSource(nameof(GetUpcastSecondCases))]

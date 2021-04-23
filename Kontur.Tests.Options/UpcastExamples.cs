@@ -11,7 +11,7 @@ namespace Kontur.Tests.Options
 
         internal static IEnumerable<UpcastExample<TResult>> Get<TResult>(TResult noneResult, Func<Child, TResult> someResultFactory)
         {
-            var child = new Child();
+            Child child = new();
             yield return new(Option<Child>.Some(child), someResultFactory(child));
             yield return new(Option<Child>.None(), noneResult);
         }

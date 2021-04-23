@@ -18,7 +18,7 @@ namespace Kontur.Tests.Options.Extraction.GetOrDefault.Upcast
             yield return CreateCase(Option<Child?>.None(), null);
             yield return CreateCase(Option<Child?>.Some(null), null);
 
-            var child = new Child();
+            Child child = new();
             yield return CreateCase(Option<Child?>.Some(child), child);
         }
 

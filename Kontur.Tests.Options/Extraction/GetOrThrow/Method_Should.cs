@@ -77,7 +77,7 @@ namespace Kontur.Tests.Options.Extraction.GetOrThrow
         [TestCaseSource(nameof(GetUpcastCases))]
         public void Upcast_On_Some(Func<Option<Child>, Base> callGetOrThrow)
         {
-            var expected = new Child();
+            Child expected = new();
             var option = Option<Child>.Some(expected);
 
             var value = callGetOrThrow(option);

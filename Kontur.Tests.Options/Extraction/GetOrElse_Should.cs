@@ -55,7 +55,7 @@ namespace Kontur.Tests.Options.Extraction
 
         private static IEnumerable<TestCaseData> GetUpcastCases()
         {
-            var defaultValue = new Base();
+            Base defaultValue = new();
 
             return
                 from testCase in UpcastExamples.Get(defaultValue, value => value)
@@ -77,10 +77,10 @@ namespace Kontur.Tests.Options.Extraction
 
         private static IEnumerable<TestCaseData> GetUpcastDefaultValueCases()
         {
-            var defaultValue = new Child();
-            var someValue = new Base();
+            Child defaultValue = new();
+            Base someValue = new();
 
-            var methods = new (Option<Base> Option, Base Result)[]
+            (Option<Base> Option, Base Result)[] methods =
             {
                 (Option<Base>.Some(someValue), someValue),
                 (Option<Base>.None(), defaultValue),

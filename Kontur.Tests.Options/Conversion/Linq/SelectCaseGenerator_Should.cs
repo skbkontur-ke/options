@@ -24,24 +24,24 @@ namespace Kontur.Tests.Options.Conversion.Linq
         {
             Create(
                 1,
-                new SelectCase(new[] { None }, None),
-                new SelectCase(new[] { Some10 }, Some10)),
+                new(new[] { None }, None),
+                new(new[] { Some10 }, Some10)),
             Create(
                 2,
-                new SelectCase(new[] { None, None }, None),
-                new SelectCase(new[] { Some10, None }, None),
-                new SelectCase(new[] { None, Some11 }, None),
-                new SelectCase(new[] { Some10, Some11 }, CreateSome(21))),
+                new(new[] { None, None }, None),
+                new(new[] { Some10, None }, None),
+                new(new[] { None, Some11 }, None),
+                new(new[] { Some10, Some11 }, CreateSome(21))),
             Create(
                 3,
-                new SelectCase(new[] { None, None, None }, None),
-                new SelectCase(new[] { Some10, None, None }, None),
-                new SelectCase(new[] { None, Some11, None }, None),
-                new SelectCase(new[] { Some10, Some11, None }, None),
-                new SelectCase(new[] { None, None, Some12 }, None),
-                new SelectCase(new[] { Some10, None, Some12 }, None),
-                new SelectCase(new[] { None, Some11, Some12 }, None),
-                new SelectCase(new[] { Some10, Some11, Some12 }, CreateSome(33))),
+                new(new[] { None, None, None }, None),
+                new(new[] { Some10, None, None }, None),
+                new(new[] { None, Some11, None }, None),
+                new(new[] { Some10, Some11, None }, None),
+                new(new[] { None, None, Some12 }, None),
+                new(new[] { Some10, None, Some12 }, None),
+                new(new[] { None, Some11, Some12 }, None),
+                new(new[] { Some10, Some11, Some12 }, CreateSome(33))),
         };
 
         [TestCaseSource(nameof(Cases))]

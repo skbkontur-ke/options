@@ -4,7 +4,7 @@ namespace Kontur.Options
 {
     internal sealed class None<TValue> : Option<TValue>
     {
-        private static readonly Lazy<None<TValue>> Provider = new(() => new None<TValue>());
+        private static readonly Lazy<None<TValue>> Provider = new(() => new());
 
         private None()
         {

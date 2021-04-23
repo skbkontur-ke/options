@@ -39,7 +39,7 @@ namespace Kontur.Tests.Options.Conversion.Linq
                             ? (Option<int>.Some(term.Value), accumulator.Result)
                             : (Option<int>.None(), Option<int>.None());
 
-                        return new SelectCase(accumulator.Args.Append(arg), newResult);
+                        return new(accumulator.Args.Append(arg), newResult);
                     });
         }
 

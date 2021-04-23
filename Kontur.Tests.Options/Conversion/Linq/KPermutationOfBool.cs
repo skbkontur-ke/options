@@ -5,7 +5,7 @@ namespace Kontur.Tests.Options.Conversion.Linq
 {
     internal static class KPermutationOfBool
     {
-        private static readonly IEnumerable<bool> Set = new[] { false, true };
+        private static readonly bool[] Set = { false, true };
 
         internal static IEnumerable<IEnumerable<bool>> Create(int size)
         {

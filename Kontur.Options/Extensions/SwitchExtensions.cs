@@ -11,18 +11,18 @@ namespace Kontur.Options
 
         public static Option<TValue> Switch<TValue>(this IOption<TValue> option, Action onNone, Action<TValue> onSome)
         {
-            var converted = option.Upcast();
             return option.Match(
                 () =>
                 {
                     onNone();
-                    return converted;
+                    return option;
                 },
                 value =>
                 {
                     onSome(value);
-                    return converted;
-                });
+                    return option;
+                })
+                .Upcast();
         }
     }
 }

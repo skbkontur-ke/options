@@ -566,6 +566,12 @@ Option<string> option2 = ...;
 
 Option<object> upcasted = option1.Or(option2);
 Option<object> upcasted = option1.Or(() => option2);
+
+Option<string> option1 = ...;
+Option<string> option2 = ...;
+
+Option<object> upcasted = option1.Or<object>(option2);
+Option<object> upcasted = option1.Or<object>(() => option2);
 ```
 
 ### Do-notation without tasks

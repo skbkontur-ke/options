@@ -80,14 +80,14 @@ namespace Kontur.Tests.Options.Extraction
             Child defaultValue = new();
             Base someValue = new();
 
-            (Option<Base> Option, Base Result)[] methods =
+            (Option<Base> Option, Base Result)[] cases =
             {
                 (Option<Base>.Some(someValue), someValue),
                 (Option<Base>.None(), defaultValue),
             };
 
             return
-                from testCase in methods
+                from testCase in cases
                 from method in GetUpcastDefaultValueMethods(defaultValue)
                 select new TestCaseData(testCase.Option, method).Returns(testCase.Result);
         }

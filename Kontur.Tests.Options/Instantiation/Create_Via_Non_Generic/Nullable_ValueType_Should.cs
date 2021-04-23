@@ -15,8 +15,8 @@ namespace Kontur.Tests.Options.Instantiation.Create_Via_Non_Generic
         private static readonly TestCaseData[] HasValueNullableValueTypeCases =
         {
             CreateHasValueCase(Option.None<int?>(), false),
-            CreateHasValueCase(Option.Some(null as int?), true),
-            CreateHasValueCase(Option.Some(10 as int?), true),
+            CreateHasValueCase(Option.Some<int?>(null), true),
+            CreateHasValueCase(Option.Some<int?>(10), true),
         };
 
         [TestCaseSource(nameof(HasValueNullableValueTypeCases))]

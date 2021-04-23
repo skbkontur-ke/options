@@ -15,7 +15,7 @@ namespace Kontur.Tests.Options.Instantiation.Create_Via_Non_Generic
         private static readonly TestCaseData[] HasValueNullableReferenceTypeCases =
         {
             CreateHasValueCase(Option.None<string?>(), false),
-            CreateHasValueCase(Option.Some(null as string), true),
+            CreateHasValueCase(Option.Some<string?>(null), true),
             CreateHasValueCase(Option.Some<string?>("foo"), true),
         };
 

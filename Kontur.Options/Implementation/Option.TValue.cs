@@ -6,7 +6,7 @@ using Kontur.Options.Holders;
 
 namespace Kontur.Options
 {
-    public abstract class Option<TValue> : IOptionMatchable<TValue>
+    public abstract class Option<TValue> : IOption<TValue>
     {
         private static readonly Type TypeArgument = typeof(TValue);
 
@@ -46,7 +46,7 @@ namespace Kontur.Options
             return new Some<TValue>(value);
         }
 
-        TResult IOptionMatchable<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
+        TResult IOption<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
             Match(onNone, onSome);
 
         public Option<TResult> Map<TResult>(TResult result)

@@ -7,7 +7,7 @@ namespace Kontur.Tests.Options.LibraryNamespace
     internal static class GetOrThrowExtensions
     {
         [Pure]
-        public static CustomValue GetOrThrow(this IOptionMatchable<CustomValue> option)
+        public static CustomValue GetOrThrow(this IOption<CustomValue> option)
         {
             return option.GetOrThrow(LibraryException.Instance);
         }

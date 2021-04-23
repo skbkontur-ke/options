@@ -103,7 +103,9 @@ Explicit variants:
 var option = Option.Some("hello");
 var option = Option<string>.Some("hello");
 var option = Option.Some<string>("hello");
+```
 
+```
 var option = Option.None<string>();
 var option = Option<string>.None();
 ```
@@ -112,7 +114,9 @@ Implicit variants:
 ```
 Option<string> option = "hello";
 Option<string> option = Option.None();
+```
 
+```
 var option = flag
   ? Option.Some("Hello")
   : Option.None();
@@ -124,7 +128,9 @@ var option = flag
 Option<string> option = flag
   ? "Hello"
   : Option.None();
+```
 
+```
 Option<int> GetResult(Random random)
 {
   int randomValue = random.Next(0, 10);
@@ -559,14 +565,17 @@ Option<object> option2 = ...;
 
 Option<object> upcasted = option1.Or(option2);
 Option<object> upcasted = option1.Or(() => option2);
+```
 
-
+```
 Option<object> option1 = ...;
 Option<string> option2 = ...;
 
 Option<object> upcasted = option1.Or(option2);
 Option<object> upcasted = option1.Or(() => option2);
+```
 
+```
 Option<string> option1 = ...;
 Option<string> option2 = ...;
 

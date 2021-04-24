@@ -2,7 +2,7 @@
 
 namespace Kontur.Options.Unsafe
 {
-    public static class EnsureEnsureNoneExtensions
+    public static class EnsureNoneExtensions
     {
         public static void EnsureNone<TValue>(this IOption<TValue> option, Func<TValue, Exception> exceptionFactory)
         {

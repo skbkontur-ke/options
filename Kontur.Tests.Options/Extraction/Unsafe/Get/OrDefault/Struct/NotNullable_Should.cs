@@ -2,24 +2,24 @@
 using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.GetOrDefault.Class
+namespace Kontur.Tests.Options.Extraction.Unsafe.Get.OrDefault.Struct
 {
     [TestFixture]
-    internal class NonNullable_Should
+    internal class NotNullable_Should
     {
-        private static TestCaseData CreateCase(Option<string> option, string? result)
+        private static TestCaseData CreateCase(Option<int> option, int result)
         {
             return new(option) { ExpectedResult = result };
         }
 
         private static readonly TestCaseData[] Cases =
         {
-            CreateCase(Option<string>.None(), null),
-            CreateCase(Option<string>.Some("foo"), "foo"),
+            CreateCase(Option<int>.None(), 0),
+            CreateCase(Option<int>.Some(1), 1),
         };
 
         [TestCaseSource(nameof(Cases))]
-        public string? Process_Option(Option<string> option)
+        public int Process_Option(Option<int> option)
         {
             return option.GetOrDefault();
         }

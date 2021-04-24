@@ -5,7 +5,7 @@ using Kontur.Options.Unsafe;
 using Kontur.Tests.Options.LibraryNamespace;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Ensure.None
+namespace Kontur.Tests.Options.Extraction.Unsafe.Ensure.None
 {
     [TestFixture]
     internal class Override_Should

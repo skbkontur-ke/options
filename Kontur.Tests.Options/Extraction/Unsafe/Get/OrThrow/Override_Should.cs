@@ -5,7 +5,7 @@ using Kontur.Options.Unsafe;
 using Kontur.Tests.Options.LibraryNamespace;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Ensure.HasValue
+namespace Kontur.Tests.Options.Extraction.Unsafe.Get.OrThrow
 {
     [TestFixture]
     internal class Override_Should
@@ -15,7 +15,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure.HasValue
         {
             var option = Option<string>.None();
 
-            Action action = () => option.EnsureHasValue();
+            Func<string> action = () => option.GetOrThrow();
 
             action.Should().Throw<InvalidOperationException>();
         }
@@ -25,7 +25,7 @@ namespace Kontur.Tests.Options.Extraction.Ensure.HasValue
         {
             var option = Option<CustomValue>.None();
 
-            Action action = () => option.EnsureHasValue();
+            Func<CustomValue> action = () => option.GetOrThrow();
 
             action.Should()
                 .Throw<Exception>()
@@ -33,13 +33,14 @@ namespace Kontur.Tests.Options.Extraction.Ensure.HasValue
         }
 
         [Test]
-        public void Do_Not_Throw_If_Some()
+        public void Return_Value_If_Some()
         {
-            var option = Option<CustomValue>.Some(new());
+            CustomValue expected = new();
+            var option = Option<CustomValue>.Some(expected);
 
-            Action action = () => option.EnsureHasValue();
+            var result = option.GetOrThrow();
 
-            action.Should().NotThrow();
+            result.Should().Be(expected);
         }
     }
 }

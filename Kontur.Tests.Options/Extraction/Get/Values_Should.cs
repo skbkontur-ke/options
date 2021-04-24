@@ -3,10 +3,10 @@ using System.Linq;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction
+namespace Kontur.Tests.Options.Extraction.Get
 {
     [TestFixture]
-    internal class GetValues_Should
+    internal class Values_Should
     {
         private static TestCaseData CreateCase(Option<int> option, IEnumerable<int> results)
         {

@@ -3,7 +3,7 @@ using Kontur.Options;
 using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.GetOrDefault.Upcast
+namespace Kontur.Tests.Options.Extraction.Unsafe.Get.OrDefault.Upcast
 {
     [TestFixture]
     internal class Nullable_Should

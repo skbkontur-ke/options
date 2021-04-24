@@ -5,7 +5,7 @@ using Kontur.Options;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction
+namespace Kontur.Tests.Options.Extraction.Actions
 {
     [TestFixture]
     public class OnNone_Should

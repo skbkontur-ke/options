@@ -4,10 +4,10 @@ using System.Linq;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction
+namespace Kontur.Tests.Options.Extraction.Get
 {
     [TestFixture]
-    internal class GetOrElse_Should
+    internal class OrElse_Should
     {
         private static int AssertIsNotCalled()
         {

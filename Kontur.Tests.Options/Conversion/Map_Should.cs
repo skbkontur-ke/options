@@ -13,40 +13,26 @@ namespace Kontur.Tests.Options.Conversion
     {
         private const int ExpectedResult = 42;
 
-        private static TestCaseData CreateMapCase(Func<Option<string>, Option<int>> converter)
+        private static readonly Func<Option<string>, Option<int>>[] Methods =
         {
-            return new(converter);
-        }
+            result => result.Map(_ => ExpectedResult),
+            result => result.Map(() => ExpectedResult),
+            result => result.Map(ExpectedResult),
+        };
 
-        private static IEnumerable<TestCaseData> MapCases
-        {
-            get
+        private static readonly IEnumerable<TestCaseData> MapCases =
+            from testCase in new[]
             {
-                yield return CreateMapCase(option => option.Map(_ => ExpectedResult));
-                yield return CreateMapCase(option => option.Map(() => ExpectedResult));
-                yield return CreateMapCase(option => option.Map(ExpectedResult));
+                (Source: Option<string>.None(), Result: Option<int>.None()),
+                (Source: Option<string>.Some("unused"), Result: Option<int>.Some(ExpectedResult)),
             }
-        }
+            from method in Methods
+            select new TestCaseData(testCase.Source, method).Returns(testCase.Result);
 
         [TestCaseSource(nameof(MapCases))]
-        public void Do_Not_Convert_None(Func<Option<string>, Option<int>> converter)
+        public Option<int> Convert(Option<string> source, Func<Option<string>, Option<int>> converter)
         {
-            var option = Option<string>.None();
-
-            var result = converter(option);
-
-            result.Should().BeEquivalentTo(Option<int>.None());
-        }
-
-        private static readonly IEnumerable<TestCaseData> ConvertSomeCases = MapCases
-            .Select(testCase => testCase.Returns(Option<int>.Some(ExpectedResult)));
-
-        [TestCaseSource(nameof(ConvertSomeCases))]
-        public Option<int> Convert_Some(Func<Option<string>, Option<int>> converter)
-        {
-            var option = Option<string>.Some("unused");
-
-            return converter(option);
+            return converter(source);
         }
 
         [Test]

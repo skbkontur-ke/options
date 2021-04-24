@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace Kontur.Options
 {
-    public static class EnumerableExtensions
+    public static class SelectManyExtensions
     {
-        [Pure]
-        public static IEnumerator<TValue> GetEnumerator<TValue>(this IOption<TValue> option)
-        {
-            return option.GetValues().GetEnumerator();
-        }
-
         public static IEnumerable<TResult> SelectMany<TValue, TItem, TResult>(
             this IOption<TValue> option,
             Func<TValue, IEnumerable<TItem>> collectionSelector,

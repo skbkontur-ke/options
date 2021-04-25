@@ -9,7 +9,7 @@
     * [Other features](#other-features)
     * [Drawbacks](#drawbacks)
 * [Instantiation of Option type](#instantiation-of-option-type)
-* [Safe extraction of data from Option instance](#safe-extraction-of-data-from-option-instance)
+* [Extraction of data from Option instance](#extraction-of-data-from-option-instance)
     * [GetOrElse](#getorelse)
     * [TryGet](#tryget)
     * [Match](#match)
@@ -26,7 +26,6 @@
     * [Conversion to IEnumerable](#conversion-to-ienumerable)
     * [LINQ method syntax](#linq-method-syntax)
     * [ToString](#tostring)
-* [Unsafe extraction of data from Option instance](#unsafe-extraction-of-data-from-option-instance)
     * [GetOrThrow](#getorthrow)
     * [GetOrDefault](#getordefault)
     * [EnsureHasValue](#ensurehasvalue)
@@ -144,7 +143,7 @@ Option<int> GetResult(Random random)
 ```
 
 
-## Safe extraction of data from `Option` instance
+## Extraction of data from `Option` instance
 
 ### GetOrElse
 ```
@@ -402,9 +401,6 @@ Option<string> option = ...;
 // `Some<string> value={Value}` if `Some`
 string str = option.ToString();
 ```
-
-
-## Unsafe extraction of data from Option instance
 
 ### GetOrThrow
 ```

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kontur.Options.Unsafe
+namespace Kontur.Options
 {
     public sealed class ValueExistsException : InvalidOperationException
     {

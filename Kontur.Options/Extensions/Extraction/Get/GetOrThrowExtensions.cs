@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace Kontur.Options.Unsafe
+namespace Kontur.Options
 {
     public static class GetOrThrowExtensions
     {

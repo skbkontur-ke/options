@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentAssertions;
 using Kontur.Options;
-using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
 namespace Kontur.Tests.Options.Extraction.Unsafe.Get.OrThrow

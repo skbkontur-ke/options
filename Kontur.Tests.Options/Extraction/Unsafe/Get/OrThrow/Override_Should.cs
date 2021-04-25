@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentAssertions;
 using Kontur.Options;
-using Kontur.Options.Unsafe;
 using Kontur.Tests.Options.LibraryNamespace;
 using NUnit.Framework;
 

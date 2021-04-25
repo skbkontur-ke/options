@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Kontur.Options;
-using Kontur.Options.Unsafe;
 
 namespace Kontur.Tests.Options.LibraryNamespace
 {

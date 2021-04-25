@@ -1,5 +1,4 @@
 ﻿using Kontur.Options;
-using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
 namespace Kontur.Tests.Options.Instantiation.Create_Via_Non_Generic

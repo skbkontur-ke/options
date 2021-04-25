@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Kontur.Options;
-using Kontur.Options.Unsafe;
 using NUnit.Framework;
 
 namespace Kontur.Tests.Options.Extraction.Unsafe.Get.OrDefault.Upcast

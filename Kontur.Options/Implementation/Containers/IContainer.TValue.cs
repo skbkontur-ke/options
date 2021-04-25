@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
-namespace Kontur.Options.Holders
+namespace Kontur.Options.Containers
 {
-    internal interface IHolder<TValue>
+    internal interface IContainer<TValue>
     {
         [Pure]
         bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value);

@@ -2,17 +2,17 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
-namespace Kontur.Options.Holders
+namespace Kontur.Options.Containers
 {
-    internal sealed class NoneHolder<TValue> : IHolder<TValue>
+    internal sealed class NoneContainer<TValue> : IContainer<TValue>
     {
-        private static readonly Lazy<NoneHolder<TValue>> Provider = new(() => new());
+        private static readonly Lazy<NoneContainer<TValue>> Provider = new(() => new());
 
-        private NoneHolder()
+        private NoneContainer()
         {
         }
 
-        internal static IHolder<TValue> Instance => Provider.Value;
+        internal static IContainer<TValue> Instance => Provider.Value;
 
         [Pure]
         public bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value)

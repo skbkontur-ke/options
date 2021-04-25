@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
-using Kontur.Options.Holders;
+using Kontur.Options.Containers;
 
 namespace Kontur.Options
 {
@@ -172,8 +172,8 @@ namespace Kontur.Options
         public bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value)
         {
             return Match(
-                    () => NoneHolder<TValue>.Instance,
-                    val => new SomeHolder<TValue>(val))
+                    () => NoneContainer<TValue>.Instance,
+                    val => new SomeContainer<TValue>(val))
                 .TryGet(out value);
         }
 

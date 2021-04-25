@@ -62,7 +62,7 @@ If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-optio
 
 ## Drawbacks
 
-* Implementation is based on abstract classes polymorphism. So `Option` type is not `readonly` and is not `struct`.
+* Implementation is based on abstract classes polymorphism. So `Option` type is not marked `readonly` (but it is implemented as readonly) and is not `struct`.
 
 
 ## Instantiation of `Option` type

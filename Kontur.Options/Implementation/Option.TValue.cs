@@ -61,17 +61,37 @@ namespace Kontur.Options
 
         public Option<TResult> Map<TResult>(Func<TValue, TResult> projection)
         {
-            return this.Select(projection);
+            return Select(projection);
+        }
+
+        public Option<TResult> Select<TResult>(Func<TValue, Option<TResult>> resultSelector)
+        {
+            return Match(Option<TResult>.None, resultSelector);
+        }
+
+        public Option<TResult> Select<TResult>(Func<TValue, TResult> resultSelector)
+        {
+            return Select(value => Option<TResult>.Some(resultSelector(value)));
+        }
+
+        public Task<Option<TResult>> Select<TResult>(Func<TValue, Task<Option<TResult>>> resultSelector)
+        {
+            return Match(() => Task.FromResult(Option<TResult>.None()), resultSelector);
+        }
+
+        public Task<Option<TResult>> Select<TResult>(Func<TValue, Task<TResult>> resultSelector)
+        {
+            return Select(async value => Option<TResult>.Some(await resultSelector(value).ConfigureAwait(false)));
         }
 
         public Option<TValue> Where(Func<TValue, bool> predicate)
         {
-            return this.Select(value => predicate(value) ? Some(value) : None());
+            return Select(value => predicate(value) ? Some(value) : None());
         }
 
         public Task<Option<TValue>> Where(Func<TValue, Task<bool>> predicate)
         {
-            return this.Select(async value => await predicate(value).ConfigureAwait(false)
+            return Select(async value => await predicate(value).ConfigureAwait(false)
                 ? Some(value)
                 : None());
         }
@@ -87,7 +107,7 @@ namespace Kontur.Options
             Func<TValue, Option<TOtherValue>> optionSelector,
             Func<TValue, TOtherValue, Option<TResult>> resultSelector)
         {
-            return this.Select(
+            return Select(
                 value => optionSelector(value).Select(
                     otherValue => resultSelector(value, otherValue)));
         }
@@ -123,7 +143,7 @@ namespace Kontur.Options
             Func<TValue, Option<TOtherValue>> optionSelector,
             Func<TValue, TOtherValue, Task<Option<TResult>>> resultSelector)
         {
-            return this.Select(
+            return Select(
                 value => optionSelector(value).Select(
                     otherValue => resultSelector(value, otherValue)));
         }

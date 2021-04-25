@@ -23,9 +23,9 @@ namespace Kontur.Options
             return option.HasSome;
         }
 
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Only type is needed")]
-        public static implicit operator Option<TValue>(NoneMarker _)
+        public static implicit operator Option<TValue>(NoneMarker none)
         {
+            _ = none;
             return None();
         }
 

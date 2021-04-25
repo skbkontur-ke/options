@@ -488,7 +488,7 @@ Option<object> upcasted = option.Map<object>("other string");
 
 ### And
 
-`And` is `And` (`And`/`Then`/`ContinueOnSome`) combinator.
+`And` is `And` (`Then`/`ContinueOnSome`) combinator.
 If a first option is `None` then the `None` is returned.
 If the first option is `Some` then a second option is returned.
 The second `Option` factory method is only executed if the first `Option` is `Some`.
@@ -499,9 +499,9 @@ Option<string> option2 = ...;
 
 // If option1 is None then None is returned.
 // Otherwise option2 is returned.
-Option<string> result = option1.Or(option2);
-Option<string> result = option1.Or(() => option2);
-Option<string> result = option1.Or(i => i > 10 Option<string>.Some(i.ToString()) : Option<string>.None());
+Option<string> result = option1.And(option2);
+Option<string> result = option1.And(() => option2);
+Option<string> result = option1.And(i => i > 10 Option<string>.Some(i.ToString()) : Option<string>.None());
 ```
 
 Variants with upcast:
@@ -509,9 +509,9 @@ Variants with upcast:
 Option<int> option1 = ...;
 Option<string> option2 = ...;
 
-Option<object> upcasted = option1.Or<object>(option2);
-Option<object> upcasted = option1.Or<object>(() => option2);
-Option<object> upcasted = option1.Or<object>(i => option2);
+Option<object> upcasted = option1.And<object>(option2);
+Option<object> upcasted = option1.And<object>(() => option2);
+Option<object> upcasted = option1.And<object>(i => option2);
 ```
 
 ### Or

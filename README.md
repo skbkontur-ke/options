@@ -615,6 +615,6 @@ Where:
 
 ## Contributing
 
-If new method can return `Generic<TValue>` or just `TValue` of some `Option<TValue>` or base type of `TValue`, then add the method as extension method and require `IOptionMatchable<TValue>` instead of `Option<TValue>`. That allows simple and safe upcasts by providing additional arguments or specifing a one generic argument on method call.
-If new method has exactly one extra generic parameter in addition to `TValue` of `Option<TValue>` and method is safe, then add the method directly into `Option.TValue.cs`. That allows simple and safe upcasts by specifing generic argument on method call.
-Add all other methods as as extension methods.
+If a new method can return `GenericType<TValue>` or just `TValue` for some `Option<TValue>` or base type of `TValue` and has no other generic parameters, then the new method should be added as an extension method. In that case, the new method should receive a parameter of type `IOptionMatchable<TValue>` instead of `Option<TValue>`. That allows simple and safe upcasts by providing additional arguments or specifying one generic argument at a call site of the new method.
+If the new method has exactly one extra generic parameter in addition to `TValue` of `Option<TValue>`, then the new method should be added directly into `Option.TValue.cs`. That also allows simple and safe upcasts by specifying one generic argument at a call site of the new method.
+Please, add all other methods as extension methods.

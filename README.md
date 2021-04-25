@@ -30,9 +30,10 @@
     * [ToString](#tostring)
 * [Conversion of `Option<TValue>` to another Option type](#conversion-of-optiontvalue-to-another-option-type)
     * [Map](#map)
-    * [Select](#select)
+    * [And](#and)
     * [Or](#or)
     * [Upcast](#upcast)
+    * [Select](#select)
     * [Do-notation without tasks](#do-notation-without-tasks)
     * [Do-notation with tasks](#do-notation-with-tasks)
 * [Other](#other)
@@ -55,7 +56,7 @@ If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-optio
 
 * [Unrestricted do-notation with `Task<T>` support](#do-notation-with-tasks)
 * Great interface that allow checking and extraction of data with single method. See [TryGet](#tryget) and [Match](#match).
-* `And` (`Then`, `ContinueWith`) and `Or` (`Else`, `ContinueOnNone`) combinators `Option` type. See [Select](#select) for `And` combinator and [Or](#or) for `Or` combinator.
+* `And` (`Then`, `ContinueOnSome`) and `Or` (`Else`, `ContinueOnNone`) combinators `Option` type. See [And](#and) for `And` combinator and [Or](#or) for `Or` combinator.
 * Assembly contains only `Option` type implementation. There are no other stuff.
 * `Option` type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. As a result there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag or similar staff.
 * There is no specific handling of nulls. Use C# 8 nullable reference types to handle nulls.
@@ -485,28 +486,40 @@ Option<object> upcasted = option.Map<object>(() => 1.ToString());
 Option<object> upcasted = option.Map<object>("other string");
 ```
 
-### Select
+### And
 
-`Select` is the same as `Map` but it allows creating an `Option` in addition to creating a plain value.
-That even allows you to change `Some` to `None` for some cases.
-
-`Select` can be thought of as `And`/`Then`/`ContinueWith` combinator.
-So a second `Option` factory method is only executed if the first `Option` is `Some`.
+`And` is `And` (`And`/`Then`/`ContinueOnSome`) combinator.
+If a first option is `None` then the `None` is returned.
+If the first option is `Some` then a second option is returned.
+The second `Option` factory method is only executed if the first `Option` is `Some`.
 
 ```
-Option<string> option = ...;
+Option<int> option1 = ...;
+Option<string> option2 = ...;
 
-Option<string> result = option.Select(str => str.Length > 5 ? Option.Some(str) : Option.None());
-Option<string> result = option.Select(str => str + "suffix");
-Option<int> result = option.Select(str => int.Parse(str));
+// If option1 is None then None is returned.
+// Otherwise option2 is returned.
+Option<string> result = option1.Or(option2);
+Option<string> result = option1.Or(() => option2);
+Option<string> result = option1.Or(i => i > 10 Option<string>.Some(i.ToString()) : Option<string>.None());
+```
 
-Option<object> upcasted = option.Select<object>(str => str);
+Variants with upcast:
+```
+Option<int> option1 = ...;
+Option<string> option2 = ...;
+
+Option<object> upcasted = option1.Or<object>(option2);
+Option<object> upcasted = option1.Or<object>(() => option2);
+Option<object> upcasted = option1.Or<object>(i => option2);
 ```
 
 ### Or
 
 `Or` is `Or` (`Else`, `ContinueOnNone`) combinator.
-So a second `Option` factory method is only executed if the first `Option` is `None`.
+If a first option is `Some` then the it is returned.
+If the first option is `None` then a second option is returned.
+The second `Option` factory method is only executed if the first `Option` is `None`.
 
 ```
 Option<string> option1 = ...;
@@ -556,6 +569,24 @@ Option<object> objectOption = option.Upcast<object>();
 // Does not compile
 var result = objectOption.Upcast<string>();
 
+```
+
+### Select
+
+`Select` is a mix of `Map` and `And`.
+Like both of them, a factory method of a second `Option` or value is only executed if the first `Option` is `Some`.
+Like `Map` it allows changing type and value by using the value factory.
+Unlike `Map` and like `And` it allows creating a second `Option` which is a result of the whole operation.
+It also allows you to change `Some` to `None` for some cases.
+
+```
+Option<string> option = ...;
+
+Option<string> result = option.Select(str => str.Length > 5 ? Option.Some(str) : Option.None());
+Option<string> result = option.Select(str => str + "suffix");
+Option<int> result = option.Select(str => int.Parse(str));
+
+Option<object> upcasted = option.Select<object>(str => str);
 ```
 
 ### Do-notation without tasks

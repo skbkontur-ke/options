@@ -6,6 +6,6 @@
     <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
     <LangVersion>9</LangVersion>
     <Nullable>enable</Nullable>
-    <NoWarn>1701;1702;CA1716;S3453;S3626;ASA001</NoWarn>
+    <NoWarn>1701;1702;S3453;ASA001</NoWarn>
   </PropertyGroup>
 </Project>

@@ -82,8 +82,6 @@ var option = Option<string>.None();
 Implicit variants:
 ```
 Option<string> option = "hello";
-```
-```
 Option<string> option = Option.None();
 ```
 
@@ -91,13 +89,11 @@ Option<string> option = Option.None();
 var option = flag
   ? Option.Some("Hello")
   : Option.None();
-```
-```
+
 var option = flag
   ? "Hello"
   : Option<string>.None();
-```
-```
+
 Option<string> option = flag
   ? "Hello"
   : Option.None();

@@ -13,4 +13,3 @@ indent_size = 2
 
 [*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
 indent_size = 2
-

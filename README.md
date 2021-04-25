@@ -70,18 +70,12 @@ If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-optio
 Explicit variants:
 ```
 var option = Option.Some("hello");
-```
-```
 var option = Option<string>.Some("hello");
-```
-```
 var option = Option.Some<string>("hello");
 ```
 
 ```
 var option = Option.None<string>();
-```
-```
 var option = Option<string>.None();
 ```
 

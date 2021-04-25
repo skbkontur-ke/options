@@ -3,7 +3,7 @@
 ## Content
 
 * [License](#license)
-* [Insallation](#insallation)
+* [Installation](#installation)
 * [Features](#features)
 * [Drawbacks](#drawbacks)
 * [Instantiation of Option type](#instantiation-of-option-type)
@@ -42,7 +42,7 @@
 
 MIT
 
-## Insallation
+## Installation
 
 Use [cement](https://github.com/skbkontur/cement#get-started) to add reference to `Option` type assembly.
 

@@ -3,14 +3,11 @@
 ## Content
 
 * [License](#license)
-* [Using option type](#using-option-type)
+* [Insallation](#insallation)
 * [Features](#features)
-    * [Killer-feature: Unrestricted do-notation with `Task<T>` support](#killer-feature-unrestricted-do-notation-with-taskt-support)
-    * [Other features](#other-features)
-    * [Drawbacks](#drawbacks)
+* [Drawbacks](#drawbacks)
 * [Instantiation of Option type](#instantiation-of-option-type)
 * [Extraction of data from Option instance](#extraction-of-data-from-option-instance)
-    * [GetOrElse](#getorelse)
     * [TryGet](#tryget)
     * [Match](#match)
     * [Switch](#switch)
@@ -18,32 +15,34 @@
     * [OnNone](#onnone)
     * [Switch/OnSome/OnNone methods chaining](#switchonsomeonnone-methods-chaining)
     * [Switch/OnSome/OnNone return value upcasting](#switchonsomeonnone-return-value-upcasting)
-    * [HasSome](#hassome)
-    * [IsNone](#isnone)
-    * [Implicit conversion to bool](#implicit-conversion-to-bool)
-    * [foreach](#foreach)
-    * [LINQ query sytnax](#linq-query-sytnax)
-    * [Conversion to IEnumerable](#conversion-to-ienumerable)
-    * [LINQ method syntax](#linq-method-syntax)
-    * [ToString](#tostring)
+    * [GetOrElse](#getorelse)
     * [GetOrThrow](#getorthrow)
     * [GetOrDefault](#getordefault)
     * [EnsureHasValue](#ensurehasvalue)
     * [EnsureNone](#ensurenone)
+    * [HasSome](#hassome)
+    * [IsNone](#isnone)
+    * [Implicit conversion to bool](#implicit-conversion-to-bool)
+    * [Conversion to IEnumerable](#conversion-to-ienumerable)
+    * [LINQ method syntax](#linq-method-syntax)
+    * [LINQ query sytnax](#linq-query-sytnax)
+    * [foreach](#foreach)
+    * [ToString](#tostring)
 * [Conversion of `Option<TValue>` to another Option type](#conversion-of-optiontvalue-to-another-option-type)
     * [Map](#map)
     * [Select](#select)
-    * [Upcast](#upcast)
     * [Or](#or)
+    * [Upcast](#upcast)
     * [Do-notation without tasks](#do-notation-without-tasks)
     * [Do-notation with tasks](#do-notation-with-tasks)
 * [Other](#other)
 * [Contributing](#contributing)
 
 ## License
+
 MIT
 
-## Using option type
+## Insallation
 
 Use [cement](https://github.com/skbkontur/cement#get-started) to add reference to `Option` type assembly.
 
@@ -54,45 +53,16 @@ If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-optio
 
 ## Features
 
-### Killer-feature: Unrestricted do-notation with `Task<T>` support
-
-Example:
-```
-abstract Option<Guid> GetCurrentUserId();
-abstract Task<int> GetCurrentIndex();
-abstract Task<Option<Product>> GetCurrentProduct();
-abstract Task<Option<string>> GetMessage(Guid userId, int index, Product product));
-abstract Task<Format> GetFormat(int index, string message);
-abstract Option<ConvertResult> Convert(string message, Format format);
-abstract Task<bool> IsValid(int index);
-
-Task<Option<ConvertResult>> result =
-  from userId  in GetCurrentUserId() // A
-  where userId != Guid.Empty       // B
-  from index   in GetCurrentIndex() // C
-  from product in GetCurrentProduct() // D
-  let nextIndex = index + 1
-  where IsValid(nextIndex) // E
-  from message in GetMessage(userId, nextIndex, product) // F
-  from format  in GetFormat(nextIndex, message) // G
-  select Convert(message, format); // H
-
-```
-Where:
-* `A` or `C` or both (first two `from`/`in` clauses) must return either `Option<T>` or `Task<Option<T>>`.
-* `A`, `C`, `D`, `F` and `G` may return one of `Option<T>`, `Task<T>` or `Task<Option<T>>`. Subsequent expressions may depend on previous expressions (`F` and `G` for example) or may not depend on previous expressions (`C` and `D` for example). Number of `B`, `C`, `D`, `E`, `F` and `G`-like statements is efficiently unlimited.
-* `B` and `E` may return either `bool` or `Task<bool>`.
-* `H` should return either `TResult` or `Option<TResult>`.
-
-### Other features
-
+* [Unrestricted do-notation with `Task<T>` support](#do-notation-with-tasks)
+* Great interface that allow checking extraction of data with one method. See [TryGet](#tryget) and [Match](#match).
+* `And` (`Then`, `ContinueWith`) and `Or` (`Else`, `ContinueOnNone`) combinators `Option` type. See [Select](#select) for `And` combinator and [Or](#or) for `Or` combinator.
 * Assembly contains only `Option` type implementation. There are no other stuff.
-* `Option` type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. So there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag.
+* `Option` type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. As a result there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag or similar staff.
 * There is no specific handling of nulls. Use C# 8 nullable reference types to handle nulls.
 
-### Drawbacks
+## Drawbacks
 
-* As implementation is based on abstract classes polymorphism, `Option` type is not `readonly` `struct`.
+* Implementation is based on abstract classes polymorphism. So `Option` type is not `readonly` and is not `struct`.
 
 
 ## Instantiation of `Option` type
@@ -100,18 +70,26 @@ Where:
 Explicit variants:
 ```
 var option = Option.Some("hello");
+```
+```
 var option = Option<string>.Some("hello");
+```
+```
 var option = Option.Some<string>("hello");
 ```
 
 ```
 var option = Option.None<string>();
+```
+```
 var option = Option<string>.None();
 ```
 
 Implicit variants:
 ```
 Option<string> option = "hello";
+```
+```
 Option<string> option = Option.None();
 ```
 
@@ -119,11 +97,13 @@ Option<string> option = Option.None();
 var option = flag
   ? Option.Some("Hello")
   : Option.None();
-
+```
+```
 var option = flag
   ? "Hello"
   : Option<string>.None();
-
+```
+```
 Option<string> option = flag
   ? "Hello"
   : Option.None();
@@ -145,29 +125,7 @@ Option<int> GetResult(Random random)
 
 ## Extraction of data from `Option` instance
 
-### GetOrElse
-```
-Option<string> option = ...;
-
-string result = option.GetOrElse(() => "defaultValue");
-string result = option.GetOrElse("defaultValue");
-
-object upcasted = option.GetOrElse(() => new object());
-object upcasted = option.GetOrElse(new object());
-
-object upcasted = option.GetOrElse<object>(() => new Exception("There is no value"));
-object upcasted = option.GetOrElse<object>(new Exception("There is no value"));
-
-Option<object> objectOption = ...;
-object upcasted = objectOption.GetOrElse(() => "defaultValue");
-object upcasted = objectOption.GetOrElse("defaultValue");
-```
-
 ### TryGet
-It works for nullable and non-nullable reference and value types.
-
-Remark: On netstandard2.0 and below for reference types it returns nullable variant of generic type if nullable reference types are enabled.
-
 ```
 Option<string> option = ...;
 
@@ -275,131 +233,22 @@ Option<object> upcasted = option.OnSome<object>(() => Console.WriteLine("Value i
 Option<object> upcasted = option.OnNone<object>(() => Console.WriteLine("There is no value"));
 ```
 
-### HasSome
-
-```
-Option<string> option = "has value";
-
-// true
-bool result = option.HasSome;
-```
-
-```
-Option<string> option = Option.None();
-
-// false
-bool result = option.HasSome;
-```
-
-### IsNone
-
-```
-Option<string> option = "has value";
-
-// false
-bool result = option.IsNone;
-```
-
-```
-Option<string> option = Option.None();
-
-// true
-bool result = option.IsNone;
-```
-
-### Implicit conversion to bool
+### GetOrElse
 ```
 Option<string> option = ...;
 
-if (option)
-{
-  // On some
-}
-else
-{
-  // On none
-}
+string result = option.GetOrElse(() => "defaultValue");
+string result = option.GetOrElse("defaultValue");
 
-bool result = option;
-```
+object upcasted = option.GetOrElse(() => new object());
+object upcasted = option.GetOrElse(new object());
 
-### foreach
-```
-string FindValue(Option<int> option)
-{
-  foreach(var value in option)
-  {
-    return value + " is found!";
-  }
+object upcasted = option.GetOrElse<object>(() => new Exception("There is no value"));
+object upcasted = option.GetOrElse<object>(new Exception("There is no value"));
 
-  return "no value found";
-}
-
-```
-
-### LINQ query sytnax
-```
-Option<int> option = Option.Some(10);
-
-IEnumerable<int> result =
-  from value in option
-  from i1 in new [] { 1, 2 }
-  from i2 in new [] { 100, 200 }
-  select value + i1 + i2;
-
-IEnumerable<int> result =
-  from i1 in new [] { 1, 2 }
-  from value in option
-  from i2 in new [] { 100, 200 }
-  select i1 + value + i2;
-
-// result is [111, 112, 211, 212].
-```
-
-```
-Option<int> option = Option.None();
-
-IEnumerable<int> result =
-  from value in option
-  from i in new [] { 1, 2 }
-  select value + i;
-
-IEnumerable<int> result =
-  from i in new [] { 1, 2 }
-  from value in option
-  select value + i;
-
-// result is empty.
-
-```
-
-### Conversion to IEnumerable
-```
-Option<string> option = ...;
-
-// `[]` if `None`
-// `[value]` if `Some`
-IEnumerable<string> values = option.GetValues();
-
-IEnumerable<object> upcasted = option.GetValues<object>();
-```
-
-### LINQ method syntax
-```
-Option<string> option = ...;
-
-// `[]` if `None`
-// `[value]` if `Some`
-string[] values = option.GetValues().ToArray();
-```
-
-### ToString
-```
-Option<string> option = ...;
-
-// `None<string>` if `None`
-// `Some<string> value={Value}` if `Some`
-string str = option.ToString();
+Option<object> objectOption = ...;
+object upcasted = objectOption.GetOrElse(() => "defaultValue");
+object upcasted = objectOption.GetOrElse("defaultValue");
 ```
 
 ### GetOrThrow
@@ -433,8 +282,6 @@ namespace Custom
 ```
 
 ### GetOrDefault
-It works for nullable and non-nullable reference and value types.
-
 ```
 Option<string> option = ...;
 
@@ -498,25 +345,163 @@ namespace Custom
 }
 ```
 
+### HasSome
+
+```
+Option<string> option = "has value";
+
+// true
+bool result = option.HasSome;
+```
+
+```
+Option<string> option = Option.None();
+
+// false
+bool result = option.HasSome;
+```
+
+### IsNone
+
+```
+Option<string> option = "has value";
+
+// false
+bool result = option.IsNone;
+```
+
+```
+Option<string> option = Option.None();
+
+// true
+bool result = option.IsNone;
+```
+
+### Implicit conversion to bool
+```
+Option<string> option = ...;
+
+if (option)
+{
+  // On some
+}
+else
+{
+  // On none
+}
+
+bool result = option;
+```
+
+### Conversion to IEnumerable
+```
+Option<string> option = ...;
+
+// `[]` if `None`
+// `[value]` if `Some`
+IEnumerable<string> values = option.GetValues();
+
+IEnumerable<object> upcasted = option.GetValues<object>();
+```
+
+### LINQ method syntax
+```
+Option<string> option = ...;
+
+// `[]` if `None`
+// `[value]` if `Some`
+string[] values = option.GetValues().ToArray();
+```
+
+### LINQ query sytnax
+```
+Option<int> option = Option.Some(10);
+
+IEnumerable<int> result =
+  from value in option
+  from i1 in new [] { 1, 2 }
+  from i2 in new [] { 100, 200 }
+  select value + i1 + i2;
+
+IEnumerable<int> result =
+  from i1 in new [] { 1, 2 }
+  from value in option
+  from i2 in new [] { 100, 200 }
+  select i1 + value + i2;
+
+// result is [111, 112, 211, 212].
+```
+
+```
+Option<int> option = Option.None();
+
+IEnumerable<int> result =
+  from value in option
+  from i in new [] { 1, 2 }
+  select value + i;
+
+IEnumerable<int> result =
+  from i in new [] { 1, 2 }
+  from value in option
+  select value + i;
+
+// result is empty.
+
+```
+
+### foreach
+```
+string FindValue(Option<int> option)
+{
+  foreach(var value in option)
+  {
+    return value + " is found!";
+  }
+
+  return "no value found";
+}
+
+```
+
+### ToString
+```
+Option<string> option = ...;
+
+// `None<string>` if `None`
+// `Some<string> value={Value}` if `Some`
+string str = option.ToString();
+```
+
+
 ## Conversion of `Option<TValue>` to another Option type
 
 ### Map
 
-Map changes value or/and type of `TValue`
+`Map` changes value or/and type of `TValue`
 
 ```
 Option<string> option = ...;
 
 Option<string> result = option.Map(str => str + "suffix");
+Option<string> result = option.Map(() => 1.ToString());
+Option<string> result = option.Map("other string");
+
 Option<int> result = option.Map(str => int.Parse(str));
+Option<int> result = option.Map(() => int.Parse("123"));
+Option<int> result = option.Map(15);
 
 Option<object> upcasted = option.Map<object>(str => str);
+Option<object> upcasted = option.Map<object>(() => 1.ToString());
+Option<object> upcasted = option.Map<object>("other string");
 ```
 
 ### Select
 
-`Select` is same as map but allows selecting an `Option` in addition to selecting a plain value.
-That even allows to change `Some` to `None` for some values.
+`Select` is the same as `Map` but it allows creating an `Option` in addition to creating a plain value.
+That even allows you to change `Some` to `None` for some cases.
+
+`Select` can be thought of as `And`/`Then`/`ContinueWith` combinator.
+So a second `Option` factory method is only executed if the first `Option` is `Some`.
 
 ```
 Option<string> option = ...;
@@ -528,22 +513,11 @@ Option<int> result = option.Select(str => int.Parse(str));
 Option<object> upcasted = option.Select<object>(str => str);
 ```
 
-### Upcast
-
-Only safe upcasts are allowed. That rule applies to all other methods which support upcasts.
-
-```
-Option<string> option = ...;
-
-// Compiles
-Option<object> objectOption = option.Upcast<object>();
-
-// Does not compile
-var result = objectOption.Upcast<string>();
-
-```
-
 ### Or
+
+`Or` is `Or` (`Else`, `ContinueOnNone`) combinator.
+So a second `Option` factory method is only executed if the first `Option` is `None`.
+
 ```
 Option<string> option1 = ...;
 Option<string> option2 = ...;
@@ -577,6 +551,21 @@ Option<string> option2 = ...;
 
 Option<object> upcasted = option1.Or<object>(option2);
 Option<object> upcasted = option1.Or<object>(() => option2);
+```
+
+### Upcast
+
+Only safe upcasts are allowed. That rule applies to all other methods which support upcasts.
+
+```
+Option<string> option = ...;
+
+// Compiles
+Option<object> objectOption = option.Upcast<object>();
+
+// Does not compile
+var result = objectOption.Upcast<string>();
+
 ```
 
 ### Do-notation without tasks

@@ -1,4 +1,7 @@
-﻿using Kontur.Options;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Kontur.Options;
 using NUnit.Framework;
 
 namespace Kontur.Tests.Options.Conversion.Or
@@ -6,31 +9,35 @@ namespace Kontur.Tests.Options.Conversion.Or
     [TestFixture]
     internal class Method_Should
     {
-        private static readonly Option<int> None = Option<int>.None();
-
-        private static TestCaseData CreateIntCase(Option<int> option1, Option<int> option2, Option<int> result)
+        private static IEnumerable<(Option<int> Option1, Option<int> Option2, Option<int> Result)> CreateCases()
         {
-            return new(option1, option2) { ExpectedResult = result };
+            var none = Option<int>.None();
+            var some = Option<int>.Some(1);
+
+            yield return (none, none, none);
+            yield return (some, none, some);
+            yield return (none, some, some);
+            yield return (some, Option<int>.Some(2), some);
         }
 
-        private static readonly TestCaseData[] IntCases =
+        private static readonly Func<Option<int>, Option<int>, Option<int>>[] Methods =
         {
-            CreateIntCase(None, None, None),
-            CreateIntCase(Option<int>.Some(1), None, Option<int>.Some(1)),
-            CreateIntCase(None, Option<int>.Some(2), Option<int>.Some(2)),
-            CreateIntCase(Option<int>.Some(1), Option<int>.Some(2), Option<int>.Some(1)),
+            (option1, option2) => option1.Or(option2),
+            (option1, option2) => option1.Or(() => option2),
         };
 
-        [TestCaseSource(nameof(IntCases))]
-        public Option<int> Process_Value(Option<int> option1, Option<int> option2)
-        {
-            return option1.Or(option2);
-        }
+        private static readonly IEnumerable<TestCaseData> Cases =
+            from testCase in CreateCases()
+            from method in Methods
+            select new TestCaseData(testCase.Option1, testCase.Option2, method).Returns(testCase.Result);
 
-        [TestCaseSource(nameof(IntCases))]
-        public Option<int> Process_Func(Option<int> option1, Option<int> option2)
+        [TestCaseSource(nameof(Cases))]
+        public Option<int> Process(
+            Option<int> option1,
+            Option<int> option2,
+            Func<Option<int>, Option<int>, Option<int>> callOr)
         {
-            return option1.Or(() => option2);
+            return callOr(option1, option2);
         }
 
         private static Option<int> AssertIsNotCalled()
@@ -39,12 +46,20 @@ namespace Kontur.Tests.Options.Conversion.Or
             throw new UnreachableException();
         }
 
-        [Test]
-        public void Do_Not_Call_Delegate_If_Some()
+        private static readonly Func<Option<int>, Option<int>>[] AssertIsNotCalledMethods =
+        {
+            option => option.Or(AssertIsNotCalled),
+        };
+
+        private static readonly IEnumerable<TestCaseData> AssertIsNotCalledCases =
+            AssertIsNotCalledMethods.Select(method => new TestCaseData(method));
+
+        [TestCaseSource(nameof(AssertIsNotCalledCases))]
+        public void Do_Not_Call_Delegate_If_Some(Func<Option<int>, Option<int>> assertIsNotCalled)
         {
             var option = Option<int>.Some(0);
 
-            option.Or(AssertIsNotCalled);
+            assertIsNotCalled(option);
         }
     }
 }

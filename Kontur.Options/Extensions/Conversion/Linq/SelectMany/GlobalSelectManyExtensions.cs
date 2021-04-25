@@ -3,9 +3,7 @@ using System.Threading.Tasks;
 using Kontur.Options;
 
 // ReSharper disable once CheckNamespace
-#pragma warning disable S3903 // Types should be defined in named namespaces
 public static class GlobalSelectManyExtensions
-#pragma warning restore S3903 // Types should be defined in named namespaces
 {
     public static Task<Option<TResult>> SelectMany<TValue1, TValue2, TResult>(
         this Task<Option<TValue1>> optionTask,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace Kontur.Options.Holders
@@ -14,13 +15,7 @@ namespace Kontur.Options.Holders
         internal static IHolder<TValue> Instance => Provider.Value;
 
         [Pure]
-        public bool TryGet(
-#if NETSTANDARD2_0
-            out TValue? value)
-#else
-            [System.Diagnostics.CodeAnalysis.MaybeNullWhen(returnValue: false)]
-            out TValue value)
-#endif
+        public bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value)
         {
             value = default;
             return false;

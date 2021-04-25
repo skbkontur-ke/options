@@ -169,12 +169,7 @@ namespace Kontur.Options
         }
 
         [Pure]
-        public bool TryGet(
-#if NETSTANDARD2_0
-            out TValue? value)
-#else
-            [MaybeNullWhen(returnValue: false)] out TValue value)
-#endif
+        public bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value)
         {
             return Match(
                     () => NoneHolder<TValue>.Instance,

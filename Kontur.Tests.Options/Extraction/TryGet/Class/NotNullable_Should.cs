@@ -42,11 +42,7 @@ namespace Kontur.Tests.Options.Extraction.TryGet.Class
         {
             if (option.TryGet(out var value))
             {
-#if NETFRAMEWORK
-#pragma warning disable 8603
-#endif
                 return value;
-#pragma warning restore 8603
             }
 
             throw new UnreachableException();

@@ -4,18 +4,17 @@ namespace Kontur.Options.Holders
 {
     internal sealed class SomeHolder<TValue> : IHolder<TValue>
     {
-        private readonly TValue value;
+        private readonly TValue wrappedValue;
 
         internal SomeHolder(TValue value)
         {
-            this.value = value;
+            wrappedValue = value;
         }
 
-        // ReSharper disable once ParameterHidesMember
         [Pure]
         public bool TryGet(out TValue value)
         {
-            value = this.value;
+            value = wrappedValue;
             return true;
         }
     }

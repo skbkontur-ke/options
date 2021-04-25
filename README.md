@@ -54,7 +54,7 @@ If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-optio
 ## Features
 
 * [Unrestricted do-notation with `Task<T>` support](#do-notation-with-tasks)
-* Great interface that allow checking extraction of data with one method. See [TryGet](#tryget) and [Match](#match).
+* Great interface that allow checking and extraction of data with single method. See [TryGet](#tryget) and [Match](#match).
 * `And` (`Then`, `ContinueWith`) and `Or` (`Else`, `ContinueOnNone`) combinators `Option` type. See [Select](#select) for `And` combinator and [Or](#or) for `Or` combinator.
 * Assembly contains only `Option` type implementation. There are no other stuff.
 * `Option` type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. As a result there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag or similar staff.

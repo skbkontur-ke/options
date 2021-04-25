@@ -49,9 +49,9 @@ namespace Kontur.Options
         TResult IOption<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
             Match(onNone, onSome);
 
-        public Option<TValue2> And<TValue2>(Func<TValue, IOption<TValue2>> onSomeFactory)
+        public Option<TResult> And<TResult>(Func<TValue, IOption<TResult>> onSomeFactory)
         {
-            return Match(Option<TValue2>.None, value => onSomeFactory(value).Upcast());
+            return Match(Option<TResult>.None, value => onSomeFactory(value).Upcast());
         }
 
         public Option<TResult> And<TResult>(Func<IOption<TResult>> onSomeFactory)

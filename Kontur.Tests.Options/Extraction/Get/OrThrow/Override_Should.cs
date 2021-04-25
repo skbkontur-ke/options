@@ -4,7 +4,7 @@ using Kontur.Options;
 using Kontur.Tests.Options.LibraryNamespace;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Unsafe.Ensure.None
+namespace Kontur.Tests.Options.Extraction.Get.OrThrow
 {
     [TestFixture]
     internal class Override_Should
@@ -12,19 +12,19 @@ namespace Kontur.Tests.Options.Extraction.Unsafe.Ensure.None
         [Test]
         public void Import_Namespace_And_Do_Not_Override_Other_Values()
         {
-            var option = Option<string>.Some("unused");
+            var option = Option<string>.None();
 
-            Action action = () => option.EnsureNone();
+            Func<string> action = () => option.GetOrThrow();
 
             action.Should().Throw<InvalidOperationException>();
         }
 
         [Test]
-        public void Throw_If_Some()
+        public void Throw_If_None()
         {
-            var option = Option<CustomValue>.Some(new());
+            var option = Option<CustomValue>.None();
 
-            Action action = () => option.EnsureNone();
+            Func<CustomValue> action = () => option.GetOrThrow();
 
             action.Should()
                 .Throw<Exception>()
@@ -32,13 +32,14 @@ namespace Kontur.Tests.Options.Extraction.Unsafe.Ensure.None
         }
 
         [Test]
-        public void Do_Not_Throw_If_None()
+        public void Return_Value_If_Some()
         {
-            var option = Option<CustomValue>.None();
+            CustomValue expected = new();
+            var option = Option<CustomValue>.Some(expected);
 
-            Action action = () => option.EnsureNone();
+            var result = option.GetOrThrow();
 
-            action.Should().NotThrow();
+            result.Should().Be(expected);
         }
     }
 }

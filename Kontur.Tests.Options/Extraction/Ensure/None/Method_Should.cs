@@ -5,7 +5,7 @@ using FluentAssertions;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Unsafe.Ensure.None
+namespace Kontur.Tests.Options.Extraction.Ensure.None
 {
     [TestFixture]
     internal class Method_Should

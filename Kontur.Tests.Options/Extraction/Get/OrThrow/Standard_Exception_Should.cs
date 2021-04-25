@@ -3,7 +3,7 @@ using FluentAssertions;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Unsafe.Get.OrThrow
+namespace Kontur.Tests.Options.Extraction.Get.OrThrow
 {
     [TestFixture(typeof(InvalidOperationException))]
     [TestFixture(typeof(ValueMissingException))]

@@ -1,7 +1,7 @@
 ﻿using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Unsafe.Get.OrDefault.Struct
+namespace Kontur.Tests.Options.Extraction.Get.OrDefault.Struct
 {
     [TestFixture]
     internal class NotNullable_Should

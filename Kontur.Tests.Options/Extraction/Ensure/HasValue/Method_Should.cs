@@ -5,7 +5,7 @@ using FluentAssertions;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Extraction.Unsafe.Ensure.HasValue
+namespace Kontur.Tests.Options.Extraction.Ensure.HasValue
 {
     [TestFixture]
     internal class Method_Should

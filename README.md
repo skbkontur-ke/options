@@ -32,7 +32,7 @@
     * [Map](#map)
     * [Then](#then)
     * [OrElse](#orelse)
-    * [Then/OrElse methods chaining](thenorelse-methods-chaining)
+    * [Then/OrElse methods chaining](#thenorelse-methods-chaining)
     * [Upcast](#upcast)
     * [Select](#select)
     * [Do-notation without tasks](#do-notation-without-tasks)

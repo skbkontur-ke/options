@@ -56,7 +56,7 @@ If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-optio
 
 * [Unrestricted do-notation with `Task<T>` support](#do-notation-with-tasks)
 * Great interface that allow checking and extraction of data with single method. See [TryGet](#tryget) and [Match](#match).
-* `And` (`Then`, `ContinueOnSome`) and `Or` (`Else`, `ContinueOnNone`) combinators `Option` type. See [And](#and) for `And` combinator and [Or](#or) for `Or` combinator.
+* `And` (`Then`, `ContinueOnSome`) and `Or` (`Else`, `ContinueOnNone`) combinations `Option` type. See [And](#and) for `And` combination and [Or](#or) for `Or` combination.
 * Assembly contains only `Option` type implementation. There are no other stuff.
 * `Option` type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. As a result there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag or similar staff.
 * There is no specific handling of nulls. Use C# 8 nullable reference types to handle nulls.
@@ -488,7 +488,7 @@ Option<object> upcasted = option.Map<object>("other string");
 
 ### And
 
-`And` is `And` (`Then`/`ContinueOnSome`) combinator.
+`And` is `And` (`Then`/`ContinueOnSome`) combination.
 If a first option is `None` then the `None` is returned.
 If the first option is `Some` then a second option is returned.
 The second `Option` factory method is only executed if the first `Option` is `Some`.
@@ -516,7 +516,7 @@ Option<object> upcasted = option1.And<object>(i => option2);
 
 ### Or
 
-`Or` is `Or` (`Else`, `ContinueOnNone`) combinator.
+`Or` is `Or` (`Else`, `ContinueOnNone`) combination.
 If a first option is `Some` then the it is returned.
 If the first option is `None` then a second option is returned.
 The second `Option` factory method is only executed if the first `Option` is `None`.

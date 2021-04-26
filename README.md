@@ -30,8 +30,9 @@
     * [ToString](#tostring)
 * [Conversion of `Option<TValue>` to another Option type](#conversion-of-optiontvalue-to-another-option-type)
     * [Map](#map)
-    * [And](#and)
-    * [Or](#or)
+    * [Then](#then)
+    * [OrElse](#orelse)
+    * [Then/OrElse methods chaining](thenorelse-methods-chaining)
     * [Upcast](#upcast)
     * [Select](#select)
     * [Do-notation without tasks](#do-notation-without-tasks)
@@ -56,7 +57,7 @@ If you are targeting .NET Framework 4.8 or lower, replace reference `..\ke-optio
 
 * [Unrestricted do-notation with `Task<T>` support](#do-notation-with-tasks)
 * Great interface that allow checking and extraction of data with single method. See [TryGet](#tryget) and [Match](#match).
-* `And` (`Then`, `ContinueOnSome`) and `Or` (`Else`, `ContinueOnNone`) combinations `Option` type. See [And](#and) for `And` combination and [Or](#or) for `Or` combination.
+* `Then` (`And`, `ContinueWith`, `ContinueOnSome`) and `Or` (`OrElse`, `Else`, `Catch`, `ContinueOnNone` combinations `Option` type that allows chaining. See [Then](#then) for `Then` combination and [OrElse](#orelse) for `OrElse` combination.
 * Assembly contains only `Option` type implementation. There are no other stuff.
 * `Option` type implementation is if-less and makes use of abstract classes polymorphism and VMT to maintain error-safety and simplifity. As a result there is no null-forgiving operator. Also there is no ternary operators that check `HasSome` flag or similar staff.
 * There is no specific handling of nulls. Use C# 8 nullable reference types to handle nulls.
@@ -486,9 +487,9 @@ Option<object> upcasted = option.Map<object>(() => 1.ToString());
 Option<object> upcasted = option.Map<object>("other string");
 ```
 
-### And
+### Then
 
-`And` is `And` (`Then`/`ContinueOnSome`) combination.
+`Then` is `Then` (`And`, `ContinueWith`, `ContinueOnSome`) combination.
 If a first option is `None` then the `None` is returned.
 If the first option is `Some` then a second option is returned.
 The second `Option` factory method is only executed if the first `Option` is `Some`.
@@ -499,9 +500,9 @@ Option<string> option2 = ...;
 
 // If option1 is None then None is returned.
 // Otherwise option2 is returned.
-Option<string> result = option1.And(option2);
-Option<string> result = option1.And(() => option2);
-Option<string> result = option1.And(i => i > 10 Option<string>.Some(i.ToString()) : Option<string>.None());
+Option<string> result = option1.Then(option2);
+Option<string> result = option1.Then(() => option2);
+Option<string> result = option1.Then(i => i > 10 Option<string>.Some(i.ToString()) : Option<string>.None());
 ```
 
 Variants with upcast:
@@ -509,14 +510,14 @@ Variants with upcast:
 Option<int> option1 = ...;
 Option<string> option2 = ...;
 
-Option<object> upcasted = option1.And<object>(option2);
-Option<object> upcasted = option1.And<object>(() => option2);
-Option<object> upcasted = option1.And<object>(i => option2);
+Option<object> upcasted = option1.Then<object>(option2);
+Option<object> upcasted = option1.Then<object>(() => option2);
+Option<object> upcasted = option1.Then<object>(i => option2);
 ```
 
-### Or
+### OrElse
 
-`Or` is `Or` (`Else`, `ContinueOnNone`) combination.
+`OrElse` is `Or` (`OrElse`, `Else`, `Catch`, `ContinueOnNone`) combination.
 If a first option is `Some` then the it is returned.
 If the first option is `None` then a second option is returned.
 The second `Option` factory method is only executed if the first `Option` is `None`.
@@ -527,8 +528,8 @@ Option<string> option2 = ...;
 
 // If option1 is Some then option1 is returned.
 // Otherwise option2 is returned.
-Option<string> result = option1.Or(option2); 
-Option<string> result = option1.Or(() => option2);
+Option<string> result = option1.OrElse(option2);
+Option<string> result = option1.OrElse(() => option2);
 ```
 
 Variants with upcast:
@@ -536,24 +537,41 @@ Variants with upcast:
 Option<string> option1 = ...;
 Option<object> option2 = ...;
 
-Option<object> upcasted = option1.Or(option2);
-Option<object> upcasted = option1.Or(() => option2);
+Option<object> upcasted = option1.OrElse(option2);
+Option<object> upcasted = option1.OrElse(() => option2);
 ```
 
 ```
 Option<object> option1 = ...;
 Option<string> option2 = ...;
 
-Option<object> upcasted = option1.Or(option2);
-Option<object> upcasted = option1.Or(() => option2);
+Option<object> upcasted = option1.OrElse(option2);
+Option<object> upcasted = option1.OrElse(() => option2);
 ```
 
 ```
 Option<string> option1 = ...;
 Option<string> option2 = ...;
 
-Option<object> upcasted = option1.Or<object>(option2);
-Option<object> upcasted = option1.Or<object>(() => option2);
+Option<object> upcasted = option1.OrElse<object>(option2);
+Option<object> upcasted = option1.OrElse<object>(() => option2);
+```
+
+### Then/OrElse methods chaining
+
+```
+abstract Option<string> GetFormLogin();
+abstract Option<Guid> GetUser(string login);
+abstract Option<Guid> CreateUser(string login);
+abstract Option<DateTime> GetCreationDate(Guid userId);
+
+string login = ...
+
+Option<long> userCreationDateTicks =
+   GetFormLogin()
+  .Then(login => GetUser(login).OrElse(() => CreateUser(login)))
+  .Then(userId => GetCreationDate(userId))
+  .Map(date => date.Ticks);
 ```
 
 ### Upcast

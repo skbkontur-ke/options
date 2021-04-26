@@ -21,9 +21,9 @@ namespace Kontur.Tests.Options.Conversion.Combinations.And
 
         private static readonly Func<Option<string>, Option<Child>, Option<Base>>[] Methods =
         {
-            (option1, option2) => option1.And<Base>(option2),
-            (option1, option2) => option1.And<Base>(() => option2),
-            (option1, option2) => option1.And<Base>(_ => option2),
+            (option1, option2) => option1.Then<Base>(option2),
+            (option1, option2) => option1.Then<Base>(() => option2),
+            (option1, option2) => option1.Then<Base>(_ => option2),
         };
 
         private static readonly IEnumerable<TestCaseData> Cases =

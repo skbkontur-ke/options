@@ -3,9 +3,9 @@ using System.Diagnostics.Contracts;
 
 namespace Kontur.Options
 {
-    public static class OrExtensions
+    public static class OrElseExtensions
     {
-        public static Option<TValue> Or<TValue>(this IOption<TValue> option, Func<IOption<TValue>> onNoneFactory)
+        public static Option<TValue> OrElse<TValue>(this IOption<TValue> option, Func<IOption<TValue>> onNoneFactory)
         {
             return option.Match(() => onNoneFactory().Upcast(), Option<TValue>.Some);
         }
@@ -13,7 +13,7 @@ namespace Kontur.Options
         [Pure]
         public static Option<TValue> Or<TValue>(this IOption<TValue> option, IOption<TValue> onNone)
         {
-            return option.Or(() => onNone);
+            return option.OrElse(() => onNone);
         }
     }
 }

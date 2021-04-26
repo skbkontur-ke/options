@@ -29,7 +29,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
         private static readonly Or<Child, Base>[] FirstMethods =
         {
             (option1, option2) => option1.Or(option2),
-            (option1, option2) => option1.Or(() => option2),
+            (option1, option2) => option1.OrElse(() => option2),
         };
 
         private static readonly IEnumerable<TestCaseData> FirstCases =
@@ -46,7 +46,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
         private static readonly Or<Base, Child>[] SecondMethods =
         {
             (option1, option2) => option1.Or(option2),
-            (option1, option2) => option1.Or(() => option2),
+            (option1, option2) => option1.OrElse(() => option2),
         };
 
         private static readonly IEnumerable<TestCaseData> SecondCases =
@@ -63,7 +63,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
         private static readonly Or<Child, Child>[] ExplicitMethods =
         {
             (option1, option2) => option1.Or<Base>(option2),
-            (option1, option2) => option1.Or<Base>(() => option2),
+            (option1, option2) => option1.OrElse<Base>(() => option2),
         };
 
         private static readonly IEnumerable<TestCaseData> ExplicitCases =

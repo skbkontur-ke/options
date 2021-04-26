@@ -23,7 +23,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
         private static readonly Func<Option<int>, Option<int>, Option<int>>[] Methods =
         {
             (option1, option2) => option1.Or(option2),
-            (option1, option2) => option1.Or(() => option2),
+            (option1, option2) => option1.OrElse(() => option2),
         };
 
         private static readonly IEnumerable<TestCaseData> Cases =
@@ -48,7 +48,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
 
         private static readonly Func<Option<int>, Option<int>>[] AssertIsNotCalledMethods =
         {
-            option => option.Or(AssertIsNotCalled),
+            option => option.OrElse(AssertIsNotCalled),
         };
 
         private static readonly IEnumerable<TestCaseData> AssertIsNotCalledCases =

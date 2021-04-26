@@ -49,20 +49,20 @@ namespace Kontur.Options
         TResult IOption<TValue>.Match<TResult>(Func<TResult> onNone, Func<TValue, TResult> onSome) =>
             Match(onNone, onSome);
 
-        public Option<TResult> And<TResult>(Func<TValue, IOption<TResult>> onSomeFactory)
+        public Option<TResult> Then<TResult>(Func<TValue, IOption<TResult>> onSomeFactory)
         {
             return Match(Option<TResult>.None, value => onSomeFactory(value).Upcast());
         }
 
-        public Option<TResult> And<TResult>(Func<IOption<TResult>> onSomeFactory)
+        public Option<TResult> Then<TResult>(Func<IOption<TResult>> onSomeFactory)
         {
-            return And(_ => onSomeFactory().Upcast());
+            return Then(_ => onSomeFactory().Upcast());
         }
 
         [Pure]
-        public Option<TResult> And<TResult>(IOption<TResult> onSome)
+        public Option<TResult> Then<TResult>(IOption<TResult> onSome)
         {
-            return And(() => onSome);
+            return Then(() => onSome);
         }
 
         public Option<TResult> Map<TResult>(TResult result)

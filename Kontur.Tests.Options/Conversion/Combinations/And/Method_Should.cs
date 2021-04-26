@@ -22,9 +22,9 @@ namespace Kontur.Tests.Options.Conversion.Combinations.And
 
         private static readonly Func<Option<string>, Option<int>, Option<int>>[] Methods =
         {
-            (option1, option2) => option1.And(option2),
-            (option1, option2) => option1.And(() => option2),
-            (option1, option2) => option1.And(_ => option2),
+            (option1, option2) => option1.Then(option2),
+            (option1, option2) => option1.Then(() => option2),
+            (option1, option2) => option1.Then(_ => option2),
         };
 
         private static readonly IEnumerable<TestCaseData> Cases =
@@ -46,7 +46,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.And
         {
             var option = Option<string>.Some("example");
 
-            var result = option.And(Option<string>.Some);
+            var result = option.Then(Option<string>.Some);
 
             result.Should().Be(option);
         }
@@ -59,8 +59,8 @@ namespace Kontur.Tests.Options.Conversion.Combinations.And
 
         private static readonly Func<Option<int>, Option<int>>[] AssertIsNotCalledMethods =
         {
-            option => option.And(AssertIsNotCalled),
-            option => option.And(_ => AssertIsNotCalled()),
+            option => option.Then(AssertIsNotCalled),
+            option => option.Then(_ => AssertIsNotCalled()),
         };
 
         private static readonly IEnumerable<TestCaseData> AssertIsNotCalledCases =

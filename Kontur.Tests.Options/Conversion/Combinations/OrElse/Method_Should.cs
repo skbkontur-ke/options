@@ -4,7 +4,7 @@ using System.Linq;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Combinations.Or
+namespace Kontur.Tests.Options.Conversion.Combinations.OrElse
 {
     [TestFixture]
     internal class Method_Should
@@ -22,7 +22,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
 
         private static readonly Func<Option<int>, Option<int>, Option<int>>[] Methods =
         {
-            (option1, option2) => option1.Or(option2),
+            (option1, option2) => option1.OrElse(option2),
             (option1, option2) => option1.OrElse(() => option2),
         };
 
@@ -35,14 +35,14 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
         public Option<int> Process(
             Option<int> option1,
             Option<int> option2,
-            Func<Option<int>, Option<int>, Option<int>> callOr)
+            Func<Option<int>, Option<int>, Option<int>> orElse)
         {
-            return callOr(option1, option2);
+            return orElse(option1, option2);
         }
 
         private static Option<int> AssertIsNotCalled()
         {
-            Assert.Fail("Backup value factory should not be called on Some");
+            Assert.Fail("Factory should not be called on Some");
             throw new UnreachableException();
         }
 

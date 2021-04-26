@@ -11,7 +11,7 @@ namespace Kontur.Options
         }
 
         [Pure]
-        public static Option<TValue> Or<TValue>(this IOption<TValue> option, IOption<TValue> onNone)
+        public static Option<TValue> OrElse<TValue>(this IOption<TValue> option, IOption<TValue> onNone)
         {
             return option.OrElse(() => onNone);
         }

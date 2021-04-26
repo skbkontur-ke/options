@@ -4,7 +4,7 @@ using System.Linq;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Combinations.And
+namespace Kontur.Tests.Options.Conversion.Combinations.Then
 {
     [TestFixture]
     internal class Upcast_Should
@@ -35,9 +35,9 @@ namespace Kontur.Tests.Options.Conversion.Combinations.And
         public Option<Base> Process(
             Option<string> option1,
             Option<Child> option2,
-            Func<Option<string>, Option<Child>, Option<Base>> callAnd)
+            Func<Option<string>, Option<Child>, Option<Base>> then)
         {
-            return callAnd(option1, option2);
+            return then(option1, option2);
         }
     }
 }

@@ -3,12 +3,12 @@ using System.Linq;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Combinations.Or
+namespace Kontur.Tests.Options.Conversion.Combinations.OrElse
 {
     [TestFixture]
     internal class Upcast_Should
     {
-        public delegate Option<Base> Or<TValue1, TValue2>(Option<TValue1> option1, Option<TValue2> option2)
+        public delegate Option<Base> OrElse<TValue1, TValue2>(Option<TValue1> option1, Option<TValue2> option2)
             where TValue1 : Base
             where TValue2 : Base;
 
@@ -26,9 +26,9 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
             yield return (Option<TValue1>.Some(example1), Option<TValue2>.Some(new()), Option<Base>.Some(example1));
         }
 
-        private static readonly Or<Child, Base>[] FirstMethods =
+        private static readonly OrElse<Child, Base>[] FirstMethods =
         {
-            (option1, option2) => option1.Or(option2),
+            (option1, option2) => option1.OrElse(option2),
             (option1, option2) => option1.OrElse(() => option2),
         };
 
@@ -38,14 +38,14 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
             select new TestCaseData(testCase.Option1, testCase.Option2, method).Returns(testCase.Result);
 
         [TestCaseSource(nameof(FirstCases))]
-        public Option<Base> First(Option<Child> option1, Option<Base> option2, Or<Child, Base> or)
+        public Option<Base> First(Option<Child> option1, Option<Base> option2, OrElse<Child, Base> orElse)
         {
-            return or(option1, option2);
+            return orElse(option1, option2);
         }
 
-        private static readonly Or<Base, Child>[] SecondMethods =
+        private static readonly OrElse<Base, Child>[] SecondMethods =
         {
-            (option1, option2) => option1.Or(option2),
+            (option1, option2) => option1.OrElse(option2),
             (option1, option2) => option1.OrElse(() => option2),
         };
 
@@ -55,14 +55,14 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
             select new TestCaseData(testCase.Option1, testCase.Option2, method).Returns(testCase.Result);
 
         [TestCaseSource(nameof(SecondCases))]
-        public Option<Base> Second(Option<Base> option1, Option<Child> option2, Or<Base, Child> or)
+        public Option<Base> Second(Option<Base> option1, Option<Child> option2, OrElse<Base, Child> orElse)
         {
-            return or(option1, option2);
+            return orElse(option1, option2);
         }
 
-        private static readonly Or<Child, Child>[] ExplicitMethods =
+        private static readonly OrElse<Child, Child>[] ExplicitMethods =
         {
-            (option1, option2) => option1.Or<Base>(option2),
+            (option1, option2) => option1.OrElse<Base>(option2),
             (option1, option2) => option1.OrElse<Base>(() => option2),
         };
 
@@ -72,9 +72,9 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Or
             select new TestCaseData(testCase.Option1, testCase.Option2, method).Returns(testCase.Result);
 
         [TestCaseSource(nameof(ExplicitCases))]
-        public Option<Base> Explicit(Option<Child> option1, Option<Child> option2, Or<Child, Child> or)
+        public Option<Base> Explicit(Option<Child> option1, Option<Child> option2, OrElse<Child, Child> orElse)
         {
-            return or(option1, option2);
+            return orElse(option1, option2);
         }
     }
 }

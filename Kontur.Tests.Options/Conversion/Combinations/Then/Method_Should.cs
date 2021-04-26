@@ -5,7 +5,7 @@ using FluentAssertions;
 using Kontur.Options;
 using NUnit.Framework;
 
-namespace Kontur.Tests.Options.Conversion.Combinations.And
+namespace Kontur.Tests.Options.Conversion.Combinations.Then
 {
     [TestFixture]
     internal class Method_Should
@@ -36,9 +36,9 @@ namespace Kontur.Tests.Options.Conversion.Combinations.And
         public Option<int> Process(
             Option<string> option1,
             Option<int> option2,
-            Func<Option<string>, Option<int>, Option<int>> callAnd)
+            Func<Option<string>, Option<int>, Option<int>> then)
         {
-            return callAnd(option1, option2);
+            return then(option1, option2);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.And
 
         private static Option<int> AssertIsNotCalled()
         {
-            Assert.Fail("Value factory should not be called on None");
+            Assert.Fail("Factory should not be called on None");
             throw new UnreachableException();
         }
 

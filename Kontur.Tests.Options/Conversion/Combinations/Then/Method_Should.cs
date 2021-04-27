@@ -68,21 +68,15 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Then
             throw new UnreachableException();
         }
 
-        private static readonly Func<Option<int>, Option<string>>[] AssertIsNotCalledMethods =
-        {
-            option => option.Then(AssertIsNotCalled),
-            option => option.Then(_ => AssertIsNotCalled()),
-        };
-
         private static readonly IEnumerable<TestCaseData> AssertIsNotCalledCases =
-            AssertIsNotCalledMethods.Select(method => new TestCaseData(method));
+            FactoryMethods.Select(method => new TestCaseData(method));
 
         [TestCaseSource(nameof(AssertIsNotCalledCases))]
-        public void Do_Not_Call_Delegate_If_None(Func<Option<int>, Option<string>> assertIsNotCalled)
+        public void Do_Not_Call_Delegate_If_None(Func<Option<int>, Func<Option<string>>, Option<string>> then)
         {
             var option = Option<int>.None();
 
-            assertIsNotCalled(option);
+            then(option, AssertIsNotCalled);
         }
     }
 }

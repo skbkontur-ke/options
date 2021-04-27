@@ -20,23 +20,17 @@ namespace Kontur.Tests.Options.Conversion.Combinations.OrElse
             yield return (some, Option<string>.Some("unused"), some);
         }
 
-        private static readonly Func<Option<string>, Func<Option<string>>, Option<string>>[] FactoryMethods =
-        {
-            (option, factory) => option.OrElse(factory),
-        };
+        private static readonly Func<Option<string>, Func<Option<string>>, Option<string>> FactoryMethod = (option, factory) => option.OrElse(factory);
 
-        private static IEnumerable<Func<Option<string>, Option<string>, Option<string>>> AllMethods()
+        private static readonly Func<Option<string>, Option<string>, Option<string>>[] AllMethods =
         {
-            yield return (option1, option2) => option1.OrElse(option2);
-            foreach (var method in FactoryMethods)
-            {
-                yield return (option1, option2) => method(option1, () => option2);
-            }
-        }
+            (option1, option2) => option1.OrElse(option2),
+            (option1, option2) => FactoryMethod(option1, () => option2),
+        };
 
         private static readonly IEnumerable<TestCaseData> Cases =
             from testCase in CreateCases()
-            from method in AllMethods()
+            from method in AllMethods
             select new TestCaseData(testCase.Option1, testCase.Option2, method).Returns(testCase.Result);
 
         [TestCaseSource(nameof(Cases))]
@@ -54,15 +48,12 @@ namespace Kontur.Tests.Options.Conversion.Combinations.OrElse
             throw new UnreachableException();
         }
 
-        private static readonly IEnumerable<TestCaseData> AssertIsNotCalledCases =
-            FactoryMethods.Select(method => new TestCaseData(method));
-
-        [TestCaseSource(nameof(AssertIsNotCalledCases))]
-        public void Do_Not_Call_Delegate_If_Some(Func<Option<string>, Func<Option<string>>, Option<string>> orElse)
+        [Test]
+        public void Do_Not_Call_Delegate_If_Some()
         {
             var option = Option<string>.Some("value");
 
-            orElse(option, AssertIsNotCalled);
+            FactoryMethod(option, AssertIsNotCalled);
         }
     }
 }

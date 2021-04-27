@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Kontur.Options;
@@ -10,33 +11,43 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Then
     [TestFixture]
     internal class Method_Should
     {
-        private static IEnumerable<(Option<string> Option1, Option<int> Option2, Option<int> Result)> CreateCases()
+        private static IEnumerable<(Option<int> Option1, Option<string> Option2, Option<string> Result)> CreateCases()
         {
-            yield return (Option<string>.None(), Option<int>.None(), Option<int>.None());
-            yield return (Option<string>.Some("unused"), Option<int>.None(), Option<int>.None());
-            yield return (Option<string>.None(), Option<int>.Some(1), Option<int>.None());
+            yield return (Option<int>.None(), Option<string>.None(), Option<string>.None());
+            yield return (Option<int>.Some(1), Option<string>.None(), Option<string>.None());
+            yield return (Option<int>.None(), Option<string>.Some("unused"), Option<string>.None());
 
-            var some = Option<int>.Some(1);
-            yield return (Option<string>.Some("unused"), some, some);
+            var some = Option<string>.Some("value");
+            yield return (Option<int>.Some(1), some, some);
         }
 
-        private static readonly Func<Option<string>, Option<int>, Option<int>>[] Methods =
+        private static readonly Func<Option<int>, Func<int, Option<string>>, Option<string>> PassMethod = (option, factory) => option.Then(factory);
+
+        private static readonly Func<Option<int>, Func<Option<string>>, Option<string>>[] FactoryMethods =
         {
-            (option1, option2) => option1.Then(option2),
-            (option1, option2) => option1.Then(() => option2),
-            (option1, option2) => option1.Then(_ => option2),
+            (option, factory) => option.Then(factory),
+            (option, factory) => PassMethod(option, _ => factory()),
         };
+
+        private static IEnumerable<Func<Option<int>, Option<string>, Option<string>>> AllMethods()
+        {
+            yield return (option1, option2) => option1.Then(option2);
+            foreach (var method in FactoryMethods)
+            {
+                yield return (option1, option2) => method(option1, () => option2);
+            }
+        }
 
         private static readonly IEnumerable<TestCaseData> Cases =
             from testCase in CreateCases()
-            from method in Methods
+            from method in AllMethods()
             select new TestCaseData(testCase.Option1, testCase.Option2, method).Returns(testCase.Result);
 
         [TestCaseSource(nameof(Cases))]
-        public Option<int> Process(
-            Option<string> option1,
-            Option<int> option2,
-            Func<Option<string>, Option<int>, Option<int>> then)
+        public Option<string> Process(
+            Option<int> option1,
+            Option<string> option2,
+            Func<Option<int>, Option<string>, Option<string>> then)
         {
             return then(option1, option2);
         }
@@ -44,20 +55,20 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Then
         [Test]
         public void Pass_Value_If_Some()
         {
-            var option = Option<string>.Some("example");
+            var option = Option<int>.Some(123);
 
-            var result = option.Then(Option<string>.Some);
+            var result = PassMethod(option, i => Option<string>.Some(i.ToString(CultureInfo.InvariantCulture)));
 
-            result.Should().Be(option);
+            result.Should().Be(Option<string>.Some("123"));
         }
 
-        private static Option<int> AssertIsNotCalled()
+        private static Option<string> AssertIsNotCalled()
         {
             Assert.Fail("Factory should not be called on None");
             throw new UnreachableException();
         }
 
-        private static readonly Func<Option<int>, Option<int>>[] AssertIsNotCalledMethods =
+        private static readonly Func<Option<int>, Option<string>>[] AssertIsNotCalledMethods =
         {
             option => option.Then(AssertIsNotCalled),
             option => option.Then(_ => AssertIsNotCalled()),
@@ -67,7 +78,7 @@ namespace Kontur.Tests.Options.Conversion.Combinations.Then
             AssertIsNotCalledMethods.Select(method => new TestCaseData(method));
 
         [TestCaseSource(nameof(AssertIsNotCalledCases))]
-        public void Do_Not_Call_Delegate_If_None(Func<Option<int>, Option<int>> assertIsNotCalled)
+        public void Do_Not_Call_Delegate_If_None(Func<Option<int>, Option<string>> assertIsNotCalled)
         {
             var option = Option<int>.None();
 

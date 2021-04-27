@@ -5,12 +5,10 @@ namespace System.Diagnostics.CodeAnalysis
     [AttributeUsage(AttributeTargets.Parameter)]
     internal sealed class MaybeNullWhenAttribute : Attribute
     {
-        public MaybeNullWhenAttribute(bool returnValue)
+        internal MaybeNullWhenAttribute(bool returnValue)
         {
-            ReturnValue = returnValue;
+            _ = returnValue;
         }
-
-        public bool ReturnValue { get; }
     }
 }
 #endif

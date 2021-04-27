@@ -15,7 +15,7 @@ namespace Kontur.Options.Containers
         internal static IContainer<TValue> Instance => Provider.Value;
 
         [Pure]
-        public bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value)
+        public bool TryGet([MaybeNullWhen(false)] out TValue value)
         {
             value = default;
             return false;

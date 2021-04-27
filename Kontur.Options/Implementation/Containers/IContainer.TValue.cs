@@ -6,6 +6,6 @@ namespace Kontur.Options.Containers
     internal interface IContainer<TValue>
     {
         [Pure]
-        bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value);
+        bool TryGet([MaybeNullWhen(false)] out TValue value);
     }
 }

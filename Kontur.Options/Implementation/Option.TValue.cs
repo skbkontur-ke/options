@@ -185,7 +185,7 @@ namespace Kontur.Options
         }
 
         [Pure]
-        public bool TryGet([MaybeNullWhen(returnValue: false)] out TValue value)
+        public bool TryGet([MaybeNullWhen(false)] out TValue value)
         {
             return Match(
                     () => NoneContainer<TValue>.Instance,
